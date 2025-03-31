@@ -58,6 +58,7 @@ extension LoginViewController {
     }
     
     struct EmailCodeResponse: Codable {
+        let userId: String?
         let message: String
     }
     
