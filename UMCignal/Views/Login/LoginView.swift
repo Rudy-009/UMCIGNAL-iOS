@@ -57,6 +57,7 @@ class LoginView: UIView {
             $0.font = .systemFont(ofSize: 25)
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.black.cgColor
+            $0.textColor = .black
             $0.setPlaceholder(text: placeHolder, color: .gray)
         }
     }

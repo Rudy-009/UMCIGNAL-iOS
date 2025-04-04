@@ -50,7 +50,7 @@ extension LoginViewController {
         ).responseDecodable(of: EmailCodeResponse.self) { response in
             switch response.result {
             case .success(let value):
-                print("Success: \(value)")
+                return
             case .failure(let error):
                 print("Error: \(error)")
             }
@@ -71,7 +71,7 @@ extension LoginViewController {
         let parameters: [String: Any] = [
             "mailVerification": loginView.codeTextField.text ?? ""
         ]
-        print("token: \(loginView.codeTextField.text ?? "")")
+        
         AF.request(
             K.baseURLString + "/user/verify",
             method: .post,
@@ -81,7 +81,8 @@ extension LoginViewController {
         ).responseDecodable(of: TokenResponse.self) { response in
             switch response.result {
             case .success(let value):
-                print("Success: \(value)")
+                _ = KeychainService.add(key: K.APIKey.accessToken, value: value.token)
+                self.checkUserProcess()
             case .failure(let error):
                 print("Error: \(error)")
             }
@@ -93,6 +94,45 @@ extension LoginViewController {
         let token: String
     }
     
+    private func checkUserProcess() {
+        guard let accessToken = KeychainService.get(key: K.APIKey.accessToken) else { return }
+        let headers: HTTPHeaders = [
+            "accept": "application/json",
+            "Authorization": "Bearer \(accessToken)"
+        ]
+        let url = K.baseURLString + "/operating/checkSignUp"
+        AF.request(
+            url,
+            method: .get,
+            encoding: JSONEncoding.default,
+            headers: headers
+        ).responseDecodable(of: CheckSignUpResponse.self) { response in
+            switch response.result {
+            case .success(let value):
+                if let signup = value.signUpStatus {
+                    if signup {
+                        if let ideal = value.idleTypeStatus {
+                            if ideal {
+                                print("every progress is completed")
+                            } else {
+                                print("ideal is not completed")
+                            }
+                        }
+                    } else {
+                        print("signup is not completed")
+                    }
+                }
+            case .failure(let error):
+                print("Error: \(error)")
+            }
+        }
+    }
+    
+    struct CheckSignUpResponse: Codable {
+        let signUpStatus: Bool?
+        let idleTypeStatus: Bool?
+        let message: String
+    }
 }
 
 import SwiftUI

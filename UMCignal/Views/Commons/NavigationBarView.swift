@@ -72,8 +72,3 @@ public class NavigationBarView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
-import SwiftUI
-#Preview {
-    UserInfoViewController()
-}
