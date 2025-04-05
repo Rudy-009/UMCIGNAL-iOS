@@ -10,7 +10,7 @@ import UIKit
 public class NavigationBarView: UIView {
     
     public lazy var leftButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "chevron.backward"), for: .normal)
+        $0.setImage(.rightArrow, for: .normal)
         $0.contentMode = .scaleAspectFit
         $0.tintColor = .black
     }
@@ -21,10 +21,7 @@ public class NavigationBarView: UIView {
         $0.tintColor = .black
     }
     
-    public lazy var titleLabel = UILabel().then {
-        $0.textColor = .black
-        $0.text = " "
-    }
+    public lazy var titleLabel = LabelComponents.T1Label
     
     private func setConstraints() {
         self.snp.makeConstraints { make in
@@ -41,8 +38,8 @@ public class NavigationBarView: UIView {
         }
         
         leftButton.imageView?.snp.makeConstraints { make in
-            make.height.equalTo(30)
-            make.width.equalTo(20)
+            make.height.equalTo(16)
+            make.width.equalTo(8)
         }
         
         rightButton.snp.makeConstraints { make in

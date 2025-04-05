@@ -49,7 +49,7 @@ extension LoginViewController {
             headers: headers
         ).responseDecodable(of: EmailCodeResponse.self) { response in
             switch response.result {
-            case .success(let value):
+            case .success(_):
                 return
             case .failure(let error):
                 print("Error: \(error)")
