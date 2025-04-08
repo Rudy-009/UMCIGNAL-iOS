@@ -14,6 +14,12 @@ class ProgressBar: UIProgressView {
         self.progress = 0
         self.trackTintColor = .gray100
         self.progressTintColor = .TB
+        
+        self.layer.cornerRadius = 4
+        self.clipsToBounds = true
+        self.snp.makeConstraints { make in
+            make.height.equalTo(8)
+        }
     }
     
     required init?(coder: NSCoder) {

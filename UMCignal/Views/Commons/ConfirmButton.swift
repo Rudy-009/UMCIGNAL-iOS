@@ -13,16 +13,16 @@ class ConfirmButton: UIButton {
     
     private lazy var mainLabel = UILabel().then {
         $0.text = "다음"
-        $0.font = .systemFont(ofSize: 25)
-        $0.textColor = .black
+        $0.font = Fonts.T2
+        $0.textColor = .white
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.clipsToBounds = true
         self.layer.cornerRadius = 7
-        self.backgroundColor = .gray
-        self.isEnabled = false
+        self.backgroundColor = .TB
+        // self.isEnabled = false
         addComponents()
     }
     
@@ -43,21 +43,13 @@ class ConfirmButton: UIButton {
         mainLabel.text = labelText
     }
     
-    public func availableForSendQuery() {
-        mainLabel.textColor = .black
-        self.backgroundColor = .gray
-        self.isEnabled = true
-    }
-    
     public func available() {
-        mainLabel.textColor = .black
-        self.backgroundColor = .black
+        self.backgroundColor = .TB
         self.isEnabled = true
     }
     
     public func unavailable() {
-        mainLabel.textColor = .black
-        self.backgroundColor = .gray
+        self.backgroundColor = .TB_3
         self.isEnabled = false
     }
         

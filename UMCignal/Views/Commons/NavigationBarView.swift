@@ -38,8 +38,8 @@ public class NavigationBarView: UIView {
         }
         
         leftButton.imageView?.snp.makeConstraints { make in
-            make.height.equalTo(16)
-            make.width.equalTo(8)
+            make.height.equalTo(24)
+            make.width.equalTo(12)
         }
         
         rightButton.snp.makeConstraints { make in
@@ -58,6 +58,10 @@ public class NavigationBarView: UIView {
     
     public func configure(text: String) {
         titleLabel.text = text
+    }
+    
+    public func hideRightButton() {
+        self.rightButton.isHidden = true
     }
     
     override init(frame: CGRect) {
