@@ -26,6 +26,10 @@ class UserAlcoholView: UIView {
     
     public lazy var nextButton = ConfirmButton()
     
+    public lazy var aGlassButton = AlcoholCapabilityButton()
+    public lazy var aBottleButton = AlcoholCapabilityButton()
+    public lazy var bottlesButton = AlcoholCapabilityButton()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .white
@@ -72,6 +76,41 @@ class UserAlcoholView: UIView {
             make.leading.trailing.equalToSuperview().inset(14)
             make.bottom.equalTo(self.safeAreaLayoutGuide).inset(24)
         }
+    }
+    
+    public func setButtonConstraints() {
+        self.addSubview(aGlassButton)
+        self.addSubview(aBottleButton)
+        self.addSubview(bottlesButton)
+        
+        let width = UIScreen.main.bounds.width - 28
+        let height = width * 2.0 / 7.0
+        
+        aGlassButton.configure(.glass)
+        aBottleButton.configure(.aBottle)
+        bottlesButton.configure(.bottles)
+        
+        aGlassButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview().offset(-20)
+            make.height.equalTo(height)
+            make.width.equalTo(width)
+        }
+        
+        aBottleButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(aGlassButton.snp.bottom).offset(8)
+            make.height.equalTo(height)
+            make.width.equalTo(width)
+        }
+        
+        bottlesButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(aBottleButton.snp.bottom).offset(8)
+            make.height.equalTo(height)
+            make.width.equalTo(width)
+        }
+        
     }
     
     required init?(coder: NSCoder) {

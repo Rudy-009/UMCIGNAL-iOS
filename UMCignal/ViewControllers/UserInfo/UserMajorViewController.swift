@@ -14,6 +14,7 @@ class UserMajorViewController: UIViewController {
     override func viewDidLoad() {
         self.view = userMajorView
         self.setButtonActions()
+        userMajorView.nextButton.available()
     }
     
     private func setButtonActions() {

@@ -9,6 +9,9 @@ import UIKit
 
 class UserMBTIView: UIView {
     
+    private let padding: CGFloat = 78
+    private let buttonMargin: CGFloat = 11
+    
     public lazy var navigationBar = NavigationBarView()
     public lazy var progressBar = ProgressBar()
     private lazy var mainTitle = UILabel().then {
@@ -26,11 +29,21 @@ class UserMBTIView: UIView {
     
     public lazy var nextButton = ConfirmButton()
     
+    public lazy var mbtiE = MBTIButton(); public lazy var mbtiI = MBTIButton()
+    public lazy var mbtiN = MBTIButton(); public lazy var mbtiS = MBTIButton()
+    public lazy var mbtiF = MBTIButton(); public lazy var mbtiT = MBTIButton()
+    public lazy var mbtiP = MBTIButton(); public lazy var mbtiJ = MBTIButton()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .white
         self.setBasicConstraints()
         self.configure(mainText: "현재 MBTI를 알려주세요.", subText: "", progress: 5.0/7.0)
+        let buttons: [MBTIButton] = [mbtiE, mbtiI, mbtiN, mbtiS, mbtiF, mbtiT, mbtiJ, mbtiP]
+        let mbti: [MBTIEnum] = [.e, .i, .n, .s, .f, .t, .j, .p]
+        for (index, button) in buttons.enumerated() {
+            button.configure(mbti[index])
+        }
     }
     
     private func configure(mainText: String, subText: String, progress: Float) {
@@ -72,6 +85,59 @@ class UserMBTIView: UIView {
             make.leading.trailing.equalToSuperview().inset(14)
             make.bottom.equalTo(self.safeAreaLayoutGuide).inset(24)
         }
+    }
+    
+    public func setButtonConstraints() {
+        let screenWidth = UIScreen.main.bounds.width
+        let size = ( screenWidth - ( padding * 2 + buttonMargin )) / 2.0
+        let buttons: [MBTIButton] = [mbtiE, mbtiI, mbtiN, mbtiS, mbtiF, mbtiT, mbtiJ, mbtiP]
+        for button in buttons {
+            self.addSubview(button)
+            button.snp.makeConstraints { make in
+                make.width.height.equalTo(size)
+            }
+        }
+        
+        mbtiE.snp.makeConstraints { make in
+            make.top.equalTo(subTitle.snp.bottom).offset(20)
+            make.leading.equalToSuperview().offset(padding)
+        }
+        
+        mbtiI.snp.makeConstraints { make in
+            make.top.equalTo(subTitle.snp.bottom).offset(20)
+            make.trailing.equalToSuperview().offset(-padding)
+        }
+        
+        mbtiN.snp.makeConstraints { make in
+            make.top.equalTo(mbtiE.snp.bottom).offset(buttonMargin)
+            make.leading.equalToSuperview().offset(padding)
+        }
+        
+        mbtiS.snp.makeConstraints { make in
+            make.top.equalTo(mbtiE.snp.bottom).offset(buttonMargin)
+            make.trailing.equalToSuperview().offset(-padding)
+        }
+        
+        mbtiF.snp.makeConstraints { make in
+            make.top.equalTo(mbtiN.snp.bottom).offset(buttonMargin)
+            make.leading.equalToSuperview().offset(padding)
+        }
+        
+        mbtiT.snp.makeConstraints { make in
+            make.top.equalTo(mbtiN.snp.bottom).offset(buttonMargin)
+            make.trailing.equalToSuperview().offset(-padding)
+        }
+        
+        mbtiJ.snp.makeConstraints { make in
+            make.top.equalTo(mbtiF.snp.bottom).offset(buttonMargin)
+            make.leading.equalToSuperview().offset(padding)
+        }
+        
+        mbtiP.snp.makeConstraints { make in
+            make.top.equalTo(mbtiF.snp.bottom).offset(buttonMargin)
+            make.trailing.equalToSuperview().offset(-padding)
+        }
+        
     }
     
     required init?(coder: NSCoder) {

@@ -19,6 +19,12 @@ class UserBirthdayViewController: UIViewController {
     private func setButtonActions() {
         userBirthdayView.navigationBar.leftButton.addTarget(self, action: #selector(popVC), for: .touchUpInside)
         userBirthdayView.nextButton.addTarget(self, action: #selector(nextVC), for: .touchUpInside)
+        userBirthdayView.datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
+    }
+    
+    @objc
+    private func datePickerValueChanged() {
+        userBirthdayView.nextButton.available()
     }
     
     @objc
@@ -28,13 +34,15 @@ class UserBirthdayViewController: UIViewController {
     
     @objc
     private func nextVC() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let birthday = userBirthdayView.datePicker.date
+        let formattedDate = dateFormatter.string(from: birthday)
+        UserInfoSingletone.typeAge(formattedDate)
+        
         let nextVC = UserSmokeViewController()
         nextVC.modalPresentationStyle = .overFullScreen
         present(nextVC, animated: false)
-    }
-    
-    private func isNextButtonAvailable() {
-        userBirthdayView.nextButton.available()
     }
     
 }

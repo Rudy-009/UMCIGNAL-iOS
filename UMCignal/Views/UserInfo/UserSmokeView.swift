@@ -9,6 +9,9 @@ import UIKit
 
 class UserSmokeView: UIView {
     
+    private let screenMargin: CGFloat = 14
+    private let buttonSpacing: CGFloat = 15
+    
     public lazy var navigationBar = NavigationBarView()
     public lazy var progressBar = ProgressBar()
     private lazy var mainTitle = UILabel().then {
@@ -25,6 +28,9 @@ class UserSmokeView: UIView {
     }
     
     public lazy var nextButton = ConfirmButton()
+    
+    public lazy var nonSmokerButton = SmokeButton()
+    public lazy var smokerButton = SmokeButton()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -74,13 +80,32 @@ class UserSmokeView: UIView {
         }
     }
     
+    public func setButtonConstraints() {
+        nonSmokerButton.configure(.none)
+        smokerButton.configure(.smoker)
+        
+        self.addSubview(smokerButton)
+        self.addSubview(nonSmokerButton)
+        
+        let screenWidth = UIScreen.main.bounds.width
+        let buttonWidth = (screenWidth - (screenMargin * 2 + buttonSpacing)) / 2
+        
+        smokerButton.snp.makeConstraints { make in
+            make.width.height.equalTo(buttonWidth)
+            make.leading.equalToSuperview().offset(screenMargin)
+            make.centerY.equalToSuperview().offset(30)
+        }
+        
+        nonSmokerButton.snp.makeConstraints { make in
+            make.width.height.equalTo(buttonWidth)
+            make.trailing.equalToSuperview().inset(screenMargin)
+            make.centerY.equalTo(smokerButton)
+        }
+        
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-}
-
-import SwiftUI
-#Preview {
-    UserSmokeViewController()
 }

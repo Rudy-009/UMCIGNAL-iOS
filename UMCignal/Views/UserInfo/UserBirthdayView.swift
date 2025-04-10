@@ -24,6 +24,25 @@ class UserBirthdayView: UIView {
         $0.numberOfLines = 2
     }
     
+    public lazy var datePicker = UIDatePicker().then {
+        $0.preferredDatePickerStyle = .wheels
+        $0.datePickerMode = .date
+        $0.locale = Locale(identifier: "ko-KR")
+                
+        // 현재 날짜에서 18년을 뺀 날짜 계산
+        let calendar = Calendar.current
+        let currentDate = Date()
+        let adultAgeDate = calendar.date(byAdding: .year, value: -18, to: currentDate)!
+        
+        // 최대 날짜를 18년 전으로 설정 (성인 기준)
+        $0.maximumDate = adultAgeDate
+        
+        // 최소 날짜는 예를 들어 100년 전으로 설정
+        if let minDate = calendar.date(byAdding: .year, value: -30, to: currentDate) {
+            $0.minimumDate = minDate
+        }
+    }
+    
     public lazy var nextButton = ConfirmButton()
     
     override init(frame: CGRect) {
@@ -44,6 +63,7 @@ class UserBirthdayView: UIView {
         self.addSubview(progressBar)
         self.addSubview(mainTitle)
         self.addSubview(subTitle)
+        self.addSubview(datePicker)
         self.addSubview(nextButton)
         
         navigationBar.hideRightButton()
@@ -65,6 +85,13 @@ class UserBirthdayView: UIView {
         subTitle.snp.makeConstraints { make in
             make.top.equalTo(mainTitle.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview().inset(14)
+        }
+        
+        datePicker.snp.makeConstraints { make in
+            make.centerY.equalToSuperview().offset(100)
+            make.centerX.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(14)
+            make.height.equalTo(300)
         }
         
         nextButton.configure(labelText: "다음")

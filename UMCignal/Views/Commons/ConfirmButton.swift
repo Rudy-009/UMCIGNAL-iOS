@@ -21,8 +21,8 @@ class ConfirmButton: UIButton {
         super.init(frame: frame)
         self.clipsToBounds = true
         self.layer.cornerRadius = 7
-        self.backgroundColor = .TB
-        // self.isEnabled = false
+        self.backgroundColor = .TB_3
+        self.isEnabled = false
         addComponents()
     }
     

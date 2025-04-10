@@ -14,11 +14,20 @@ class UserInstagramIDViewController: UIViewController {
     override func viewDidLoad() {
         self.view = userInstagramIDView
         self.setButtonActions()
+        self.hideKeyboardWhenTappedAround()
     }
     
     private func setButtonActions() {
         userInstagramIDView.navigationBar.leftButton.addTarget(self, action: #selector(popVC), for: .touchUpInside)
         userInstagramIDView.nextButton.addTarget(self, action: #selector(nextVC), for: .touchUpInside)
+        userInstagramIDView.idTextField.addTarget(self, action: #selector(textFieldDidChanged), for: .editingChanged)
+    }
+    
+    @objc
+    private func textFieldDidChanged() {
+        userInstagramIDView.idTextField.layer.borderWidth = 2
+        userInstagramIDView.idTextField.layer.borderColor = UIColor.TB.cgColor
+        isNextButtonAvailable()
     }
     
     @objc
@@ -28,6 +37,8 @@ class UserInstagramIDViewController: UIViewController {
     
     @objc
     private func nextVC() {
+        UserInfoSingletone.typeInstagramId(userInstagramIDView.idTextField.text!)
+        
         let nextVC = UserSexViewController()
         nextVC.modalPresentationStyle = .overFullScreen
         present(nextVC, animated: false)
