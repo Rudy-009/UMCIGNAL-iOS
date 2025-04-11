@@ -1,14 +1,16 @@
 //
 //  AppDelegate.swift
-//  UMCignal
+//  SMU Signal
 //
-//  Created by 이승준 on 3/14/25.
+//  Created by 이승준 on 4/11/25.
 //
 
 import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
+
+
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.

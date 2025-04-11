@@ -1,8 +1,8 @@
 //
 //  SceneDelegate.swift
-//  UMCignal
+//  SMU Signal
 //
-//  Created by 이승준 on 3/14/25.
+//  Created by 이승준 on 4/11/25.
 //
 
 import UIKit
@@ -20,7 +20,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = UserBirthdayViewController()
         window?.overrideUserInterfaceStyle = .light
     }
-
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
         // This occurs shortly after the scene enters the background, or when its session is discarded.
