@@ -31,7 +31,7 @@ class UserGenderViewController: UIViewController {
     }
     
     @objc
-    private func buttonTapped(_ sender: UIButton) {
+    private func buttonTapped(_ sender: GenderButton) {
         let buttons = [userGenderView.maleButton, userGenderView.femaleButton, userGenderView.otherButton]
         
         for button in buttons {

@@ -31,6 +31,11 @@ class GenderView: UIView {
     public lazy var femaleButton = GenderButton()
     public lazy var otherButton = GenderButton()
     
+    public lazy var extraLabel = UILabel().then {
+        $0.text = "그 외 성별은 그 외 성별분들끼리만 매칭돼요."
+        $0.font = Fonts.Detail
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .white
@@ -48,6 +53,7 @@ class GenderView: UIView {
         self.addSubview(progressBar)
         self.addSubview(mainTitle)
         self.addSubview(subTitle)
+        self.addSubview(extraLabel)
         self.addSubview(nextButton)
         
         navigationBar.hideRightButton()
@@ -68,6 +74,11 @@ class GenderView: UIView {
         
         subTitle.snp.makeConstraints { make in
             make.top.equalTo(mainTitle.snp.bottom).offset(20)
+            make.leading.trailing.equalToSuperview().inset(14)
+        }
+        
+        extraLabel.snp.makeConstraints { make in
+            make.top.equalTo(subTitle.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview().inset(14)
         }
         
