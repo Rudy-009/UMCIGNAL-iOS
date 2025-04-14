@@ -10,6 +10,7 @@ import UIKit
 class TemplateViewController: UIViewController, UIGestureRecognizerDelegate {
     
     private let templateView = TemplateView()
+    let nextVC = TemplateViewController()
     
     override func viewDidLoad() {
         self.view = templateView
@@ -21,7 +22,7 @@ class TemplateViewController: UIViewController, UIGestureRecognizerDelegate {
     
     private func setButtonActions() {
         templateView.navigationBar.leftButton.addTarget(self, action: #selector(popVC), for: .touchUpInside)
-        templateView.nextButton.addTarget(self, action: #selector(nextVC), for: .touchUpInside)
+        templateView.nextButton.addTarget(self, action: #selector(pushNextVC), for: .touchUpInside)
     }
     
     @objc
@@ -30,19 +31,12 @@ class TemplateViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     @objc
-    private func nextVC() {
-        let nextVC = TemplateViewController()
-        
+    private func pushNextVC() {
+        navigationController?.pushViewController(nextVC, animated: true)
     }
     
     private func isNextButtonAvailable() {
         templateView.nextButton.available()
     }
     
-}
-
-
-import SwiftUI
-#Preview {
-    TemplateViewController()
 }

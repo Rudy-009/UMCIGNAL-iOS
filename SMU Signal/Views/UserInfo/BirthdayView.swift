@@ -106,8 +106,3 @@ class BirthdayView: UIView {
     
 }
 
-import SwiftUI
-#Preview {
-    BirthdayView()
-}
-

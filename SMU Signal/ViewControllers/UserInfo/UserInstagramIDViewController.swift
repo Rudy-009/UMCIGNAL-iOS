@@ -62,7 +62,3 @@ class UserInstagramIDViewController: UIViewController, UITextFieldDelegate {
     }
 }
 
-import SwiftUI
-#Preview {
-    UserInstagramIDViewController()
-}

@@ -50,8 +50,3 @@ class UserBirthdayViewController: UIViewController {
     
 }
 
-
-import SwiftUI
-#Preview {
-    UserBirthdayViewController()
-}

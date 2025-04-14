@@ -24,6 +24,15 @@ class IdealAgeView: UIView {
         $0.numberOfLines = 2
     }
     
+    private lazy var buttonStack = UIStackView().then {
+        $0.axis = .vertical
+        $0.spacing = 20
+    }
+    
+    public lazy var youngerButton = AgeButton()
+    public lazy var sameButton = AgeButton()
+    public lazy var olderButton = AgeButton()
+    
     public lazy var nextButton = ConfirmButton()
     
     override init(frame: CGRect) {
@@ -71,6 +80,28 @@ class IdealAgeView: UIView {
             make.leading.trailing.equalToSuperview().inset(14)
             make.bottom.equalTo(self.safeAreaLayoutGuide).inset(24)
         }
+        
+        self.addSubview(buttonStack)
+        buttonStack.snp.makeConstraints { make in
+            make.height.equalTo(340)
+            make.leading.trailing.equalToSuperview().inset(14)
+            make.bottom.equalTo(nextButton.snp.top).offset(-60)
+        }
+        
+        buttonStack.addArrangedSubview(youngerButton)
+        buttonStack.addArrangedSubview(sameButton)
+        buttonStack.addArrangedSubview(olderButton)
+        
+        let buttons = [youngerButton, sameButton, olderButton]
+        let age: [Age] = [.younger, .same, .older]
+        
+        for (index, button) in buttons.enumerated() {
+            button.configure(age[index])
+            button.snp.makeConstraints { make in
+                make.height.equalTo(100)
+            }
+        }
+        
     }
     
     required init?(coder: NSCoder) {

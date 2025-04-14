@@ -117,8 +117,3 @@ class InstagramIDView: UIView {
     }
     
 }
-
-import SwiftUI
-#Preview {
-    UserInstagramIDViewController()
-}

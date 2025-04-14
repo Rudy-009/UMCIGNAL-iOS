@@ -72,9 +72,3 @@ class MajorButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
-import SwiftUI
-#Preview {
-    UserMajorViewController()
-}
-

@@ -130,8 +130,3 @@ class GenderView: UIView {
     
 }
 
-import SwiftUI
-#Preview {
-    UserGenderViewController()
-}
-

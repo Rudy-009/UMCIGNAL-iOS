@@ -58,13 +58,7 @@ class UserAlcoholViewController: UIViewController {
                 UserInfoSingletone.typeIsDrinking(button.alcohol!.toResponse())
             }
         }
-        
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
-}
-
-import SwiftUI
-#Preview {
-    UserAlcoholViewController()
 }

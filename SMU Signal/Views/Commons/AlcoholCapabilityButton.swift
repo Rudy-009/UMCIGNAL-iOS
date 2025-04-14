@@ -58,7 +58,7 @@ enum AlcoholEnum {
         case .aBottle:
             return 1
         case .bottles:
-            return 2
+            return 1
         }
     }
     

@@ -118,8 +118,3 @@ class AlcoholView: UIView {
     
 }
 
-import SwiftUI
-#Preview {
-    UserAlcoholViewController()
-}
-
