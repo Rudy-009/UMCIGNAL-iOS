@@ -7,7 +7,7 @@
 
 import UIKit
 
-class UserMBTIView: UIView {
+class MBTIView: UIView {
     
     private let padding: CGFloat = 78
     private let buttonMargin: CGFloat = 11
@@ -38,15 +38,14 @@ class UserMBTIView: UIView {
         super.init(frame: frame)
         self.backgroundColor = .white
         self.setBasicConstraints()
-        self.configure(mainText: "현재 MBTI를 알려주세요.", subText: "", progress: 5.0/7.0)
-        let buttons: [MBTIButton] = [mbtiE, mbtiI, mbtiN, mbtiS, mbtiF, mbtiT, mbtiJ, mbtiP]
-        let mbti: [MBTIEnum] = [.e, .i, .n, .s, .f, .t, .j, .p]
+        let buttons: [MBTIButton] = [mbtiE, mbtiI, mbtiS, mbtiN, mbtiF, mbtiT, mbtiJ, mbtiP]
+        let mbti: [MBTIEnum] = [.e, .i, .s, .n, .f, .t, .j, .p]
         for (index, button) in buttons.enumerated() {
             button.configure(mbti[index])
         }
     }
     
-    private func configure(mainText: String, subText: String, progress: Float) {
+    public func configure(mainText: String, subText: String, progress: Float) {
         mainTitle.text = mainText
         subTitle.text = subText
         progressBar.progress = progress
@@ -108,12 +107,12 @@ class UserMBTIView: UIView {
             make.trailing.equalToSuperview().offset(-padding)
         }
         
-        mbtiN.snp.makeConstraints { make in
+        mbtiS.snp.makeConstraints { make in
             make.top.equalTo(mbtiE.snp.bottom).offset(buttonMargin)
             make.leading.equalToSuperview().offset(padding)
         }
         
-        mbtiS.snp.makeConstraints { make in
+        mbtiN.snp.makeConstraints { make in
             make.top.equalTo(mbtiE.snp.bottom).offset(buttonMargin)
             make.trailing.equalToSuperview().offset(-padding)
         }
@@ -128,12 +127,12 @@ class UserMBTIView: UIView {
             make.trailing.equalToSuperview().offset(-padding)
         }
         
-        mbtiJ.snp.makeConstraints { make in
+        mbtiP.snp.makeConstraints { make in
             make.top.equalTo(mbtiF.snp.bottom).offset(buttonMargin)
             make.leading.equalToSuperview().offset(padding)
         }
         
-        mbtiP.snp.makeConstraints { make in
+        mbtiJ.snp.makeConstraints { make in
             make.top.equalTo(mbtiF.snp.bottom).offset(buttonMargin)
             make.trailing.equalToSuperview().offset(-padding)
         }

@@ -9,7 +9,7 @@ import UIKit
 
 class UserAlcoholViewController: UIViewController {
     
-    private let userAlcoholView = UserAlcoholView()
+    private let userAlcoholView = AlcoholView()
     
     override func viewDidLoad() {
         self.view = userAlcoholView
@@ -19,6 +19,7 @@ class UserAlcoholViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         userAlcoholView.setButtonConstraints()
+        userAlcoholView.configure(mainText: "술 좋아하시나요?", subText: "궁합에서 음주량도 엄청 중요해요.\n여러분의 주량에 대해 알려주세요.", progress: 4.0/7.0)
     }
     
     private func setButtonActions() {

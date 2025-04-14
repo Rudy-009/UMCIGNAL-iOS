@@ -18,27 +18,21 @@ class MBTIButton: UIButton {
     }
     
     private func addConstraints() {
-        self.layer.cornerRadius = 8
-        self.clipsToBounds = true
-        self.backgroundColor = .white
-        self.layer.borderWidth = 2
-        self.layer.borderColor = UIColor.gray100.cgColor
+        self.contentMode = .scaleAspectFill
     }
     
     public func configure(_ mbti: MBTIEnum) {
         self.mbti = mbti
-        self.setTitle(mbti.getValue(), for: .normal)
+        self.setImage(mbti.image(), for: .normal)
     }
     
     public func checked() {
-        self.backgroundColor = .TB_3
-        self.layer.borderColor = UIColor.TB_2.cgColor
+        self.setImage(self.mbti!.selectedImage(), for: .normal)
         isChecked = true
     }
     
     public func notChecked() {
-        self.backgroundColor = .white
-        self.layer.borderColor = UIColor.gray100.cgColor
+        self.setImage(self.mbti!.image(), for: .normal)
         isChecked = false
     }
     
@@ -73,6 +67,48 @@ enum MBTIEnum {
             return "P"
         case .j:
             return "J"
+        }
+    }
+    
+    func image() -> UIImage {
+        switch self {
+        case .i:
+            return .iButton
+        case .e:
+            return .eButton
+        case .n:
+            return .nButton
+        case .s:
+            return .sButton
+        case .f:
+            return .fButton
+        case .t:
+            return .tButton
+        case .p:
+            return .pButton
+        case .j:
+            return .jButton
+        }
+    }
+    
+    func selectedImage() -> UIImage {
+        switch self {
+        case .i:
+            return .iButtonSelected
+        case .e:
+            return .eButtonSelected
+        case .n:
+            return .nButtonSelected
+        case .s:
+            return .sButtonSelected
+        case .f:
+            return .fButtonSelected
+        case .t:
+            return .tButtonSelected
+        case .p:
+            return .pButtonSelected
+        case .j:
+            return .jButtonSelected
         }
     }
 }

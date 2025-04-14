@@ -1,5 +1,5 @@
 //
-//  BirthdaySelectionView.swift
+//  UserInstagramIDView.swift
 //  UMCignal
 //
 //  Created by 이승준 on 4/8/25.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class UserBirthdayView: UIView {
+class InstagramIDView: UIView {
     
     public lazy var navigationBar = NavigationBarView()
     public lazy var progressBar = ProgressBar()
@@ -24,23 +24,24 @@ class UserBirthdayView: UIView {
         $0.numberOfLines = 2
     }
     
-    public lazy var datePicker = UIDatePicker().then {
-        $0.preferredDatePickerStyle = .wheels
-        $0.datePickerMode = .date
-        $0.locale = Locale(identifier: "ko-KR")
-                
-        // 현재 날짜에서 18년을 뺀 날짜 계산
-        let calendar = Calendar.current
-        let currentDate = Date()
-        let adultAgeDate = calendar.date(byAdding: .year, value: -18, to: currentDate)!
+    public lazy var idTextField = UITextField().then {
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: 33))
+        $0.leftView = paddingView
+        $0.leftViewMode = .always
         
-        // 최대 날짜를 18년 전으로 설정 (성인 기준)
-        $0.maximumDate = adultAgeDate
+        $0.font = Fonts.B2
+        $0.textColor = .black
+        $0.tintColor = .TB
         
-        // 최소 날짜는 예를 들어 100년 전으로 설정
-        if let minDate = calendar.date(byAdding: .year, value: -30, to: currentDate) {
-            $0.minimumDate = minDate
-        }
+        $0.layer.borderColor = UIColor.gray100.cgColor
+        $0.layer.borderWidth = 1
+        $0.layer.cornerRadius = 8
+        $0.clipsToBounds = true
+        
+        $0.enablesReturnKeyAutomatically = false
+        $0.autocapitalizationType = .none
+        $0.autocorrectionType = .no
+        $0.spellCheckingType = .no
     }
     
     public lazy var nextButton = ConfirmButton()
@@ -49,10 +50,9 @@ class UserBirthdayView: UIView {
         super.init(frame: frame)
         self.backgroundColor = .white
         self.setBasicConstraints()
-        self.configure(mainText: "생일도 알려주세요.", subText: "여러분의 나이를 확인하기 위함입니다.", progress: 2.0/7.0)
     }
     
-    private func configure(mainText: String, subText: String, progress: Float) {
+    public func configure(mainText: String, subText: String, progress: Float) {
         mainTitle.text = mainText
         subTitle.text = subText
         progressBar.progress = progress
@@ -63,7 +63,7 @@ class UserBirthdayView: UIView {
         self.addSubview(progressBar)
         self.addSubview(mainTitle)
         self.addSubview(subTitle)
-        self.addSubview(datePicker)
+        self.addSubview(idTextField)
         self.addSubview(nextButton)
         
         navigationBar.hideRightButton()
@@ -87,11 +87,10 @@ class UserBirthdayView: UIView {
             make.leading.trailing.equalToSuperview().inset(14)
         }
         
-        datePicker.snp.makeConstraints { make in
-            make.centerY.equalToSuperview().offset(100)
-            make.centerX.equalToSuperview()
+        idTextField.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(14)
-            make.height.equalTo(300)
+            make.top.equalTo(subTitle.snp.bottom).offset(24)
+            make.height.equalTo(46)
         }
         
         nextButton.configure(labelText: "다음")
@@ -109,6 +108,5 @@ class UserBirthdayView: UIView {
 
 import SwiftUI
 #Preview {
-    UserBirthdayView()
+    UserInstagramIDViewController()
 }
-

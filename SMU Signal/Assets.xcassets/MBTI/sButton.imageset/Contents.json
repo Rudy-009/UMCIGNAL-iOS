@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "sButton.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

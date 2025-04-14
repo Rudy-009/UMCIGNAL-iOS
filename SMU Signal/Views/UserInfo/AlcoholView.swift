@@ -7,7 +7,7 @@
 
 import UIKit
 
-class UserAlcoholView: UIView {
+class AlcoholView: UIView {
     
     public lazy var navigationBar = NavigationBarView()
     public lazy var progressBar = ProgressBar()
@@ -34,10 +34,9 @@ class UserAlcoholView: UIView {
         super.init(frame: frame)
         self.backgroundColor = .white
         self.setBasicConstraints()
-        self.configure(mainText: "술 좋아하시나요?", subText: "궁합에서 음주량도 엄청 중요해요.\n여러분의 주량에 대해 알려주세요.", progress: 4.0/7.0)
     }
     
-    private func configure(mainText: String, subText: String, progress: Float) {
+    public func configure(mainText: String, subText: String, progress: Float) {
         mainTitle.text = mainText
         subTitle.text = subText
         progressBar.progress = progress

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class UserSmokeView: UIView {
+class SmokeView: UIView {
     
     private let screenMargin: CGFloat = 14
     private let buttonSpacing: CGFloat = 15
@@ -36,10 +36,9 @@ class UserSmokeView: UIView {
         super.init(frame: frame)
         self.backgroundColor = .white
         self.setBasicConstraints()
-        self.configure(mainText: "흡연 하시나요?", subText: "서로 흡연에 대한 생각이 같은 분들과 \n매칭해드릴게요.", progress: 3.0/7.0)
     }
     
-    private func configure(mainText: String, subText: String, progress: Float) {
+    public func configure(mainText: String, subText: String, progress: Float) {
         mainTitle.text = mainText
         subTitle.text = subText
         progressBar.progress = progress

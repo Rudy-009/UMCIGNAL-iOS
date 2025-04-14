@@ -9,12 +9,13 @@ import UIKit
 
 class UserMajorViewController: UIViewController {
     
-    private let userMajorView = UserMajorView()
+    private let userMajorView = MajorView()
     
     override func viewDidLoad() {
         self.view = userMajorView
         self.setButtonActions()
         userMajorView.nextButton.available()
+        userMajorView.configure(mainText: "주전공 학과가 어디인가요?", subText: "학과 궁합도 알려드릴게요!", progress: 6.0/7.0)
     }
     
     private func setButtonActions() {

@@ -9,11 +9,12 @@ import UIKit
 
 class UserMBTIViewController: UIViewController {
     
-    private let userMBTIView = UserMBTIView()
+    private let userMBTIView = MBTIView()
     
     override func viewDidLoad() {
         self.view = userMBTIView
         self.setButtonActions()
+        userMBTIView.configure(mainText: "현재 MBTI를 알려주세요.", subText: "", progress: 5.0/7.0)
     }
     
     override func viewDidAppear(_ animated: Bool) {

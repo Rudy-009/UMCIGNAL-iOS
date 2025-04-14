@@ -9,12 +9,13 @@ import UIKit
 
 class UserInstagramIDViewController: UIViewController {
     
-    private let userInstagramIDView = UserInstagramIDView()
+    private let userInstagramIDView = InstagramIDView()
     
     override func viewDidLoad() {
         self.view = userInstagramIDView
         self.setButtonActions()
         self.hideKeyboardWhenTappedAround()
+        userInstagramIDView.configure(mainText: "인스타그램 아이디를 입력해주세요.", subText: "개인정보 노출을 최소화하기 위해 UMCignal은 여러분의 인스타그램 아이디 하나만 받고 있어요.", progress: 1.0)
     }
     
     private func setButtonActions() {
@@ -39,9 +40,7 @@ class UserInstagramIDViewController: UIViewController {
     private func nextVC() {
         UserInfoSingletone.typeInstagramId(userInstagramIDView.idTextField.text!)
         
-        let nextVC = UserSexViewController()
-        nextVC.modalPresentationStyle = .overFullScreen
-        present(nextVC, animated: false)
+        print(UserInfoSingletone.shared)
     }
     
     private func isNextButtonAvailable() {

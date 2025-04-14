@@ -1,5 +1,5 @@
 //
-//  UserInstagramIDView.swift
+//  UserMajorView.swift
 //  UMCignal
 //
 //  Created by 이승준 on 4/8/25.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class UserInstagramIDView: UIView {
+class MajorView: UIView {
     
     public lazy var navigationBar = NavigationBarView()
     public lazy var progressBar = ProgressBar()
@@ -24,36 +24,15 @@ class UserInstagramIDView: UIView {
         $0.numberOfLines = 2
     }
     
-    public lazy var idTextField = UITextField().then {
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: 33))
-        $0.leftView = paddingView
-        $0.leftViewMode = .always
-        
-        $0.font = Fonts.B2
-        $0.textColor = .black
-        $0.tintColor = .TB
-        
-        $0.layer.borderColor = UIColor.gray100.cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 8
-        $0.clipsToBounds = true
-        
-        $0.enablesReturnKeyAutomatically = false
-        $0.autocapitalizationType = .none
-        $0.autocorrectionType = .no
-        $0.spellCheckingType = .no
-    }
-    
     public lazy var nextButton = ConfirmButton()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .white
         self.setBasicConstraints()
-        self.configure(mainText: "인스타그램 아이디를 입력해주세요.", subText: "개인정보 노출을 최소화하기 위해 UMCignal은 여러분의 인스타그램 아이디 하나만 받고 있어요.", progress: 1.0)
     }
     
-    private func configure(mainText: String, subText: String, progress: Float) {
+    public func configure(mainText: String, subText: String, progress: Float) {
         mainTitle.text = mainText
         subTitle.text = subText
         progressBar.progress = progress
@@ -64,7 +43,6 @@ class UserInstagramIDView: UIView {
         self.addSubview(progressBar)
         self.addSubview(mainTitle)
         self.addSubview(subTitle)
-        self.addSubview(idTextField)
         self.addSubview(nextButton)
         
         navigationBar.hideRightButton()
@@ -88,12 +66,6 @@ class UserInstagramIDView: UIView {
             make.leading.trailing.equalToSuperview().inset(14)
         }
         
-        idTextField.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(14)
-            make.top.equalTo(subTitle.snp.bottom).offset(24)
-            make.height.equalTo(46)
-        }
-        
         nextButton.configure(labelText: "다음")
         nextButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(14)
@@ -109,5 +81,5 @@ class UserInstagramIDView: UIView {
 
 import SwiftUI
 #Preview {
-    UserInstagramIDViewController()
+    UserMajorViewController()
 }
