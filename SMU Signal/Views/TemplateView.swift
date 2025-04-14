@@ -33,7 +33,7 @@ class TemplateView: UIView {
         self.configure(mainText: "템플릿 페이지입니다", subText: "여러줄의 문장도\n확인하는 용도입니다.", progress: 1.0/7.0)
     }
     
-    private func configure(mainText: String, subText: String, progress: Float) {
+    public func configure(mainText: String, subText: String, progress: Float) {
         mainTitle.text = mainText
         subTitle.text = subText
         progressBar.progress = progress

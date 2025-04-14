@@ -7,9 +7,10 @@
 
 import UIKit
 
-class UserGenderViewController: UIViewController {
+class UserGenderViewController: UIViewController, UIGestureRecognizerDelegate {
     
     private let userGenderView = GenderView()
+    let nextVC = UserBirthdayViewController()
     
     override func viewDidLoad() {
         self.view = userGenderView
@@ -20,11 +21,14 @@ class UserGenderViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         userGenderView.setButtonConstraints()
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
     private func setButtonActions() {
         userGenderView.navigationBar.leftButton.addTarget(self, action: #selector(popVC), for: .touchUpInside)
-        userGenderView.nextButton.addTarget(self, action: #selector(nextVC), for: .touchUpInside)
+        userGenderView.nextButton.addTarget(self, action: #selector(pushNextVC), for: .touchUpInside)
         userGenderView.maleButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         userGenderView.femaleButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         userGenderView.otherButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
@@ -46,11 +50,11 @@ class UserGenderViewController: UIViewController {
     
     @objc
     private func popVC() {
-        dismiss(animated: false)
+        self.navigationController?.popViewController(animated: true)
     }
     
     @objc
-    private func nextVC() {
+    private func pushNextVC() {
         let buttons = [userGenderView.maleButton, userGenderView.femaleButton, userGenderView.otherButton]
         for button in buttons {
             if button.isChecked {
@@ -58,9 +62,7 @@ class UserGenderViewController: UIViewController {
             }
         }
         
-        let nextVC = UserBirthdayViewController()
-        nextVC.modalPresentationStyle = .overFullScreen
-        present(nextVC, animated: false)
+        navigationController?.pushViewController(nextVC, animated: true)
     }
     
     private func isNextButtonAvailable() {
@@ -72,5 +74,5 @@ class UserGenderViewController: UIViewController {
 
 import SwiftUI
 #Preview {
-    UserGenderViewController()
+    UINavigationController(rootViewController: UserGenderViewController())
 }

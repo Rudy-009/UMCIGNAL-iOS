@@ -10,6 +10,7 @@ import UIKit
 class UserMajorViewController: UIViewController {
     
     private let majorView = MajorView()
+    let nextVC = UserInstagramIDViewController()
     
     override func viewDidLoad() {
         self.view = majorView
@@ -20,7 +21,7 @@ class UserMajorViewController: UIViewController {
     
     private func setButtonActions() {
         majorView.navigationBar.leftButton.addTarget(self, action: #selector(popVC), for: .touchUpInside)
-        majorView.nextButton.addTarget(self, action: #selector(nextVC), for: .touchUpInside)
+        majorView.nextButton.addTarget(self, action: #selector(pushNextVC), for: .touchUpInside)
     }
     
     private func setCollegeButtonAction() {
@@ -87,16 +88,14 @@ class UserMajorViewController: UIViewController {
     
     @objc
     private func popVC() {
-        dismiss(animated: false)
+        self.navigationController?.popViewController(animated: true)
     }
     
     @objc
-    private func nextVC() {
+    private func pushNextVC() {
         UserInfoSingletone.typeStudentMajor(majorView.majorButton.major!.rawValue)
         
-        let nextVC = UserInstagramIDViewController()
-        nextVC.modalPresentationStyle = .overFullScreen
-        present(nextVC, animated: false)
+        navigationController?.pushViewController(nextVC, animated: true)
     }
     
     private func isNextButtonAvailable() {
@@ -105,10 +104,4 @@ class UserMajorViewController: UIViewController {
         }
     }
     
-}
-
-
-import SwiftUI
-#Preview {
-    UserMajorViewController()
 }

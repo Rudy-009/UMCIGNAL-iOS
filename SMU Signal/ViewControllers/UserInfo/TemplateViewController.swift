@@ -7,13 +7,16 @@
 
 import UIKit
 
-class TemplateViewController: UIViewController {
+class TemplateViewController: UIViewController, UIGestureRecognizerDelegate {
     
     private let templateView = TemplateView()
     
     override func viewDidLoad() {
         self.view = templateView
         self.setButtonActions()
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
     private func setButtonActions() {
@@ -23,14 +26,13 @@ class TemplateViewController: UIViewController {
     
     @objc
     private func popVC() {
-        dismiss(animated: false)
+        self.navigationController?.popViewController(animated: true)
     }
     
     @objc
     private func nextVC() {
         let nextVC = TemplateViewController()
-        nextVC.modalPresentationStyle = .overFullScreen
-        present(nextVC, animated: false)
+        
     }
     
     private func isNextButtonAvailable() {

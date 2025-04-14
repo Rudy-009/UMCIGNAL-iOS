@@ -7,7 +7,7 @@
 
 import UIKit
 
-class UserInstagramIDViewController: UIViewController {
+class UserInstagramIDViewController: UIViewController, UITextFieldDelegate {
     
     private let userInstagramIDView = InstagramIDView()
     
@@ -15,6 +15,8 @@ class UserInstagramIDViewController: UIViewController {
         self.view = userInstagramIDView
         self.setButtonActions()
         self.hideKeyboardWhenTappedAround()
+        self.userInstagramIDView.idTextField.becomeFirstResponder()
+        self.userInstagramIDView.idTextField.delegate = self
         userInstagramIDView.configure(mainText: "인스타그램 아이디를 입력해주세요.", subText: "개인정보 노출을 최소화하기 위해 UMCignal은 여러분의 인스타그램 아이디 하나만 받고 있어요.", progress: 1.0)
     }
     
@@ -26,29 +28,39 @@ class UserInstagramIDViewController: UIViewController {
     
     @objc
     private func textFieldDidChanged() {
-        userInstagramIDView.idTextField.layer.borderWidth = 2
-        userInstagramIDView.idTextField.layer.borderColor = UIColor.TB.cgColor
-        isNextButtonAvailable()
+        if userInstagramIDView.idTextField.text! != "" {
+            userInstagramIDView.availableMode()
+        } else {
+            userInstagramIDView.defaultMode()
+        }
     }
     
     @objc
     private func popVC() {
-        dismiss(animated: false)
+        self.navigationController?.popViewController(animated: true)
     }
     
     @objc
     private func nextVC() {
-        UserInfoSingletone.typeInstagramId(userInstagramIDView.idTextField.text!)
-        
+        postUserInfo()
         print(UserInfoSingletone.shared)
     }
-    
-    private func isNextButtonAvailable() {
-        userInstagramIDView.nextButton.available()
+        
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        postUserInfo()
+        return true
     }
     
+    private func storeUserInfo() {
+        postUserInfo()
+    }
+    
+    private func postUserInfo() {
+        UserInfoSingletone.typeInstagramId(userInstagramIDView.idTextField.text!)
+        
+        // API 연동
+    }
 }
-
 
 import SwiftUI
 #Preview {

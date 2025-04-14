@@ -17,9 +17,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         window?.makeKeyAndVisible()
-        window?.rootViewController = UserBirthdayViewController()
+        window?.rootViewController = UINavigationController(rootViewController: UserGenderViewController())
         window?.overrideUserInterfaceStyle = .light
     }
+    
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
         // This occurs shortly after the scene enters the background, or when its session is discarded.

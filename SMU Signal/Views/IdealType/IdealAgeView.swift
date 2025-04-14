@@ -1,13 +1,13 @@
 //
-//  UserInstagramIDView.swift
-//  UMCignal
+//  IdealAgeView.swift
+//  SMU Signal
 //
-//  Created by 이승준 on 4/8/25.
+//  Created by 이승준 on 4/14/25.
 //
 
 import UIKit
 
-class InstagramIDView: UIView {
+class IdealAgeView: UIView {
     
     public lazy var navigationBar = NavigationBarView()
     public lazy var progressBar = ProgressBar()
@@ -24,26 +24,6 @@ class InstagramIDView: UIView {
         $0.numberOfLines = 2
     }
     
-    public lazy var idTextField = UITextField().then {
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: 33))
-        $0.leftView = paddingView
-        $0.leftViewMode = .always
-        
-        $0.font = Fonts.B2
-        $0.textColor = .black
-        $0.tintColor = .TB
-        
-        $0.layer.borderColor = UIColor.gray100.cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 8
-        $0.clipsToBounds = true
-        
-        $0.enablesReturnKeyAutomatically = false
-        $0.autocapitalizationType = .none
-        $0.autocorrectionType = .no
-        $0.spellCheckingType = .no
-    }
-    
     public lazy var nextButton = ConfirmButton()
     
     override init(frame: CGRect) {
@@ -58,24 +38,11 @@ class InstagramIDView: UIView {
         progressBar.progress = progress
     }
     
-    public func defaultMode() {
-        self.idTextField.layer.borderWidth = 2
-        self.idTextField.layer.borderColor = UIColor.gray100.cgColor
-        self.nextButton.unavailable()
-    }
-    
-    public func availableMode() {
-        self.idTextField.layer.borderWidth = 2
-        self.idTextField.layer.borderColor = UIColor.TB.cgColor
-        self.nextButton.available()
-    }
-    
     private func setBasicConstraints() {
         self.addSubview(navigationBar)
         self.addSubview(progressBar)
         self.addSubview(mainTitle)
         self.addSubview(subTitle)
-        self.addSubview(idTextField)
         self.addSubview(nextButton)
         
         navigationBar.hideRightButton()
@@ -99,12 +66,6 @@ class InstagramIDView: UIView {
             make.leading.trailing.equalToSuperview().inset(14)
         }
         
-        idTextField.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(14)
-            make.top.equalTo(subTitle.snp.bottom).offset(24)
-            make.height.equalTo(46)
-        }
-        
         nextButton.configure(labelText: "다음")
         nextButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(14)
@@ -118,7 +79,3 @@ class InstagramIDView: UIView {
     
 }
 
-import SwiftUI
-#Preview {
-    UserInstagramIDViewController()
-}

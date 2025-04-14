@@ -10,14 +10,15 @@ import UIKit
 class UserAlcoholViewController: UIViewController {
     
     private let userAlcoholView = AlcoholView()
+    let nextVC = UserMBTIViewController()
     
     override func viewDidLoad() {
         self.view = userAlcoholView
         self.setButtonActions()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         userAlcoholView.setButtonConstraints()
         userAlcoholView.configure(mainText: "술 좋아하시나요?", subText: "궁합에서 음주량도 엄청 중요해요.\n여러분의 주량에 대해 알려주세요.", progress: 4.0/7.0)
     }
@@ -27,7 +28,7 @@ class UserAlcoholViewController: UIViewController {
         userAlcoholView.aBottleButton.addTarget(self, action: #selector(selectAlcohol(_:)), for: .touchUpInside)
         userAlcoholView.bottlesButton.addTarget(self, action: #selector(selectAlcohol(_:)), for: .touchUpInside)
         userAlcoholView.navigationBar.leftButton.addTarget(self, action: #selector(popVC), for: .touchUpInside)
-        userAlcoholView.nextButton.addTarget(self, action: #selector(nextVC), for: .touchUpInside)
+        userAlcoholView.nextButton.addTarget(self, action: #selector(pushNextVC), for: .touchUpInside)
     }
     
     @objc
@@ -46,11 +47,11 @@ class UserAlcoholViewController: UIViewController {
     
     @objc
     private func popVC() {
-        dismiss(animated: false)
+        self.navigationController?.popViewController(animated: true)
     }
     
     @objc
-    private func nextVC() {
+    private func pushNextVC() {
         let buttons = [userAlcoholView.aGlassButton, userAlcoholView.aBottleButton, userAlcoholView.bottlesButton]
         for button in buttons {
             if button.isChecked {
@@ -58,9 +59,7 @@ class UserAlcoholViewController: UIViewController {
             }
         }
         
-        let nextVC = UserMBTIViewController()
-        nextVC.modalPresentationStyle = .overFullScreen
-        present(nextVC, animated: false)
+        navigationController?.pushViewController(nextVC, animated: true)
     }
     
 }

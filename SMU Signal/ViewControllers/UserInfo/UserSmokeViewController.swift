@@ -10,6 +10,7 @@ import UIKit
 class UserSmokeViewController: UIViewController {
     
     private let userSmokeView = SmokeView()
+    let nextVC = UserAlcoholViewController()
     
     override func viewDidLoad() {
         self.view = userSmokeView
@@ -17,8 +18,8 @@ class UserSmokeViewController: UIViewController {
         userSmokeView.configure(mainText: "흡연 하시나요?", subText: "서로 흡연에 대한 생각이 같은 분들과 \n매칭해드릴게요.", progress: 3.0/7.0)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         userSmokeView.setButtonConstraints()
     }
     
@@ -26,7 +27,7 @@ class UserSmokeViewController: UIViewController {
         userSmokeView.smokerButton.addTarget(self, action: #selector(handleButtonTapped(_:)), for: .touchUpInside)
         userSmokeView.nonSmokerButton.addTarget(self, action: #selector(handleButtonTapped(_:)), for: .touchUpInside)
         userSmokeView.navigationBar.leftButton.addTarget(self, action: #selector(popVC), for: .touchUpInside)
-        userSmokeView.nextButton.addTarget(self, action: #selector(nextVC), for: .touchUpInside)
+        userSmokeView.nextButton.addTarget(self, action: #selector(pushNextVC), for: .touchUpInside)
     }
     
     @objc
@@ -44,14 +45,13 @@ class UserSmokeViewController: UIViewController {
     
     @objc
     private func popVC() {
-        dismiss(animated: false)
+        self.navigationController?.popViewController(animated: true)
     }
     
     @objc
-    private func nextVC() {
-        let nextVC = UserAlcoholViewController()
-        nextVC.modalPresentationStyle = .overFullScreen
-        present(nextVC, animated: false)
+    private func pushNextVC() {
+        UserInfoSingletone.typeIsSmoking(userSmokeView.smokerButton.isChecked)
+        navigationController?.pushViewController(nextVC, animated: true)
     }
     
     private func isNextButtonAvailable() {
