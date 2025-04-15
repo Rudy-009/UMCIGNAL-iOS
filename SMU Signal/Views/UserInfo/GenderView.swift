@@ -92,7 +92,12 @@ class GenderView: UIView {
     public func setButtonConstraints() {
         self.addSubview(buttonFrame)
         
-        let frameSize = UIScreen.main.bounds.width - 28
+        let screenWidth = UIScreen.main.bounds.width
+        var frameSize: CGFloat = screenWidth - 28
+        if screenWidth <= 375 {
+            frameSize = screenWidth * 0.7
+        }
+
         let buttonSize = (frameSize - 16) / 2
         
         buttonFrame.snp.makeConstraints { make in
@@ -119,8 +124,13 @@ class GenderView: UIView {
         }
         
         otherButton.snp.makeConstraints { make in
+            make.height.width.equalTo(buttonSize)
             make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-16)
+            if screenWidth <= 375 {
+                make.bottom.equalToSuperview()
+            } else {
+                make.bottom.equalToSuperview().offset(-16)
+            }
         }
     }
     

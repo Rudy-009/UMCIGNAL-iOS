@@ -88,22 +88,31 @@ class MBTIView: UIView {
     
     public func setButtonConstraints() {
         let screenWidth = UIScreen.main.bounds.width
-        let size = ( screenWidth - ( padding * 2 + buttonMargin )) / 2.0
+        var width = ( screenWidth - ( padding * 2 + buttonMargin )) / 2.0
+        var height: CGFloat = width * (96/104)
+        var mainTitlePadding: CGFloat = 20
+        if screenWidth <= 375 {
+            width = ( screenWidth - ( padding * 2 + buttonMargin )) / 2.3
+            height = width * (96/104)
+            mainTitlePadding = 10
+        }
+        
         let buttons: [MBTIButton] = [mbtiE, mbtiI, mbtiN, mbtiS, mbtiF, mbtiT, mbtiJ, mbtiP]
         for button in buttons {
             self.addSubview(button)
             button.snp.makeConstraints { make in
-                make.width.height.equalTo(size)
+                make.width.equalTo(width)
+                make.height.equalTo(height)
             }
         }
         
         mbtiE.snp.makeConstraints { make in
-            make.top.equalTo(subTitle.snp.bottom).offset(20)
+            make.top.equalTo(subTitle.snp.bottom).offset(mainTitlePadding)
             make.leading.equalToSuperview().offset(padding)
         }
         
         mbtiI.snp.makeConstraints { make in
-            make.top.equalTo(subTitle.snp.bottom).offset(20)
+            make.top.equalTo(subTitle.snp.bottom).offset(mainTitlePadding)
             make.trailing.equalToSuperview().offset(-padding)
         }
         

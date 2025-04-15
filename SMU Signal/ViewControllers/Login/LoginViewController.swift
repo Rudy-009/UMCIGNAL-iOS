@@ -17,18 +17,98 @@ class LoginViewController: UIViewController {
         self.view = loginView
         setActions()
         hideKeyboardWhenTappedAround()
+        loginView.emailTextField.delegate = self
+        loginView.codeTextField.delegate = self
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+        let keyboardHeight = keyboardFrame.cgRectValue.height
+        // codeTextField가 firstResponder일 때만 동작
+        if loginView.codeTextField.isFirstResponder {
+            loginView.keyBoardWillAppear(keyboardHeight: keyboardHeight)
+        }
+    }
+
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        loginView.keyBoardWillDisappear()
     }
     
 }
 
-extension LoginViewController {
+// MARK: 버튼 동작 및 텍스트 필드 동작
+extension LoginViewController: UITextFieldDelegate {
     
     private func setActions() {
         loginView.sendVerifyCodeButton.addTarget(self, action: #selector(sendToEmail), for: .touchUpInside)
         loginView.loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
+        loginView.emailTextField.addTarget(self, action: #selector(emailTextFieldDidChange), for: .editingChanged)
+        loginView.codeTextField.addTarget(self, action: #selector(codeTextFieldDidChange), for: .editingChanged)
+        
     }
+    
+    @objc
+    private func emailTextFieldDidChange() {
+        let text = loginView.emailTextField.text ?? ""
+        if let _ = Int(text) {
+            if text.count == 9 {
+                loginView.sendVerifyCodeButton.available()
+            } else {
+                loginView.sendVerifyCodeButton.unavailable()
+            }
+        } else {
+            loginView.sendVerifyCodeButton.unavailable()
+            // 숫자가 아닌 텍스트가 입력된 경우
+        }
+    }
+    
+    @objc
+    private func codeTextFieldDidChange() {
+        let text = loginView.codeTextField.text ?? ""
+        if let _ = Int(text) {
+            if text.count == 6 {
+                loginView.loginButton.available()
+            } else {
+                loginView.loginButton.unavailable()
+            }
+        } else {
+            loginView.loginButton.unavailable()
+            // 숫자가 아닌 텍스트가 입력된 경우
+        }
+    }
+    
+    // 글자 수 제한
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        var maxLength = 0
+        if textField == loginView.emailTextField {
+            maxLength = 9
+        } else if textField == loginView.codeTextField {
+            maxLength = 6
+        }
+        let currentString: NSString = (textField.text ?? "") as NSString
+        let newString: NSString = currentString.replacingCharacters(in: range, with: string) as NSString
+        return newString.length <= maxLength
+    }
+    
+    // Return 대응인데 Return이 없음...
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == loginView.emailTextField && loginView.sendVerifyCodeButton.isEnabled {
+            sendToEmail()
+        } else if textField == loginView.codeTextField && loginView.loginButton.isEnabled {
+            login()
+        } else {
+            return false
+        }
+        return true
+    }
+    
 }
 
+// MARK: API 연결
 extension LoginViewController {
     
     @objc
@@ -38,7 +118,7 @@ extension LoginViewController {
             "Content-Type": "application/json"
         ]
         let parameters: [String: Any] = [
-            "mail": loginView.emailTextField.text ?? ""
+            "mail": loginView.emailTextField.text! + "@sangmyung.kr"
         ]
         print("mail: \(loginView.emailTextField.text ?? "")")
         AF.request(
@@ -49,7 +129,24 @@ extension LoginViewController {
             headers: headers
         ).responseDecodable(of: EmailCodeResponse.self) { response in
             switch response.result {
-            case .success(_):
+            case .success(let apiResponse):
+                let code = response.response!.statusCode
+                print("code: \(code)")
+                let message = apiResponse.message
+                switch code {
+                case 200, 201:
+                    self.loginView.sendVerifyCodeButton.configure(labelText: "전송 완료")
+                    self.loginView.sendVerifyCodeButton.unavailable()
+                    self.loginView.codeSentMode()
+                case 400:
+                    break
+                case 500:
+                    break
+                default:
+                    break
+                }
+                self.loginView.emailSubLabel.text = message
+                self.loginView.emailSubLabel.isHidden = false
                 return
             case .failure(let error):
                 print("Error: \(error)")
@@ -58,7 +155,7 @@ extension LoginViewController {
     }
     
     struct EmailCodeResponse: Codable {
-        let userId: String?
+        let userId: Int?
         let message: String
     }
     
@@ -69,9 +166,8 @@ extension LoginViewController {
             "Content-Type": "application/json"
         ]
         let parameters: [String: Any] = [
-            "mailVerification": loginView.codeTextField.text ?? ""
+            "mailVerification": loginView.codeTextField.text!
         ]
-        
         AF.request(
             K.baseURLString + "/user/verify",
             method: .post,
@@ -80,9 +176,22 @@ extension LoginViewController {
             headers: headers
         ).responseDecodable(of: TokenResponse.self) { response in
             switch response.result {
-            case .success(let value):
-                _ = KeychainService.add(key: K.APIKey.accessToken, value: value.token)
-                self.checkUserProcess()
+            case .success(let apiResponse):
+                let code = response.response!.statusCode
+                var message = ""
+                switch code {
+                case 200:
+                    print("로그인 성공")
+                    _ = KeychainService.add(key: K.APIKey.accessToken, value: apiResponse.token!)
+                    self.checkUserProcess()
+                case 400, 401, 408, 500:
+                    print(message)
+                    message = apiResponse.message
+                default:
+                    break
+                }
+                self.loginView.codeSubLabel.text = message
+                self.loginView.codeSubLabel.isHidden = false
             case .failure(let error):
                 print("Error: \(error)")
             }
@@ -91,7 +200,7 @@ extension LoginViewController {
     
     struct TokenResponse: Codable {
         let message: String
-        let token: String
+        let token: String?
     }
     
     private func checkUserProcess() {

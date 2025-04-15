@@ -9,7 +9,7 @@ import UIKit
 
 class SmokeView: UIView {
     
-    private let screenMargin: CGFloat = 14
+    private var screenMargin: CGFloat = 14
     private let buttonSpacing: CGFloat = 15
     
     public lazy var navigationBar = NavigationBarView()
@@ -87,7 +87,12 @@ class SmokeView: UIView {
         self.addSubview(nonSmokerButton)
         
         let screenWidth = UIScreen.main.bounds.width
-        let buttonWidth = (screenWidth - (screenMargin * 2 + buttonSpacing)) / 2
+        var buttonWidth = (screenWidth - (screenMargin * 2 + buttonSpacing)) / 2
+        
+        if screenWidth <= 375 {
+            screenMargin = 28
+            buttonWidth = (screenWidth - (screenMargin * 2 + buttonSpacing)) / 2
+        }
         
         smokerButton.snp.makeConstraints { make in
             make.width.height.equalTo(buttonWidth)

@@ -82,7 +82,8 @@ class AlcoholView: UIView {
         self.addSubview(aBottleButton)
         self.addSubview(bottlesButton)
         
-        let width = UIScreen.main.bounds.width - 28
+        let screenWidth = UIScreen.main.bounds.width
+        let width = screenWidth - 28
         let height = width * 2.0 / 7.0
         
         aGlassButton.configure(.glass)
