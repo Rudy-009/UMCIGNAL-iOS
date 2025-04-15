@@ -167,47 +167,80 @@ class HomeView: UIView {
         // let frameHeight: CGFloat = mainContentFrame.frame.height
         let frameWidth: CGFloat = UIScreen.main.bounds.width
         let buttonWidth = (frameWidth - 55) / 2
-        
-        var ratio: CGFloat = 240.0 / 156.0
+        var buttonHeight: CGFloat = buttonWidth * ( 240.0 / 156.0 )
         
         if frameWidth <= 375 {
-            ratio = 1.4
+            let ratio = 1.4
+            mainContentFrame.snp.makeConstraints { make in
+                make.top.equalTo(rerollFrame.snp.bottom).offset(20)
+                make.leading.trailing.equalToSuperview()
+                make.bottom.equalToSuperview()
+            }
+            
+            matchResultButton.setConstraints(width: buttonWidth, height: buttonWidth * ratio )
+            matchResultButton.snp.makeConstraints { make in
+                make.leading.top.equalToSuperview().inset(20)
+            }
+            
+            redDot.snp.makeConstraints { make in
+                make.trailing.top.equalTo(matchResultButton).inset(4)
+            }
+            
+            editMyInfoButton.setConstraints(width: buttonWidth, height: (buttonWidth - 10.0) * (112.0/160.0))
+            editMyInfoButton.configure(text: "내 매칭 정보 수정", image: .editIcon)
+            editMyInfoButton.snp.makeConstraints { make in
+                make.trailing.top.equalToSuperview().inset(20)
+            }
+            
+            idealMatchButton.setConstraints(width: buttonWidth, height: (buttonWidth - 10.0) * (112.0/160.0))
+            idealMatchButton.configure(text: "이상형 재설정", image: .palletIcon)
+            idealMatchButton.snp.makeConstraints { make in
+                make.trailing.equalToSuperview().inset(20)
+                make.top.equalTo(editMyInfoButton.snp.bottom).offset(10)
+            }
+            
+            referralButton.snp.makeConstraints { make in
+                make.leading.trailing.equalToSuperview().inset(20)
+                make.top.equalTo(idealMatchButton.snp.bottom).offset(20)
+            }
+        } else {
+            let ratio =  240.0 / 156.0
+            let editButtonHeight = (buttonHeight - 20.0) / 2.0
+            
+            mainContentFrame.snp.makeConstraints { make in
+                make.top.equalTo(rerollFrame.snp.bottom).offset(20)
+                make.leading.trailing.equalToSuperview()
+                make.bottom.equalToSuperview()
+            }
+            
+            matchResultButton.setConstraints(width: buttonWidth, height: buttonWidth * ratio )
+            matchResultButton.snp.makeConstraints { make in
+                make.leading.top.equalToSuperview().inset(20)
+            }
+            
+            redDot.snp.makeConstraints { make in
+                make.trailing.top.equalTo(matchResultButton).inset(4)
+            }
+            
+            editMyInfoButton.setConstraints(width: buttonWidth, height: editButtonHeight)
+            editMyInfoButton.configure(text: "내 매칭 정보 수정", image: .editIcon)
+            editMyInfoButton.snp.makeConstraints { make in
+                make.trailing.top.equalToSuperview().inset(20)
+            }
+            
+            idealMatchButton.setConstraints(width: buttonWidth, height: editButtonHeight)
+            idealMatchButton.configure(text: "이상형 재설정", image: .palletIcon)
+            idealMatchButton.snp.makeConstraints { make in
+                make.trailing.equalToSuperview().inset(20)
+                make.top.equalTo(editMyInfoButton.snp.bottom).offset(20)
+            }
+            
+            referralButton.snp.makeConstraints { make in
+                make.leading.trailing.equalToSuperview().inset(10)
+                make.top.equalTo(idealMatchButton.snp.bottom).offset(20)
+            }
         }
         
-        mainContentFrame.snp.makeConstraints { make in
-            make.top.equalTo(rerollFrame.snp.bottom).offset(20)
-            make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
-        
-        matchResultButton.setConstraints(width: buttonWidth, height: buttonWidth * ratio )
-        matchResultButton.snp.makeConstraints { make in
-            make.leading.top.equalToSuperview().inset(20)
-        }
-        
-        redDot.snp.makeConstraints { make in
-            make.trailing.top.equalTo(matchResultButton).inset(4)
-        }
-        
-        editMyInfoButton.setConstraints(width: buttonWidth, height: (buttonWidth - 10.0) * (112.0/160.0))
-        editMyInfoButton.configure(text: "내 매칭 정보 수정", image: .editIcon)
-        editMyInfoButton.snp.makeConstraints { make in
-            make.trailing.top.equalToSuperview().inset(20)
-        }
-        
-        idealMatchButton.setConstraints(width: buttonWidth, height: (buttonWidth - 10.0) * (112.0/160.0))
-        idealMatchButton.configure(text: "이상형 재설정", image: .palletIcon)
-        idealMatchButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(20)
-            make.top.equalTo(editMyInfoButton.snp.bottom).offset(10)
-            make.width.equalTo(buttonWidth)
-            make.height.equalTo(buttonWidth * (112.0/160.0))
-        }
-        
-        referralButton.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.top.equalTo(idealMatchButton.snp.bottom).offset(20)
-        }
     }
     
     public func idElisipse(_ id: String) -> String {
