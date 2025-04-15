@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         window?.makeKeyAndVisible()
-        window?.rootViewController = LoginFailedViewController() // UINavigationController(rootViewController: IdealAgeViewController())
+        window?.rootViewController =  HomeViewController() // UINavigationController(rootViewController: UserGenderViewController())
         window?.overrideUserInterfaceStyle = .light
     }
     

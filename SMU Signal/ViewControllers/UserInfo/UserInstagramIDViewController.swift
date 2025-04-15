@@ -15,9 +15,9 @@ class UserInstagramIDViewController: UIViewController, UITextFieldDelegate {
         self.view = userInstagramIDView
         self.setButtonActions()
         self.hideKeyboardWhenTappedAround()
-        self.userInstagramIDView.idTextField.becomeFirstResponder()
         self.userInstagramIDView.idTextField.delegate = self
-        userInstagramIDView.configure(mainText: "인스타그램 아이디를 입력해주세요.", subText: "개인정보 노출을 최소화하기 위해 UMCignal은 여러분의 인스타그램 아이디 하나만 받고 있어요.", progress: 1.0)
+        self.userInstagramIDView.idTextField.becomeFirstResponder()
+        userInstagramIDView.configure(mainText: "인스타그램 아이디를 입력해주세요.", subText: "개인정보 노출을 최소화하기 위해 UMCignal은 여러분의 인스타그램 아이디 하나만 받고 있어요.", progress: 1.0)        
     }
     
     private func setButtonActions() {

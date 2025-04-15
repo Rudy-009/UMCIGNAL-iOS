@@ -12,7 +12,6 @@ import Then
 class LoginView: UIView {
     
     var topPadding: CGFloat = 100
-    // private var loginButtonBottomConstraint: Constraint? // SnapKit Constraint
     
     private lazy var mainTitle = UILabel().then {
         $0.text = "로그인"
@@ -99,7 +98,7 @@ class LoginView: UIView {
             }
             UIView.animate(withDuration: 0.3) {
                 self.layoutIfNeeded()
-            }
+        }
     }
     
     private func setupConstraints() {
