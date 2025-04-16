@@ -23,6 +23,7 @@ class MatchResultButton: UIButton {
     
     private lazy var heartImage = UIImageView().then {
         $0.image = .twoHearts
+        $0.isUserInteractionEnabled = false
     }
     
     override init(frame: CGRect) {

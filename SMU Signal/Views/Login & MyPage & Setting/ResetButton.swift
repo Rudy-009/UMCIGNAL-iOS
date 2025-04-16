@@ -16,6 +16,7 @@ class ResetButton: UIButton {
     
     private lazy var mainImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
+        $0.isUserInteractionEnabled = false
     }
     
     func setConstraints(width: CGFloat, height: CGFloat) {

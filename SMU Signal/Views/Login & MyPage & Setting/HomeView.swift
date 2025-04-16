@@ -81,10 +81,7 @@ class HomeView: UIView {
     
     public lazy var idealMatchButton = ResetButton()
     
-    public lazy var referralButton = UIButton().then {
-        $0.setImage(.referralBanner, for: .normal)
-        $0.contentMode = .scaleAspectFit
-    }
+    public lazy var referralButton = ReferralButton()
     
     private lazy var redDot = UIView().then {
         $0.backgroundColor = .red400
@@ -169,14 +166,14 @@ class HomeView: UIView {
         let buttonWidth = (frameWidth - 55) / 2
         var buttonHeight: CGFloat = buttonWidth * ( 240.0 / 156.0 )
         
+        mainContentFrame.snp.makeConstraints { make in
+            make.top.equalTo(rerollFrame.snp.bottom).offset(20)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        
         if frameWidth <= 375 {
             let ratio = 1.4
-            mainContentFrame.snp.makeConstraints { make in
-                make.top.equalTo(rerollFrame.snp.bottom).offset(20)
-                make.leading.trailing.equalToSuperview()
-                make.bottom.equalToSuperview()
-            }
-            
             matchResultButton.setConstraints(width: buttonWidth, height: buttonWidth * ratio )
             matchResultButton.snp.makeConstraints { make in
                 make.leading.top.equalToSuperview().inset(20)
@@ -198,20 +195,10 @@ class HomeView: UIView {
                 make.trailing.equalToSuperview().inset(20)
                 make.top.equalTo(editMyInfoButton.snp.bottom).offset(10)
             }
-            
-            referralButton.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview().inset(20)
-                make.top.equalTo(idealMatchButton.snp.bottom).offset(20)
-            }
+           
         } else {
             let ratio =  240.0 / 156.0
             let editButtonHeight = (buttonHeight - 20.0) / 2.0
-            
-            mainContentFrame.snp.makeConstraints { make in
-                make.top.equalTo(rerollFrame.snp.bottom).offset(20)
-                make.leading.trailing.equalToSuperview()
-                make.bottom.equalToSuperview()
-            }
             
             matchResultButton.setConstraints(width: buttonWidth, height: buttonWidth * ratio )
             matchResultButton.snp.makeConstraints { make in
@@ -234,11 +221,11 @@ class HomeView: UIView {
                 make.trailing.equalToSuperview().inset(20)
                 make.top.equalTo(editMyInfoButton.snp.bottom).offset(20)
             }
-            
-            referralButton.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview().inset(10)
-                make.top.equalTo(idealMatchButton.snp.bottom).offset(20)
-            }
+        }
+        
+        referralButton.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.top.equalTo(idealMatchButton.snp.bottom).offset(20)
         }
         
     }
