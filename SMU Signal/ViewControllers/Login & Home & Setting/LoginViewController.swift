@@ -15,8 +15,8 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view = loginView
-        setActions()
         hideKeyboardWhenTappedAround()
+        setActions()
         loginView.emailTextField.delegate = self
         loginView.codeTextField.delegate = self
         
@@ -46,13 +46,16 @@ extension LoginViewController: UITextFieldDelegate {
     private func setActions() {
         loginView.sendVerifyCodeButton.addTarget(self, action: #selector(sendToEmail), for: .touchUpInside)
         loginView.loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
-        loginView.emailTextField.addTarget(self, action: #selector(emailTextFieldDidChange), for: .editingChanged)
-        loginView.codeTextField.addTarget(self, action: #selector(codeTextFieldDidChange), for: .editingChanged)
-        
+        loginView.emailTextField.addTarget(self, action: #selector(editingStarted(_ :)), for: .editingDidBegin)
+        loginView.codeTextField.addTarget(self, action: #selector(editingStarted(_ :)), for: .editingDidBegin)
+        loginView.emailTextField.addTarget(self, action: #selector(emailTextFieldDidChange(_ :)), for: .editingChanged)
+        loginView.codeTextField.addTarget(self, action: #selector(codeTextFieldDidChange(_ :)), for: .editingChanged)
+        loginView.emailTextField.addTarget(self, action: #selector(nonEditingMode(_ :)), for: .editingDidEnd)
+        loginView.codeTextField.addTarget(self, action: #selector(nonEditingMode(_ :)), for: .editingDidEnd)
     }
     
     @objc
-    private func emailTextFieldDidChange() {
+    private func emailTextFieldDidChange(_ sender: UITextField) {
         let text = loginView.emailTextField.text ?? ""
         if let _ = Int(text) {
             if text.count == 9 {
@@ -67,10 +70,12 @@ extension LoginViewController: UITextFieldDelegate {
     }
     
     @objc
-    private func codeTextFieldDidChange() {
+    private func codeTextFieldDidChange(_ sender: UITextField) {
+        sender.layer.borderColor = UIColor.red400.cgColor
         let text = loginView.codeTextField.text ?? ""
         if let _ = Int(text) {
             if text.count == 6 {
+                sender.layer.borderColor = UIColor.TB.cgColor
                 loginView.loginButton.available()
             } else {
                 loginView.loginButton.unavailable()
@@ -79,6 +84,20 @@ extension LoginViewController: UITextFieldDelegate {
             loginView.loginButton.unavailable()
             // 숫자가 아닌 텍스트가 입력된 경우
         }
+    }
+    
+    @objc
+    private func editingStarted(_ sender: UITextField) {
+        if sender == loginView.emailTextField {
+            sender.layer.borderColor = UIColor.TB.cgColor
+        } else if sender == loginView.codeTextField {
+            sender.layer.borderColor = UIColor.red400.cgColor
+        }
+    }
+    
+    @objc
+    private func nonEditingMode(_ sender: UITextField) {
+        sender.layer.borderColor = UIColor.gray200.cgColor
     }
     
     // 글자 수 제한
@@ -132,12 +151,17 @@ extension LoginViewController {
             case .success(let apiResponse):
                 let code = response.response!.statusCode
                 print("code: \(code)")
-                let message = apiResponse.message
+                var message = apiResponse.message
                 switch code {
-                case 200, 201:
+                case 200:
                     self.loginView.sendVerifyCodeButton.configure(labelText: "전송 완료")
                     self.loginView.sendVerifyCodeButton.unavailable()
                     self.loginView.codeSentMode()
+                case 201 :
+                    self.loginView.sendVerifyCodeButton.configure(labelText: "전송 완료")
+                    self.loginView.sendVerifyCodeButton.unavailable()
+                    self.loginView.codeSentMode()
+                    message += "\n스펨메일함도 확인해주세요."
                 case 400:
                     break
                 case 500:
@@ -183,7 +207,20 @@ extension LoginViewController {
                 case 200:
                     print("로그인 성공")
                     _ = KeychainService.add(key: K.APIKey.accessToken, value: apiResponse.token!)
-                    self.checkUserProcess()
+                    TokenService.checkToken { result in
+                        switch result {
+                        case .success: // home
+                            RootViewControllerService.toHomeViewController()
+                        case .expired: // login
+                            RootViewControllerService.toLoginController()
+                        case .idealNotCompleted: // ideal
+                            RootViewControllerService.toIdealViewController()
+                        case .signupNotCompleted: // signup
+                            RootViewControllerService.toSignUpViewController()
+                        case .error: // ??
+                            print("알 수 없는 오류가 발생했습니다.")
+                        }
+                    }
                 case 400, 401, 408, 500:
                     print(message)
                     message = apiResponse.message
@@ -201,46 +238,6 @@ extension LoginViewController {
     struct TokenResponse: Codable {
         let message: String
         let token: String?
-    }
-    
-    private func checkUserProcess() {
-        guard let accessToken = KeychainService.get(key: K.APIKey.accessToken) else { return }
-        let headers: HTTPHeaders = [
-            "accept": "application/json",
-            "Authorization": "Bearer \(accessToken)"
-        ]
-        let url = K.baseURLString + "/operating/checkSignUp"
-        AF.request(
-            url,
-            method: .get,
-            encoding: JSONEncoding.default,
-            headers: headers
-        ).responseDecodable(of: CheckSignUpResponse.self) { response in
-            switch response.result {
-            case .success(let value):
-                if let signup = value.signUpStatus {
-                    if signup {
-                        if let ideal = value.idleTypeStatus {
-                            if ideal {
-                                print("every progress is completed")
-                            } else {
-                                print("ideal is not completed")
-                            }
-                        }
-                    } else {
-                        print("signup is not completed")
-                    }
-                }
-            case .failure(let error):
-                print("Error: \(error)")
-            }
-        }
-    }
-    
-    struct CheckSignUpResponse: Codable {
-        let signUpStatus: Bool?
-        let idleTypeStatus: Bool?
-        let message: String
     }
 }
 

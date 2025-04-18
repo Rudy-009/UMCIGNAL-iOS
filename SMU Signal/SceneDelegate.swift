@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -16,8 +17,28 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         window?.makeKeyAndVisible()
-        window?.rootViewController =  UINavigationController(rootViewController: HomeViewController())
         window?.overrideUserInterfaceStyle = .light
+        RootViewControllerService.toLoginController()
+        
+//        TokenService.checkToken { result in
+//            switch result {
+//            case .success: // home
+//                RootViewControllerService.toHomeViewController()
+//            case .expired: // login
+//                RootViewControllerService.toLoginController()
+//            case .idealNotCompleted: // ideal
+//                RootViewControllerService.toIdealViewController()
+//            case .signupNotCompleted: // signup
+//                RootViewControllerService.toSignUpViewController()
+//            case .error: // ??
+//                break
+//            }
+//        }
+    }
+    
+    func changeRootViewController(_ viewController: UIViewController, animated: Bool) {
+        guard let window = self.window else { return }       
+        window.rootViewController = viewController
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {

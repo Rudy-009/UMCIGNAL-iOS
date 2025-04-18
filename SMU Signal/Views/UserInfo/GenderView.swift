@@ -129,7 +129,7 @@ class GenderView: UIView {
             if screenWidth <= 375 {
                 make.bottom.equalToSuperview()
             } else {
-                make.bottom.equalToSuperview().offset(-16)
+                make.bottom.equalToSuperview().offset(-6)
             }
         }
     }
@@ -140,3 +140,6 @@ class GenderView: UIView {
     
 }
 
+#Preview {
+    UserGenderViewController()
+}

@@ -28,6 +28,7 @@ class LoginView: UIView {
     public lazy var emailSubLabel = UILabel().then {
         $0.textColor = .TB
         $0.font = Fonts.B3
+        $0.numberOfLines = 2
     }
     public lazy var sendVerifyCodeButton = ConfirmButton()
     
@@ -53,7 +54,7 @@ class LoginView: UIView {
     }
     
     public func codeSentMode() {
-        let text = emailTextField.text! + "@sangmyung.kr로 인증코드를 보냈습니다"
+        let text = emailTextField.text! + "@sangmyung.kr로 인증코드를 보냈습니다\n스펨메일함도 확인해주세요."
         emailSubLabel.text = text
         emailSubLabel.isHidden = false
     }

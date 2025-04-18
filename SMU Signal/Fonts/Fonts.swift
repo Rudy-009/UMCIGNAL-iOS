@@ -12,6 +12,7 @@ struct Fonts {
     static let T1 = UIFont(name: "Pretendard-SemiBold", size: 20)
     static let T2 = UIFont(name: "Pretendard-Bold", size: 18)
     static let B1 = UIFont(name: "Pretendard-Regular", size: 16)
+    static let B1B = UIFont(name: "Pretendard-SemiBold", size: 16)
     static let B2 = UIFont(name: "Pretendard-SemiBold", size: 14)
     static let B3 = UIFont(name: "Pretendard-Bold", size: 12)
     static let Detail = UIFont(name: "Pretendard-Medium", size: 10)
