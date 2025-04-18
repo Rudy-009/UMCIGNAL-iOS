@@ -207,7 +207,7 @@ extension LoginViewController {
                 case 200:
                     print("로그인 성공")
                     _ = KeychainService.add(key: K.APIKey.accessToken, value: apiResponse.token!)
-                    TokenService.checkToken { result in
+                    APIService.checkToken { result in
                         switch result {
                         case .success: // home
                             RootViewControllerService.toHomeViewController()

@@ -10,7 +10,7 @@ import UIKit
 class IdealMBTIViewController: UIViewController {
     
     private let IdealMBTIView = MBTIView()
-    let nextVC = UIViewController()
+    let nextVC = IdealMajorViewController()
     
     override func viewDidLoad() {
         self.view = IdealMBTIView

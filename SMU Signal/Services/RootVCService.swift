@@ -22,6 +22,10 @@ class RootViewControllerService {
     }
     
     static func toIdealViewController() {
+        sceneDelegate?.changeRootViewController(UINavigationController(rootViewController: IdealOnBoardingViewController()), animated: false)
+    }
+    
+    static func toFixIdealViewController() {
         sceneDelegate?.changeRootViewController(UINavigationController(rootViewController: IdealAgeViewController()), animated: false)
     }
     

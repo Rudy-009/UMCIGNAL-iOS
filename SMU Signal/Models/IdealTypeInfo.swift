@@ -7,12 +7,13 @@
 
 import Foundation
 
-struct IdealTypeInfo {
-  var idle_MBTI: String?
-  var age_gap: Int?
-  var smoking_idle: Bool?
-  var drinking_idle: Int?
-  var major_idle: Bool?
+struct IdealTypeInfo: Codable {
+    var idle_MBTI: String?
+    var age_gap: Int?
+    var smoking_idle: Bool?
+    var drinking_idle: Int?
+    var sameMajor: Int?
+    var major_idle: [String]?
 }
 
 class IdealTypeInfoSingletone {
@@ -34,7 +35,7 @@ class IdealTypeInfoSingletone {
         shared.drinking_idle = drinkingIdle
     }
     
-    static func typeMajorIdle(_ majorIdle: Bool) {
-        shared.major_idle = majorIdle
+    static func typeMajorIdle(_ majorIdle: Int) {
+        shared.sameMajor = majorIdle
     }
 }

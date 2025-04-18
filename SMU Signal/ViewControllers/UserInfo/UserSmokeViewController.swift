@@ -23,10 +23,6 @@ class UserSmokeViewController: UIViewController {
         userSmokeView.setButtonConstraints()
         guard let isSmoker = UserInfoSingletone.shared.is_smoking else { // 첫 실행이면 없음
             return }
-        updateButtonState(isSmoker: isSmoker)
-    }
-
-    private func updateButtonState(isSmoker: Bool) {
         if isSmoker {
             userSmokeView.smokerButton.checked()
         } else {

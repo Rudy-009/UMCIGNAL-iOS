@@ -43,22 +43,27 @@ class UserInstagramIDViewController: UIViewController, UITextFieldDelegate {
     @objc
     private func nextVC() {
         postUserInfo()
-        print(UserInfoSingletone.shared)
     }
-        
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         postUserInfo()
         return true
     }
     
-    private func storeUserInfo() {
-        postUserInfo()
-    }
-    
     private func postUserInfo() {
         UserInfoSingletone.typeInstagramId(userInstagramIDView.idTextField.text!)
-        
-        // API 연동
+        APIService.signup { result in
+            switch result {
+            case .success:
+                RootViewControllerService.toHomeViewController()
+            case .expired:
+                RootViewControllerService.toLoginController()
+            case .missing:
+                RootViewControllerService.toSignUpViewController()
+            case .error:
+                return
+            }
+        }
     }
 }
 

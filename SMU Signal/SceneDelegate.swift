@@ -18,22 +18,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         window?.makeKeyAndVisible()
         window?.overrideUserInterfaceStyle = .light
-        // RootViewControllerService.toLoginController()
+        RootViewControllerService.toIdealViewController()
         
-        TokenService.checkToken { result in
-            switch result {
-            case .success: // home
-                RootViewControllerService.toHomeViewController()
-            case .expired: // login
-                RootViewControllerService.toLoginController()
-            case .idealNotCompleted: // ideal
-                RootViewControllerService.toIdealViewController()
-            case .signupNotCompleted: // signup
-                RootViewControllerService.toSignUpViewController()
-            case .error: // ??
-                break
-            }
-        }
+//        APIService.checkToken { result in
+//            switch result {
+//            case .success: // home
+//                RootViewControllerService.toHomeViewController()
+//            case .expired: // login
+//                RootViewControllerService.toLoginController()
+//            case .idealNotCompleted: // ideal
+//                RootViewControllerService.toIdealViewController()
+//            case .signupNotCompleted: // signup
+//                RootViewControllerService.toSignUpViewController()
+//            case .error: // ??
+//                break
+//            }
+//        }
     }
     
     func changeRootViewController(_ viewController: UIViewController, animated: Bool) {

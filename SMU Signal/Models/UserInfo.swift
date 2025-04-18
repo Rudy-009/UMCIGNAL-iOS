@@ -16,7 +16,6 @@ struct UserInfo: Codable {
     var is_drinking: Int?
     var instagram_id: String?
     var age: String?
-    var nickname: String?
 }
 
 class UserInfoSingletone {
@@ -54,7 +53,8 @@ class UserInfoSingletone {
         UserInfoSingletone.shared.age = age
     }
     
-    static func nickname(_ nickname: String) {
-        UserInfoSingletone.shared.nickname = nickname
+    static func saveUserInfo(_ info: UserInfo) {
+        UserInfoSingletone.shared = info
     }
+    
 }

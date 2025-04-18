@@ -21,6 +21,13 @@ class IdealSmokeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         userSmokeView.setButtonConstraints()
+        guard let isSmoker = IdealTypeInfoSingletone.shared.smoking_idle else { // 첫 실행이면 없음
+            return }
+        if isSmoker {
+            userSmokeView.smokerButton.checked()
+        } else {
+            userSmokeView.nonSmokerButton.checked()
+        }
     }
     
     private func setButtonActions() {
@@ -63,8 +70,4 @@ class IdealSmokeViewController: UIViewController {
         }
     }
     
-}
-
-#Preview {
-    IdealSmokeViewController()
 }

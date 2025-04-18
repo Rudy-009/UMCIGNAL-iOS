@@ -24,6 +24,17 @@ class UserGenderViewController: UIViewController, UIGestureRecognizerDelegate {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        guard let gender = UserInfoSingletone.shared.gender else { return }
+        switch gender {
+        case Gender.male.rawValue:
+            userGenderView.maleButton.checked()
+        case Gender.female.rawValue:
+            userGenderView.femaleButton.checked()
+        case Gender.other.rawValue:
+            userGenderView.otherButton.checked()
+        default:
+            break
+        }
     }
     
     private func setButtonActions() {

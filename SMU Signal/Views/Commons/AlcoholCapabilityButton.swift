@@ -48,8 +48,8 @@ class AlcoholCapabilityButton: UIButton {
     
 }
 
-enum AlcoholEnum {
-    case glass, aBottle, bottles
+enum AlcoholEnum: Int {
+    case glass = 1, aBottle = 2, bottles = 3
     
     func toResponse() -> Int {
         switch self {
