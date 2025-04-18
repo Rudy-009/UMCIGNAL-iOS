@@ -20,22 +20,22 @@ class LoginViewController: UIViewController {
         loginView.emailTextField.delegate = self
         loginView.codeTextField.delegate = self
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        guard let userInfo = notification.userInfo,
-              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
-        let keyboardHeight = keyboardFrame.cgRectValue.height
-        // codeTextField가 firstResponder일 때만 동작
-        if loginView.codeTextField.isFirstResponder {
-            loginView.keyBoardWillAppear(keyboardHeight: keyboardHeight)
-        }
-    }
-
-    @objc private func keyboardWillHide(_ notification: Notification) {
-        loginView.keyBoardWillDisappear()
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+//    }
+//    
+//    @objc private func keyboardWillShow(_ notification: Notification) {
+//        guard let userInfo = notification.userInfo,
+//              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+//        let keyboardHeight = keyboardFrame.cgRectValue.height
+//        // codeTextField가 firstResponder일 때만 동작
+//        if loginView.codeTextField.isFirstResponder {
+//            loginView.keyBoardWillAppear(keyboardHeight: keyboardHeight)
+//        }
+//    }
+//
+//    @objc private func keyboardWillHide(_ notification: Notification) {
+//        loginView.keyBoardWillDisappear()
     }
     
 }

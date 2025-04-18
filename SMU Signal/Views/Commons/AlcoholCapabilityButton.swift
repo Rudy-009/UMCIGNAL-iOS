@@ -54,11 +54,11 @@ enum AlcoholEnum {
     func toResponse() -> Int {
         switch self {
         case .glass:
-            return 0
+            return 1
         case .aBottle:
-            return 1
+            return 2
         case .bottles:
-            return 1
+            return 3
         }
     }
     

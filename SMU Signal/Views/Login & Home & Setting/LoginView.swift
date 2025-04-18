@@ -70,35 +70,35 @@ class LoginView: UIView {
     }
     
     // 키보드가 올라올 때 호출
-        public func keyBoardWillAppear(keyboardHeight: CGFloat) {
-            // topPadding 변경
-            self.topPadding = 20
-            // mainTitle의 top 제약 업데이트
-            mainTitle.snp.updateConstraints { make in
-                make.top.equalTo(self.safeAreaLayoutGuide.snp.top).offset(topPadding)
-            }
-            // loginButton을 키보드 위로 올림
-            loginButton.snp.updateConstraints { make in
-                make.bottom.equalTo(self.safeAreaLayoutGuide).inset(keyboardHeight + 8)
-            }
-            UIView.animate(withDuration: 0.3) {
-                self.layoutIfNeeded()
-            }
+    public func keyBoardWillAppear(keyboardHeight: CGFloat) {
+        // topPadding 변경
+        self.topPadding = 20
+        // mainTitle의 top 제약 업데이트
+        mainTitle.snp.updateConstraints { make in
+            make.top.equalTo(self.safeAreaLayoutGuide.snp.top).offset(topPadding)
         }
-
-        // 키보드가 내려갈 때 호출
-        public func keyBoardWillDisappear() {
-            // topPadding 원복
-            self.topPadding = 100
-            mainTitle.snp.updateConstraints { make in
-                make.top.equalTo(self.safeAreaLayoutGuide.snp.top).offset(topPadding)
-            }
-            // loginButton 원래 위치로
-            loginButton.snp.updateConstraints { make in
-                make.bottom.equalTo(self.safeAreaLayoutGuide).inset(24)
-            }
-            UIView.animate(withDuration: 0.3) {
-                self.layoutIfNeeded()
+        // loginButton을 키보드 위로 올림
+        loginButton.snp.updateConstraints { make in
+            make.bottom.equalTo(self.safeAreaLayoutGuide).inset(keyboardHeight + 8)
+        }
+        UIView.animate(withDuration: 0.3) {
+            self.layoutIfNeeded()
+        }
+    }
+    
+    // 키보드가 내려갈 때 호출
+    public func keyBoardWillDisappear() {
+        // topPadding 원복
+        self.topPadding = 100
+        mainTitle.snp.updateConstraints { make in
+            make.top.equalTo(self.safeAreaLayoutGuide.snp.top).offset(topPadding)
+        }
+        // loginButton 원래 위치로
+        loginButton.snp.updateConstraints { make in
+            make.bottom.equalTo(self.safeAreaLayoutGuide).inset(24)
+        }
+        UIView.animate(withDuration: 0.3) {
+            self.layoutIfNeeded()
         }
     }
     

@@ -21,6 +21,17 @@ class UserAlcoholViewController: UIViewController {
         super.viewWillAppear(animated)
         userAlcoholView.setButtonConstraints()
         userAlcoholView.configure(mainText: "술 좋아하시나요?", subText: "궁합에서 음주량도 엄청 중요해요.\n여러분의 주량에 대해 알려주세요.", progress: 4.0/7.0)
+        guard let alcoholCapability = UserInfoSingletone.shared.is_drinking else { return }
+        switch alcoholCapability {
+        case 1:
+            userAlcoholView.aGlassButton.checked()
+        case 2:
+            userAlcoholView.aBottleButton.checked()
+        case 3:
+            userAlcoholView.bottlesButton.checked()
+        default:
+            break
+        }
     }
     
     private func setButtonActions() {

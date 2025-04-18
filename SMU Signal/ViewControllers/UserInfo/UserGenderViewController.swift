@@ -18,8 +18,8 @@ class UserGenderViewController: UIViewController, UIGestureRecognizerDelegate {
         userGenderView.configure(mainText: "성별을 알려주세요.", subText: "알려주시는 정보는 이상형에 얼마나 충족되는지\n확인하는 용도로만 사용해요.", progress: 1.0/7.0)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         userGenderView.setButtonConstraints()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
