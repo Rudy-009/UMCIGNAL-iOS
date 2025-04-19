@@ -153,11 +153,7 @@ extension LoginViewController {
                 print("code: \(code)")
                 var message = apiResponse.message
                 switch code {
-                case 200:
-                    self.loginView.sendVerifyCodeButton.configure(labelText: "전송 완료")
-                    self.loginView.sendVerifyCodeButton.unavailable()
-                    self.loginView.codeSentMode()
-                case 201 :
+                case 200, 201 :
                     self.loginView.sendVerifyCodeButton.configure(labelText: "전송 완료")
                     self.loginView.sendVerifyCodeButton.unavailable()
                     self.loginView.codeSentMode()
@@ -205,20 +201,20 @@ extension LoginViewController {
                 var message = ""
                 switch code {
                 case 200:
-                    print("로그인 성공")
-                    _ = KeychainService.add(key: K.APIKey.accessToken, value: apiResponse.token!)
-                    APIService.checkToken { result in
-                        switch result {
-                        case .success: // home
-                            RootViewControllerService.toHomeViewController()
-                        case .expired: // login
-                            RootViewControllerService.toLoginController()
-                        case .idealNotCompleted: // ideal
-                            RootViewControllerService.toIdealViewController()
-                        case .signupNotCompleted: // signup
-                            RootViewControllerService.toSignUpViewController()
-                        case .error: // ??
-                            print("알 수 없는 오류가 발생했습니다.")
+                    if KeychainService.add(key: K.APIKey.accessToken, value: apiResponse.token!) {
+                        APIService.checkToken { result in
+                            switch result {
+                            case .success: // home
+                                RootViewControllerService.toHomeViewController()
+                            case .expired: // login
+                                RootViewControllerService.toLoginController()
+                            case .idealNotCompleted: // ideal
+                                RootViewControllerService.toIdealViewController()
+                            case .signupNotCompleted: // signup
+                                RootViewControllerService.toSignUpViewController()
+                            case .error: // ??
+                                print("알 수 없는 오류가 발생했습니다.")
+                            }
                         }
                     }
                 case 400, 401, 408, 500:

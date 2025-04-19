@@ -57,6 +57,10 @@ class APIService {
             }
             switch statusCode {
             case 200:
+                completion(.success)
+            case 401, 404:
+                completion(.expired)
+            case 403:
                 if let value = response.value {
                     if let signup = value.signUpStatus, signup {
                         if let ideal = value.idleTypeStatus, ideal {
@@ -66,20 +70,6 @@ class APIService {
                         }
                     } else {
                         completion(.signupNotCompleted)
-                    }
-                } else {
-                    completion(.error)
-                }
-            case 401, 404:
-                completion(.expired)
-            case 403:
-                if let value = response.value {
-                    if let signup = value.signUpStatus, !signup {
-                        completion(.signupNotCompleted)
-                    } else if let ideal = value.idleTypeStatus, !ideal {
-                        completion(.idealNotCompleted)
-                    } else {
-                        completion(.error)
                     }
                 } else {
                     completion(.error)
@@ -104,7 +94,7 @@ class APIService {
         let userInfo = UserInfoSingletone.shared
         let parameters: [String: Any] = [
             "gender":  userInfo.gender!,
-              "name": userInfo.name ?? String(),
+            "name": userInfo.name ?? String(),
             "student_major": userInfo.student_major!,
             "MBTI": userInfo.MBTI!,
             "is_smoking": userInfo.is_smoking!,
@@ -115,25 +105,32 @@ class APIService {
         let url = K.baseURLString + "/user/signup"
         AF.request(
             url,
-            method: .get,
+            method: .patch,
+            parameters: parameters,
             encoding: JSONEncoding.default,
-            headers: headers
+            headers: headers,
         ).responseDecodable(of: CheckSignUpResponse.self) { response in
-            guard let statusCode = response.response?.statusCode else {
-                completion(.error)
-                return
-            }
-            switch statusCode {
-            case SignupCode.success.rawValue:
-                completion(.success)
-            case SignupCode.expired.rawValue:
-                completion(.expired)
-            case SignupCode.missing.rawValue:
-                completion(.missing)
-            case SignupCode.error.rawValue:
-                completion(.error)
-            default:
-                completion(.error)
+            switch response.result {
+            case .success(let apiResponse):
+                guard let statusCode = response.response?.statusCode else {
+                    completion(.error)
+                    return
+                }
+                print("status code in signup: \(statusCode)")
+                switch statusCode {
+                case SignupCode.success.rawValue:
+                    completion(.success)
+                case SignupCode.expired.rawValue:
+                    completion(.expired)
+                case SignupCode.missing.rawValue:
+                    completion(.missing)
+                case SignupCode.error.rawValue:
+                    completion(.error)
+                default:
+                    completion(.error)
+                }
+            case .failure(let error):
+                print(error)
             }
         }
         

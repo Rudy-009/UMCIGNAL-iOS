@@ -6,11 +6,20 @@
 //
 
 import UIKit
+import Combine
 
 class SmokeButton: UIButton {
     
-    public var isChecked: Bool = false
+    public var isChecked: Bool = false {
+        didSet {
+            // isChecked가 변경될 때 publisher를 통해 이벤트 발행
+            checkedPublisher.send(isChecked)
+        }
+    }
     public var isSmoke: Smoke?
+    
+    // 버튼 체크 상태를 발행하는 publisher
+    public let checkedPublisher = PassthroughSubject<Bool, Never>()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

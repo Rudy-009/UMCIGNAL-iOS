@@ -57,8 +57,18 @@ class IdealMajorViewController: UIViewController {
     @objc
     private func pushNextVC() {
         IdealTypeInfoSingletone.typeMajorIdle(idealMajorView.yesButton.isChecked ? 1 : 0)
-        print(IdealTypeInfoSingletone.shared)
-        // API 연동
+        APIService.addIdeal { result in
+            switch result {
+            case .success:
+                RootViewControllerService.toHomeViewController()
+            case .missingValue:
+                RootViewControllerService.toIdealViewController()
+            case .invalidToken, .expiredToken:
+                RootViewControllerService.toLoginController()
+            case .serverError:
+                break
+            }
+        }
     }
     
     private func isNextButtonAvailable() {
