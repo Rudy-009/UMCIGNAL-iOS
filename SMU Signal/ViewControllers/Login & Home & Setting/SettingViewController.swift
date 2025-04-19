@@ -41,12 +41,12 @@ class SettingViewController: UIViewController {
     
     @objc
     private func logout() {
-        print("logout")
+        APIService.out("logOut")
     }
     
     @objc
     private func revoke() {
-        print("revoke")
+        APIService.out("signOut")
     }
 }
 

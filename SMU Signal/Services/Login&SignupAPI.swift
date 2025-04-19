@@ -34,6 +34,18 @@ struct SignUpResponse: Codable {
     let missingFields: [String]?
 }
 
+enum LogoutCode: Int {
+    case success = 200
+    case success1 = 201
+    case error   = 500
+    case expired = 401
+    case missing = 404
+}
+
+struct LogoutOrSignoutResponse: Codable {
+    let message: String
+}
+
 class APIService {
     static func checkToken(completion: @escaping (TokenCode) -> Void) {
         guard let accessToken = KeychainService.get(key: K.APIKey.accessToken) else {
@@ -111,7 +123,7 @@ class APIService {
             headers: headers,
         ).responseDecodable(of: CheckSignUpResponse.self) { response in
             switch response.result {
-            case .success(let apiResponse):
+            case .success(_):
                 guard let statusCode = response.response?.statusCode else {
                     completion(.error)
                     return
@@ -133,6 +145,43 @@ class APIService {
                 print(error)
             }
         }
-        
     }
+    
+    static func out(_  action: String) {
+        guard let accessToken = KeychainService.get(key: K.APIKey.accessToken) else {
+            return
+        }
+        let headers: HTTPHeaders = [
+            "accept": "application/json",
+            "Authorization": "Bearer \(accessToken)"
+        ]
+        let parameters: [String: Any] = [:]
+        let url = K.baseURLString + "/user/\(action)"
+        AF.request(
+            url,
+            method: .patch,
+            parameters: parameters,
+            encoding: JSONEncoding.default,
+            headers: headers,
+        ).responseDecodable(of: LogoutOrSignoutResponse.self) { response in
+            switch response.result {
+            case .success(_):
+                guard let statusCode = response.response?.statusCode else {
+                    return
+                }
+                switch statusCode {
+                case 200, 201, 401, 404:
+                    RootViewControllerService.toLoginController()
+                    _ = KeychainService.delete(key: K.APIKey.accessToken)
+                case 500:
+                    break
+                default:
+                    break
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
 }

@@ -10,7 +10,6 @@ import UIKit
 class RootViewControllerService {
     private static let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
     
-    private static let homeVC = UINavigationController(rootViewController: HomeViewController())
     private static let networkErrorVC = NetworkErrorViewController()
     
     static func toLoginController() {
@@ -18,7 +17,7 @@ class RootViewControllerService {
     }
     
     static func toHomeViewController() {
-        sceneDelegate?.changeRootViewController(homeVC, animated: false)
+        sceneDelegate?.changeRootViewController(UINavigationController(rootViewController: HomeViewController()), animated: false)
     }
     
     static func toIdealViewController() {
