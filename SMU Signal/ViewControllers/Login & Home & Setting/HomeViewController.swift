@@ -27,6 +27,7 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate {
     
     private func setActions() {
         homeView.gearButton.addTarget(self, action: #selector(goSettingVC), for: .touchUpInside)
+        homeView.resetIdealType.addTarget(self, action: #selector(goIdealType), for: .touchUpInside)
     }
     
     private func setUI() {
@@ -42,6 +43,11 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate {
             }
         }
         // 3. 사용자의 코드
+    }
+    
+    @objc
+    private func goIdealType() {
+        RootViewControllerService.toIdealViewController()
     }
     
     

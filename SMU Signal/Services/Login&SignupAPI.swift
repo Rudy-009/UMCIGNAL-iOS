@@ -103,7 +103,8 @@ class APIService {
         }
         let headers: HTTPHeaders = [
             "accept": "application/json",
-            "Authorization": "Bearer \(accessToken)"
+            "Authorization": "Bearer \(accessToken)",
+            "Content-Type": "application/json"
         ]
         let userInfo = Singletone.userInfo
         let parameters: [String: Any] = [
@@ -117,46 +118,118 @@ class APIService {
             "age": userInfo.age!
         ]
         let url = K.baseURLString + "/user/signup"
-        AF.request(
-            url,
-            method: .patch,
-            parameters: parameters,
-            encoding: JSONEncoding.default,
-            headers: headers,
-        ).responseDecodable(of: CheckSignUpResponse.self) { response in
-            switch response.result {
-            case .success(_):
-                guard let statusCode = response.response?.statusCode else {
-                    completion(.error)
-                    return
+        
+        // checkToken을 호출하여 상태에 따라 HTTP 메소드 결정
+        checkToken { token in
+            var httpMethod: HTTPMethod = .post
+            
+            switch token {
+            case .success:
+                httpMethod = .patch
+            case .expired:
+                completion(.expired)
+                return
+            case .signupNotCompleted:
+                httpMethod = .post
+            case .idealNotCompleted:
+                httpMethod = .patch
+            case .error:
+                completion(.error)
+                return
+            }
+            
+            print("HTTP Method for signup: \(httpMethod)")
+            
+            AF.request(
+                url,
+                method: httpMethod,
+                parameters: parameters,
+                encoding: JSONEncoding.default,
+                headers: headers
+            ).response { response in
+                // 먼저 원시 응답 데이터 확인
+                if let data = response.data, let responseString = String(data: data, encoding: .utf8) {
+                    print("Raw API Response (signup): \(responseString)")
                 }
-                switch statusCode {
-                case SignupCode.success.rawValue, SignupCode.success2.rawValue:
-                    completion(.success)
-                    APIService.checkToken { token in
-                        switch token {
-                        case .success, .idealNotCompleted:
-                            Singletone.saveUserInfoToLocalStorage()
-                            RootViewControllerService.toIdealViewController()
-                        case .expired:
-                            RootViewControllerService.toLoginController()
-                        case .signupNotCompleted:
-                            RootViewControllerService.toSignUpViewController()
-                        case .error:
-                            break
+                
+                // 상태 코드 확인
+                if let statusCode = response.response?.statusCode {
+                    print("Status Code (signup): \(statusCode)")
+                }
+                
+                // 이제 JSON 디코딩 시도
+                if let data = response.data {
+                    do {
+                        let apiResponse = try JSONDecoder().decode(CheckSignUpResponse.self, from: data)
+                        print("성공적으로 디코딩된 응답 (signup): \(apiResponse)")
+                        
+                        if let statusCode = response.response?.statusCode {
+                            switch statusCode {
+                            case SignupCode.success.rawValue, SignupCode.success2.rawValue:
+                                completion(.success)
+                                APIService.checkToken { token in
+                                    switch token {
+                                    case .success, .idealNotCompleted:
+                                        Singletone.saveUserInfoToLocalStorage()
+                                        RootViewControllerService.toIdealViewController()
+                                    case .expired:
+                                        RootViewControllerService.toLoginController()
+                                    case .signupNotCompleted:
+                                        RootViewControllerService.toSignUpViewController()
+                                    case .error:
+                                        break
+                                    }
+                                }
+                            case SignupCode.expired.rawValue:
+                                completion(.expired)
+                            case SignupCode.missing.rawValue:
+                                completion(.missing)
+                            case SignupCode.error.rawValue:
+                                completion(.error)
+                            default:
+                                completion(.error)
+                            }
+                        } else {
+                            completion(.error)
+                        }
+                    } catch {
+                        print("JSON 디코딩 오류 (signup): \(error)")
+                        
+                        // 백업 데이터 처리 - 상태 코드만으로 판단
+                        if let statusCode = response.response?.statusCode {
+                            switch statusCode {
+                            case SignupCode.success.rawValue, SignupCode.success2.rawValue:
+                                completion(.success)
+                                APIService.checkToken { token in
+                                    switch token {
+                                    case .success, .idealNotCompleted:
+                                        Singletone.saveUserInfoToLocalStorage()
+                                        RootViewControllerService.toIdealViewController()
+                                    case .expired:
+                                        RootViewControllerService.toLoginController()
+                                    case .signupNotCompleted:
+                                        RootViewControllerService.toSignUpViewController()
+                                    case .error:
+                                        break
+                                    }
+                                }
+                            case SignupCode.expired.rawValue:
+                                completion(.expired)
+                            case SignupCode.missing.rawValue:
+                                completion(.missing)
+                            case SignupCode.error.rawValue:
+                                completion(.error)
+                            default:
+                                completion(.error)
+                            }
+                        } else {
+                            completion(.error)
                         }
                     }
-                case SignupCode.expired.rawValue:
-                    completion(.expired)
-                case SignupCode.missing.rawValue:
-                    completion(.missing)
-                case SignupCode.error.rawValue:
-                    completion(.error)
-                default:
+                } else {
+                    print("응답 데이터가 없습니다 (signup).")
                     completion(.error)
                 }
-            case .failure(let error):
-                print(error)
             }
         }
     }
@@ -167,7 +240,8 @@ class APIService {
         }
         let headers: HTTPHeaders = [
             "accept": "application/json",
-            "Authorization": "Bearer \(accessToken)"
+            "Authorization": "Bearer \(accessToken)",
+            "Content-Type": "application/json"
         ]
         let parameters: [String: Any] = [:]
         let url = K.baseURLString + "/user/\(action)"
@@ -176,25 +250,36 @@ class APIService {
             method: .patch,
             parameters: parameters,
             encoding: JSONEncoding.default,
-            headers: headers,
-        ).responseDecodable(of: LogoutOrSignoutResponse.self) { response in
-            switch response.result {
-            case .success(_):
-                guard let statusCode = response.response?.statusCode else {
-                    return
-                }
+            headers: headers
+        ).response { response in
+            // 먼저 원시 응답 데이터 확인
+            if let data = response.data, let responseString = String(data: data, encoding: .utf8) {
+                print("Raw API Response (out): \(responseString)")
+            }
+            
+            // 상태 코드 확인
+            if let statusCode = response.response?.statusCode {
+                print("Status Code (out): \(statusCode)")
+                
                 switch statusCode {
                 case 200, 201, 401, 404:
                     _ = KeychainService.delete(key: K.APIKey.accessToken)
                     Singletone.clearUserInfo()
                     RootViewControllerService.toLoginController()
                 case 500:
+                    print("서버 오류 (out)")
                     break
                 default:
+                    print("알 수 없는 상태 코드 (out): \(statusCode)")
                     break
                 }
-            case .failure(let error):
-                print(error)
+            } else {
+                print("상태 코드 없음 (out)")
+            }
+            
+            // 오류 확인
+            if let error = response.error {
+                print("API 요청 오류 (out): \(error)")
             }
         }
     }

@@ -6,6 +6,7 @@
 //
 
 import Alamofire
+import Foundation
 
 struct IdealTypeAPI: Codable {
     let message: String?
@@ -29,11 +30,13 @@ extension APIService {
     
     static func addIdeal(completion: @escaping (IdealTypeCode) -> Void) {
         guard let accessToken = KeychainService.get(key: K.APIKey.accessToken) else {
+            completion(.invalidToken)
             return
         }
         let headers: HTTPHeaders = [
             "accept": "application/json",
-            "Authorization": "Bearer \(accessToken)"
+            "Authorization": "Bearer \(accessToken)",
+            "Content-Type": "application/json"
         ]
         let ideal = Singletone.idealType
         let parameters: [String: Any] = [
@@ -45,34 +48,90 @@ extension APIService {
             "sameMajor": ideal.sameMajor!
         ]
         let url = K.baseURLString + "/idleType/addIdleType"
-        AF.request(
-            url,
-            method: .post,
-            parameters: parameters,
-            encoding: JSONEncoding.default,
-            headers: headers
-        ).responseDecodable(of: IdealTypeAPI.self) { response in
-            switch response.result {
-            case .success(_):
-                guard let statusCode = response.response?.statusCode else { completion(IdealTypeCode.serverError)
-                    return }
-                print("statusCode in addIdleType \(statusCode)")
-                print("\(response.result)")
-                switch statusCode {
-                case 200, 201:
-                    completion(.success)
-                case 400:
-                    completion(.missingValue)
-                case 401:
-                    completion(.invalidToken)
-                case 403:
-                    completion(.expiredToken)
-                default:
+        
+        // 먼저 checkToken을 호출하여 상태를 확인한 후 메소드를 결정하고 요청을 보냄
+        checkToken { token in
+            var httpMethod: HTTPMethod = .post
+            
+            switch token {
+            case .success:
+                httpMethod = .patch
+            case .expired:
+                completion(.expiredToken)
+                return
+            case .signupNotCompleted, .error:
+                completion(.invalidToken)
+                return
+            case .idealNotCompleted:
+                httpMethod = .post
+            }
+            
+            print("HTTP Method for addIdeal: \(httpMethod)")
+            
+            AF.request(
+                url,
+                method: httpMethod,
+                parameters: parameters,
+                encoding: JSONEncoding.default,
+                headers: headers
+            ).response { response in
+                // 먼저 원시 응답 데이터 확인
+                if let data = response.data, let responseString = String(data: data, encoding: .utf8) {
+                    print("Raw API Response: \(responseString)")
+                }
+                
+                // 상태 코드 확인
+                if let statusCode = response.response?.statusCode {
+                    print("Status Code: \(statusCode)")
+                }
+                
+                // 이제 JSON 디코딩 시도
+                if let data = response.data {
+                    do {
+                        let apiResponse = try JSONDecoder().decode(IdealTypeAPI.self, from: data)
+                        print("성공적으로 디코딩된 응답: \(apiResponse)")
+                        
+                        if let statusCode = response.response?.statusCode {
+                            switch statusCode {
+                            case 200, 201:
+                                completion(.success)
+                            case 400:
+                                completion(.missingValue)
+                            case 401:
+                                completion(.invalidToken)
+                            case 403:
+                                completion(.expiredToken)
+                            default:
+                                completion(.serverError)
+                            }
+                        } else {
+                            completion(.serverError)
+                        }
+                    } catch {
+                        print("JSON 디코딩 오류: \(error)")
+                        
+                        // 백업 데이터 처리 - 상태 코드만으로 판단
+                        if let statusCode = response.response?.statusCode {
+                            switch statusCode {
+                            case 200, 201:
+                                completion(.success)
+                            case 400:
+                                completion(.missingValue)
+                            case 401:
+                                completion(.invalidToken)
+                            case 403:
+                                completion(.expiredToken)
+                            default:
+                                completion(.serverError)
+                            }
+                        } else {
+                            completion(.serverError)
+                        }
+                    }
+                } else {
+                    print("응답 데이터가 없습니다.")
                     completion(.serverError)
                 }
-            case .failure(let error):
-                print(response.result)
-                print(error)
             }
         }
     }

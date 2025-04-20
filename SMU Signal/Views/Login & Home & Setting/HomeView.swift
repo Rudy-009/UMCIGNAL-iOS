@@ -79,7 +79,7 @@ class HomeView: UIView {
     
     public lazy var editMyInfoButton = ResetButton()
     
-    public lazy var idealMatchButton = ResetButton()
+    public lazy var resetIdealType = ResetButton()
     
     public lazy var referralButton = ReferralButton()
     
@@ -157,7 +157,7 @@ class HomeView: UIView {
         self.addSubview(mainContentFrame)
         mainContentFrame.addSubview(matchResultButton)
         mainContentFrame.addSubview(editMyInfoButton)
-        mainContentFrame.addSubview(idealMatchButton)
+        mainContentFrame.addSubview(resetIdealType)
         mainContentFrame.addSubview(referralButton)
         self.addSubview(redDot)
         
@@ -189,9 +189,9 @@ class HomeView: UIView {
                 make.trailing.top.equalToSuperview().inset(20)
             }
             
-            idealMatchButton.setConstraints(width: buttonWidth, height: (buttonWidth - 10.0) * (112.0/160.0))
-            idealMatchButton.configure(text: "이상형 재설정", image: .palletIcon)
-            idealMatchButton.snp.makeConstraints { make in
+            resetIdealType.setConstraints(width: buttonWidth, height: (buttonWidth - 10.0) * (112.0/160.0))
+            resetIdealType.configure(text: "이상형 재설정", image: .palletIcon)
+            resetIdealType.snp.makeConstraints { make in
                 make.trailing.equalToSuperview().inset(20)
                 make.top.equalTo(editMyInfoButton.snp.bottom).offset(10)
             }
@@ -215,9 +215,9 @@ class HomeView: UIView {
                 make.trailing.top.equalToSuperview().inset(20)
             }
             
-            idealMatchButton.setConstraints(width: buttonWidth, height: editButtonHeight)
-            idealMatchButton.configure(text: "이상형 재설정", image: .palletIcon)
-            idealMatchButton.snp.makeConstraints { make in
+            resetIdealType.setConstraints(width: buttonWidth, height: editButtonHeight)
+            resetIdealType.configure(text: "이상형 재설정", image: .palletIcon)
+            resetIdealType.snp.makeConstraints { make in
                 make.trailing.equalToSuperview().inset(20)
                 make.top.equalTo(editMyInfoButton.snp.bottom).offset(20)
             }
@@ -225,7 +225,7 @@ class HomeView: UIView {
         
         referralButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(20)
-            make.top.equalTo(idealMatchButton.snp.bottom).offset(20)
+            make.top.equalTo(resetIdealType.snp.bottom).offset(20)
         }
         
     }
