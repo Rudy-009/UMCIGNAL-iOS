@@ -6,6 +6,7 @@
 //
 
 import Alamofire
+import Foundation
 
 enum TokenCode {
     case success            // 200
@@ -48,6 +49,7 @@ struct LogoutOrSignoutResponse: Codable {
 }
 
 class APIService {
+    
     static func checkToken(completion: @escaping (TokenCode) -> Void) {
         guard let accessToken = KeychainService.get(key: K.APIKey.accessToken) else {
             completion(.expired)

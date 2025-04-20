@@ -33,6 +33,7 @@ extension APIService {
             completion(.invalidToken)
             return
         }
+        
         let headers: HTTPHeaders = [
             "accept": "application/json",
             "Authorization": "Bearer \(accessToken)",
@@ -47,15 +48,16 @@ extension APIService {
             "major_idle": ["컴퓨터과학과"],
             "sameMajor": ideal.sameMajor!
         ]
-        let url = K.baseURLString + "/idleType/addIdleType"
         
-        // 먼저 checkToken을 호출하여 상태를 확인한 후 메소드를 결정하고 요청을 보냄
+        // 먼저 checkToken을 호출하여 상태를 확인한 후 메소드와 엔드포인트를 결정하고 요청을 보냄
         checkToken { token in
             var httpMethod: HTTPMethod = .post
+            var endpoint: String = "addIdleType"  // 기본 엔드포인트 (POST)
             
             switch token {
             case .success:
                 httpMethod = .patch
+                endpoint = "fixIdleType"  // PATCH용 엔드포인트
             case .expired:
                 completion(.expiredToken)
                 return
@@ -64,9 +66,12 @@ extension APIService {
                 return
             case .idealNotCompleted:
                 httpMethod = .post
+                endpoint = "addIdleType"  // POST용 엔드포인트
             }
             
-            print("HTTP Method for addIdeal: \(httpMethod)")
+            let url = K.baseURLString + "/idleType/" + endpoint
+            
+            print("HTTP Method for addIdeal: \(httpMethod), Endpoint: \(endpoint)")
             
             AF.request(
                 url,

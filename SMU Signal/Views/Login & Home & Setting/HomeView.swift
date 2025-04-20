@@ -241,7 +241,6 @@ class HomeView: UIView {
     
     public func setUI() {
         Singletone.getUserInfoFromLocalStorage()
-        print("instagram_id: \(Singletone.userInfo.instagram_id ?? "")")
         userID.text = "@" + idElisipse(Singletone.userInfo.instagram_id ?? "")
     }
     
