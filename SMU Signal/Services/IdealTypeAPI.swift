@@ -35,7 +35,7 @@ extension APIService {
             "accept": "application/json",
             "Authorization": "Bearer \(accessToken)"
         ]
-        let ideal = IdealTypeInfoSingletone.shared
+        let ideal = Singletone.idealType
         let parameters: [String: Any] = [
             "idle_MBTI": ideal.idle_MBTI!,
             "age_gap": ideal.age_gap!,

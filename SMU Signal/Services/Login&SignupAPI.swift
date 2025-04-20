@@ -22,7 +22,8 @@ struct CheckSignUpResponse: Codable {
 }
 
 enum SignupCode: Int {
-    case success = 201 // 성공
+    case success = 200
+    case success2 = 201 // 성공
     case missing = 400 // 입력값 누락
     case expired = 401 // 토큰 만료
     case error   = 500 // 서버 에러
@@ -52,6 +53,7 @@ class APIService {
             completion(.expired)
             return
         }
+        print(accessToken)
         let headers: HTTPHeaders = [
             "accept": "application/json",
             "Authorization": "Bearer \(accessToken)"
@@ -103,7 +105,7 @@ class APIService {
             "accept": "application/json",
             "Authorization": "Bearer \(accessToken)"
         ]
-        let userInfo = UserInfoSingletone.shared
+        let userInfo = Singletone.userInfo
         let parameters: [String: Any] = [
             "gender":  userInfo.gender!,
             "name": userInfo.name ?? String(),
@@ -128,10 +130,22 @@ class APIService {
                     completion(.error)
                     return
                 }
-                print("status code in signup: \(statusCode)")
                 switch statusCode {
-                case SignupCode.success.rawValue:
+                case SignupCode.success.rawValue, SignupCode.success2.rawValue:
                     completion(.success)
+                    APIService.checkToken { token in
+                        switch token {
+                        case .success, .idealNotCompleted:
+                            Singletone.saveUserInfoToLocalStorage()
+                            RootViewControllerService.toIdealViewController()
+                        case .expired:
+                            RootViewControllerService.toLoginController()
+                        case .signupNotCompleted:
+                            RootViewControllerService.toSignUpViewController()
+                        case .error:
+                            break
+                        }
+                    }
                 case SignupCode.expired.rawValue:
                     completion(.expired)
                 case SignupCode.missing.rawValue:
@@ -171,8 +185,9 @@ class APIService {
                 }
                 switch statusCode {
                 case 200, 201, 401, 404:
-                    RootViewControllerService.toLoginController()
                     _ = KeychainService.delete(key: K.APIKey.accessToken)
+                    Singletone.clearUserInfo()
+                    RootViewControllerService.toLoginController()
                 case 500:
                     break
                 default:

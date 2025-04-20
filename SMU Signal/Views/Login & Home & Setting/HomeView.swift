@@ -22,7 +22,7 @@ class HomeView: UIView {
     }
     
     private lazy var userID = UILabel().then {
-        $0.text = "@" + idElisipse("iseungjun401")
+        $0.text = "@"
         $0.font = Fonts.H1
         $0.textColor = .white
     }
@@ -46,14 +46,14 @@ class HomeView: UIView {
         $0.clipsToBounds = true
     }
     
-    private lazy var rerollCountLabel = UILabel().then {
+    public lazy var rerollCountLabel = UILabel().then {
         $0.backgroundColor = .TB
         $0.layer.cornerRadius = 15
         $0.clipsToBounds = true
         
         $0.font = Fonts.H1
         $0.textColor = .white
-        $0.text = "10"
+        $0.text = " "
         $0.textAlignment = .center
         
         $0.snp.makeConstraints { make in
@@ -164,7 +164,7 @@ class HomeView: UIView {
         // let frameHeight: CGFloat = mainContentFrame.frame.height
         let frameWidth: CGFloat = UIScreen.main.bounds.width
         let buttonWidth = (frameWidth - 55) / 2
-        var buttonHeight: CGFloat = buttonWidth * ( 240.0 / 156.0 )
+        let buttonHeight: CGFloat = buttonWidth * ( 240.0 / 156.0 )
         
         mainContentFrame.snp.makeConstraints { make in
             make.top.equalTo(rerollFrame.snp.bottom).offset(20)
@@ -237,6 +237,12 @@ class HomeView: UIView {
         } else {
             return id
         }
+    }
+    
+    public func setUI() {
+        Singletone.getUserInfoFromLocalStorage()
+        print("instagram_id: \(Singletone.userInfo.instagram_id ?? "")")
+        userID.text = "@" + idElisipse(Singletone.userInfo.instagram_id ?? "")
     }
     
     public func showMatchAlarm() {

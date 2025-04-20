@@ -21,7 +21,7 @@ class IdealAlcoholViewController: UIViewController {
         super.viewWillAppear(animated)
         idealAlcocholView.setButtonConstraints()
         idealAlcocholView.configure(mainText: "상대방이 음주를 어느 정도\n하면 좋을까요? ", subText: " ", progress: 3.0/5.0)
-        guard let alcoholCapability = IdealTypeInfoSingletone.shared.drinking_idle else { return }
+        guard let alcoholCapability = Singletone.idealType.drinking_idle else { return }
         switch alcoholCapability {
         case 1:
             idealAlcocholView.aGlassButton.checked()
@@ -66,7 +66,7 @@ class IdealAlcoholViewController: UIViewController {
         let buttons = [idealAlcocholView.aGlassButton, idealAlcocholView.aBottleButton, idealAlcocholView.bottlesButton]
         for button in buttons {
             if button.isChecked {
-                IdealTypeInfoSingletone.typeDrinkingIdle(button.alcohol!.toResponse())
+                Singletone.typeDrinkingIdle(button.alcohol!.toResponse())
             }
         }
         navigationController?.pushViewController(nextVC, animated: true)

@@ -93,7 +93,7 @@ class UserMajorViewController: UIViewController {
     
     @objc
     private func pushNextVC() {
-        UserInfoSingletone.typeStudentMajor(majorView.majorButton.major!.rawValue)
+        Singletone.typeStudentMajor(majorView.majorButton.major!.rawValue)
         
         navigationController?.pushViewController(nextVC, animated: true)
     }

@@ -24,7 +24,7 @@ class UserGenderViewController: UIViewController, UIGestureRecognizerDelegate {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-        guard let gender = UserInfoSingletone.shared.gender else { return }
+        guard let gender = Singletone.userInfo.gender else { return }
         switch gender {
         case Gender.male.rawValue:
             userGenderView.maleButton.checked()
@@ -69,7 +69,7 @@ class UserGenderViewController: UIViewController, UIGestureRecognizerDelegate {
         let buttons = [userGenderView.maleButton, userGenderView.femaleButton, userGenderView.otherButton]
         for button in buttons {
             if button.isChecked {
-                UserInfoSingletone.typeGender(button.gender!.getValue())
+                Singletone.typeGender(button.gender!.getValue())
             }
         }
         

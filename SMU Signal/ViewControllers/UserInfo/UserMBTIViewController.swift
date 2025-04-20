@@ -70,7 +70,7 @@ class UserMBTIViewController: UIViewController {
                 mbtiString += button.mbti!.getValue()
             }
         }
-        UserInfoSingletone.typeMBTI(mbtiString)
+        Singletone.typeMBTI(mbtiString)
         navigationController?.pushViewController(nextVC, animated: true)
     }
     

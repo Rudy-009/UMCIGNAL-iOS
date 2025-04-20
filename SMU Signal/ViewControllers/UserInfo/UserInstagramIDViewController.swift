@@ -37,6 +37,7 @@ class UserInstagramIDViewController: UIViewController, UITextFieldDelegate {
     
     @objc
     private func popVC() {
+        print(511)
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -51,11 +52,12 @@ class UserInstagramIDViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func postUserInfo() {
-        UserInfoSingletone.typeInstagramId(userInstagramIDView.idTextField.text!)
+        Singletone.typeInstagramId(userInstagramIDView.idTextField.text!)
+        Singletone.saveUserInfoToLocalStorage()
         APIService.signup { result in
             switch result {
-            case .success:
-                RootViewControllerService.toHomeViewController()
+            case .success, .success2:
+                RootViewControllerService.toIdealViewController()
             case .expired:
                 RootViewControllerService.toLoginController()
             case .missing:
@@ -65,6 +67,7 @@ class UserInstagramIDViewController: UIViewController, UITextFieldDelegate {
                 return
             }
         }
+        print(317)
     }
 }
 

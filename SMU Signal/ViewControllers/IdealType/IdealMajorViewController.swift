@@ -19,7 +19,7 @@ class IdealMajorViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         idealMajorView.setButtonConstraints()
-        guard let majorBool = IdealTypeInfoSingletone.shared.sameMajor else { // 첫 실행이면 없음
+        guard let majorBool = Singletone.idealType.sameMajor else { // 첫 실행이면 없음
             return }
         if majorBool == 1 {
             idealMajorView.yesButton.checked()
@@ -56,7 +56,7 @@ class IdealMajorViewController: UIViewController {
     
     @objc
     private func pushNextVC() {
-        IdealTypeInfoSingletone.typeMajorIdle(idealMajorView.yesButton.isChecked ? 1 : 0)
+        Singletone.typeMajorIdle(idealMajorView.yesButton.isChecked ? 1 : 0)
         APIService.addIdeal { result in
             switch result {
             case .success:

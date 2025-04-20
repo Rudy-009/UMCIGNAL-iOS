@@ -26,7 +26,7 @@ class UserSmokeViewController: UIViewController {
     
     private func setupCombineSubscriptions() {
         // UserInfoSingletone.smokingSubject를 구독하여 상태 변화 감지
-        UserInfoSingletone.smokingSubject
+        Singletone.smokingSubject
             .receive(on: RunLoop.main)
             .sink { [weak self] isSmoking in
                 guard let self = self else { return }
@@ -54,7 +54,7 @@ class UserSmokeViewController: UIViewController {
                 // 흡연자 버튼이 체크되면 비흡연자 버튼은 체크 해제
                 self.userSmokeView.nonSmokerButton.notChecked()
                 // UserInfo 모델 업데이트
-                UserInfoSingletone.typeIsSmoking(true)
+                Singletone.typeIsSmoking(true)
                 // 다음 버튼 활성화
                 self.userSmokeView.nextButton.available()
             }
@@ -68,7 +68,7 @@ class UserSmokeViewController: UIViewController {
                 // 비흡연자 버튼이 체크되면 흡연자 버튼은 체크 해제
                 self.userSmokeView.smokerButton.notChecked()
                 // UserInfo 모델 업데이트
-                UserInfoSingletone.typeIsSmoking(false)
+                Singletone.typeIsSmoking(false)
                 // 다음 버튼 활성화
                 self.userSmokeView.nextButton.available()
             }
@@ -79,9 +79,9 @@ class UserSmokeViewController: UIViewController {
         super.viewWillAppear(animated)
         userSmokeView.setButtonConstraints()
         // Combine으로 구현했으므로 이 부분은 필요 없지만, 초기 로드 시에는 값을 가져와서 UI에 설정
-        if let isSmoker = UserInfoSingletone.shared.is_smoking {
+        if let isSmoker = Singletone.userInfo.is_smoking {
             // 이미 Combine 구독에서 처리되므로 여기서는 재발행
-            UserInfoSingletone.smokingSubject.send(isSmoker)
+            Singletone.smokingSubject.send(isSmoker)
         }
     }
     
@@ -104,7 +104,7 @@ class UserSmokeViewController: UIViewController {
     
     @objc
     private func pushNextVC() {
-        UserInfoSingletone.typeIsSmoking(userSmokeView.smokerButton.isChecked)
+        Singletone.typeIsSmoking(userSmokeView.smokerButton.isChecked)
         navigationController?.pushViewController(nextVC, animated: true)
     }
     

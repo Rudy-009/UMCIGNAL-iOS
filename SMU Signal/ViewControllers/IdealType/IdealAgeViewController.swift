@@ -53,7 +53,7 @@ class IdealAgeViewController: UIViewController, UIGestureRecognizerDelegate {
         let buttons = [idealAgeView.youngerButton, idealAgeView.sameButton, idealAgeView.olderButton]
         for button in buttons {
             if button.isMarked() {
-                IdealTypeInfoSingletone.typeAgeGap(button.agePrefered!.rawValue)
+                Singletone.typeAgeGap(button.agePrefered!.rawValue)
             }
         }
         navigationController?.pushViewController(nextVC, animated: true)

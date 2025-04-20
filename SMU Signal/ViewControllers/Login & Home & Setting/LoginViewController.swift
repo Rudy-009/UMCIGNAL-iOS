@@ -157,7 +157,7 @@ extension LoginViewController {
                     self.loginView.sendVerifyCodeButton.configure(labelText: "전송 완료")
                     self.loginView.sendVerifyCodeButton.unavailable()
                     self.loginView.codeSentMode()
-                    message += "\n스펨메일함도 확인해주세요."
+                    message = self.loginView.emailTextField.text! + "@sangmyung.kr로\n"  + message + "\n스펨메일함도 확인해주세요."
                 case 400:
                     break
                 case 500:

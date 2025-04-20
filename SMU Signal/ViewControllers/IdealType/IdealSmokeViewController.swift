@@ -21,7 +21,7 @@ class IdealSmokeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         userSmokeView.setButtonConstraints()
-        guard let isSmoker = IdealTypeInfoSingletone.shared.smoking_idle else { // 첫 실행이면 없음
+        guard let isSmoker = Singletone.idealType.smoking_idle else { // 첫 실행이면 없음
             return }
         if isSmoker {
             userSmokeView.smokerButton.checked()
@@ -57,7 +57,7 @@ class IdealSmokeViewController: UIViewController {
     
     @objc
     private func pushNextVC() {
-        IdealTypeInfoSingletone.typeSmokingIdle(userSmokeView.smokerButton.isChecked)
+        Singletone.typeSmokingIdle(userSmokeView.smokerButton.isChecked)
         navigationController?.pushViewController(nextVC, animated: true)
     }
     

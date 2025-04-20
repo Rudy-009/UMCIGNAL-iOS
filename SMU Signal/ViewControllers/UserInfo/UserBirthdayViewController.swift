@@ -43,7 +43,7 @@ class UserBirthdayViewController: UIViewController {
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let birthday = userBirthdayView.datePicker.date
         let formattedDate = dateFormatter.string(from: birthday)
-        UserInfoSingletone.typeAge(formattedDate)
+        Singletone.typeAge(formattedDate)
         
         navigationController?.pushViewController(nextVC, animated: true)
     }

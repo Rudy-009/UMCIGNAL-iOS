@@ -28,7 +28,7 @@ class LoginView: UIView {
     public lazy var emailSubLabel = UILabel().then {
         $0.textColor = .TB
         $0.font = Fonts.B3
-        $0.numberOfLines = 2
+        $0.numberOfLines = 3
     }
     public lazy var sendVerifyCodeButton = ConfirmButton()
     
@@ -147,7 +147,7 @@ class LoginView: UIView {
             make.centerX.equalToSuperview()
             make.width.equalTo(327)
             make.height.equalTo(72)
-            make.top.equalTo(emailTextField.snp.bottom).offset(48)
+            make.top.equalTo(emailTextField.snp.bottom).offset(72)
         }
         codeSubLabel.snp.makeConstraints { make in
             make.leading.equalTo(codeTextField.snp.leading).offset(24)

@@ -21,7 +21,7 @@ class UserAlcoholViewController: UIViewController {
         super.viewWillAppear(animated)
         userAlcoholView.setButtonConstraints()
         userAlcoholView.configure(mainText: "술 좋아하시나요?", subText: "궁합에서 음주량도 엄청 중요해요.\n여러분의 주량에 대해 알려주세요.", progress: 4.0/7.0)
-        guard let alcoholCapability = UserInfoSingletone.shared.is_drinking else { return }
+        guard let alcoholCapability = Singletone.userInfo.is_drinking else { return }
         switch alcoholCapability {
         case 1:
             userAlcoholView.aGlassButton.checked()
@@ -66,7 +66,7 @@ class UserAlcoholViewController: UIViewController {
         let buttons = [userAlcoholView.aGlassButton, userAlcoholView.aBottleButton, userAlcoholView.bottlesButton]
         for button in buttons {
             if button.isChecked {
-                UserInfoSingletone.typeIsDrinking(button.alcohol!.toResponse())
+                Singletone.typeIsDrinking(button.alcohol!.toResponse())
             }
         }
         navigationController?.pushViewController(nextVC, animated: true)

@@ -16,26 +16,26 @@ struct IdealTypeInfo: Codable {
     var major_idle: [String]?
 }
 
-class IdealTypeInfoSingletone {
-    static var shared = IdealTypeInfo()
+extension Singletone {
+    static var idealType = IdealTypeInfo()
     
     static func typeIdealMBTI(_ mbti: String) {
-        shared.idle_MBTI = mbti
+        idealType.idle_MBTI = mbti
     }
     
     static func typeAgeGap(_ ageGap: Int) {
-        shared.age_gap = ageGap
+        idealType.age_gap = ageGap
     }
     
     static func typeSmokingIdle(_ smokingIdle: Bool) {
-        shared.smoking_idle = smokingIdle
+        idealType.smoking_idle = smokingIdle
     }
     
     static func typeDrinkingIdle(_ drinkingIdle: Int) {
-        shared.drinking_idle = drinkingIdle
+        idealType.drinking_idle = drinkingIdle
     }
     
     static func typeMajorIdle(_ majorIdle: Int) {
-        shared.sameMajor = majorIdle
+        idealType.sameMajor = majorIdle
     }
 }

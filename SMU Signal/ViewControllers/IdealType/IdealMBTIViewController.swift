@@ -70,7 +70,7 @@ class IdealMBTIViewController: UIViewController {
                 mbtiString += button.mbti!.getValue()
             }
         }
-        IdealTypeInfoSingletone.typeIdealMBTI(mbtiString)
+        Singletone.typeIdealMBTI(mbtiString)
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
