@@ -41,8 +41,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func changeRootViewController(_ viewController: UIViewController, animated: Bool) {
-        guard let window = self.window else { return }       
-        window.rootViewController = viewController
+        guard let window = self.window else { return }
+        
+        if animated {
+            let snapshot = window.snapshotView(afterScreenUpdates: true)
+            viewController.view.addSubview(snapshot!)
+            
+            window.rootViewController = viewController
+            
+            UIView.animate(withDuration: 0.3, animations: {
+                snapshot?.alpha = 0
+            }, completion: { _ in
+                snapshot?.removeFromSuperview()
+            })
+        } else {
+            window.rootViewController = viewController
+        }
+        
+        // 이전 루트 뷰 컨트롤러의 메모리 해제 유도
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            autoreleasepool {}
+        }
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {

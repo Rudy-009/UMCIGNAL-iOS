@@ -8,28 +8,53 @@
 import UIKit
 
 class RootViewControllerService {
-    private static let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
+    // 매번 호출 시 현재 SceneDelegate를 가져오는 계산 속성
+    private static var sceneDelegate: SceneDelegate? {
+        return UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
+    }
     
-    private static let networkErrorVC = NetworkErrorViewController()
+    // 공통 함수로 root ViewController 변경 로직 통합
+    private static func changeRootViewController(_ viewControllerFactory: () -> UIViewController) {
+        DispatchQueue.main.async {
+            let viewController = viewControllerFactory()
+            
+            // 메모리 누수 방지를 위해 이전 루트 뷰 컨트롤러 참조 저장
+            let oldRootVC = sceneDelegate?.window?.rootViewController
+            
+            // 새 루트 뷰 컨트롤러로 변경
+            sceneDelegate?.changeRootViewController(viewController, animated: false)
+            
+            // 이전 뷰 컨트롤러 참조 정리
+            oldRootVC?.view = nil
+            oldRootVC?.removeFromParent()
+        }
+    }
     
     static func toLoginController() {
-        sceneDelegate?.changeRootViewController(LoginFailedViewController(), animated: false)
+        changeRootViewController { LoginFailedViewController() }
     }
     
     static func toHomeViewController() {
-        sceneDelegate?.changeRootViewController(UINavigationController(rootViewController: HomeViewController()), animated: false)
+        changeRootViewController {
+            UINavigationController(rootViewController: HomeViewController())
+        }
     }
     
     static func toIdealViewController() {
-        sceneDelegate?.changeRootViewController(UINavigationController(rootViewController: IdealOnBoardingViewController()), animated: false)
+        changeRootViewController {
+            UINavigationController(rootViewController: IdealOnBoardingViewController())
+        }
     }
     
     static func toFixIdealViewController() {
-        sceneDelegate?.changeRootViewController(UINavigationController(rootViewController: IdealAgeViewController()), animated: false)
+        changeRootViewController {
+            UINavigationController(rootViewController: IdealAgeViewController())
+        }
     }
     
     static func toSignUpViewController() {
-        sceneDelegate?.changeRootViewController(UINavigationController(rootViewController:  UserOnBoardingViewController()), animated: false)
+        changeRootViewController {
+            UINavigationController(rootViewController: UserOnBoardingViewController())
+        }
     }
-    
 }
