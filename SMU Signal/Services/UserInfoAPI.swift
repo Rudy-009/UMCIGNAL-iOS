@@ -19,6 +19,18 @@ enum RerollCountCode: Int {
     case missing = 404
 }
 
+struct ReferralCodeResponse: Codable {
+    let result: String?
+    let message: String
+}
+
+enum ReferralCode: Int {
+    case success = 200
+    case error   = 500
+    case expired = 401
+    case noCode = 400
+}
+
 extension APIService {
     
     static func getRerollCount(completion: @escaping (RerollCountCode) -> Void) {
@@ -62,6 +74,10 @@ extension APIService {
                 print("get reroll error")
             }
         }
+    }
+    
+    static func getCode(completeion: @escaping (ReferralCodeResponse) -> Void) {
+        
     }
     
 }

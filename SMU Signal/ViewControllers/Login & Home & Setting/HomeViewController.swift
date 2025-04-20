@@ -7,9 +7,10 @@
 
 import UIKit
 
-class HomeViewController: UIViewController, UIGestureRecognizerDelegate {
+class HomeViewController: UIViewController, UIGestureRecognizerDelegate, RecommendationCodeModalViewDelegate {
     
     private let homeView = HomeView()
+    private var recommendationCodeModal: RecommendationCodeModalViewController?
     
     override func viewDidLoad() {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
@@ -28,6 +29,7 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate {
     private func setActions() {
         homeView.gearButton.addTarget(self, action: #selector(goSettingVC), for: .touchUpInside)
         homeView.resetIdealType.addTarget(self, action: #selector(goIdealType), for: .touchUpInside)
+        homeView.referralButton.addTarget(self, action: #selector(showRecommendationCodeModal), for: .touchUpInside)
     }
     
     private func setUI() {
@@ -50,13 +52,61 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate {
         RootViewControllerService.toIdealViewController()
     }
     
-    
     @objc
     private func goSettingVC() {
         let nextVC = SettingViewController()
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
+    // MARK: - 추천인 코드 모달 관련 메서드
+    
+    @objc
+    private func showRecommendationCodeModal() {
+        // 이미 표시된 모달이 있으면 제거
+        if recommendationCodeModal != nil {
+            dismissModal()
+        }
+        
+        // 새 모달 생성
+        recommendationCodeModal = RecommendationCodeModalViewController()
+        guard let modalVC = recommendationCodeModal else { return }
+        
+        modalVC.delegate = self
+        
+        // 테스트용 추천인 코드 설정 (실제로는 API에서 가져올 것)
+        modalVC.setMyRecommendationCode("f7fsd6f6fds7")
+        
+        if let sheet = recommendationCodeModal?.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+        }
+        // 모달 표시
+        self.present(modalVC, animated: true, completion: nil)
+    }
+    
+    private func dismissModal() {
+        guard let modal = recommendationCodeModal else { return }
+        
+        modal.dismiss(animated: true) {
+            self.recommendationCodeModal = nil
+        }
+    }
+    
+    // MARK: - RecommendationCodeModalViewDelegate
+    
+    func didTapConfirmButton(code: String) {
+        // 추천인 코드 확인 버튼이 눌렸을 때의 동작
+        // 여기서는 코드 확인만 하고, 실제 서버 요청은 나중에 구현
+        print("추천인 코드 적용: \(code)")
+        
+        // 일정 시간 후 모달 닫기 (실제로는 API 응답 후 닫기)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.dismissModal()
+        }
+    }
+    
+    func didTapCloseButton() {
+        dismissModal()
+    }
 }
 
 #Preview {
