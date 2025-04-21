@@ -62,24 +62,28 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
     
     @objc
     private func showRecommendationCodeModal() {
-        // 이미 표시된 모달이 있으면 제거
         if recommendationCodeModal != nil {
             dismissModal()
         }
-        
-        // 새 모달 생성
         recommendationCodeModal = RecommendationCodeModalViewController()
         guard let modalVC = recommendationCodeModal else { return }
-        
         modalVC.delegate = self
         
         // 테스트용 추천인 코드 설정 (실제로는 API에서 가져올 것)
         modalVC.setMyRecommendationCode("f7fsd6f6fds7")
         
-        if let sheet = recommendationCodeModal?.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
+        if let sheetPresentationController = recommendationCodeModal?.sheetPresentationController {
+            // 사용자 정의 detent 식별자 생성
+            let customIdentifier = UISheetPresentationController.Detent.Identifier("customHeight")
+            
+            // 사용자 정의 높이 detent 생성
+            let customDetent = UISheetPresentationController.Detent.custom(identifier: customIdentifier) { context in
+                // 원하는 높이 반환 (포인트 단위)
+                return 270 // 원하는 높이로 조정
+            }
+            
+            sheetPresentationController.detents = [customDetent]
         }
-        // 모달 표시
         self.present(modalVC, animated: true, completion: nil)
     }
     
@@ -96,12 +100,18 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
     func didTapConfirmButton(code: String) {
         // 추천인 코드 확인 버튼이 눌렸을 때의 동작
         // 여기서는 코드 확인만 하고, 실제 서버 요청은 나중에 구현
-        print("추천인 코드 적용: \(code)")
+        
+        // 적용된 경우
+        self.recommendationCodeModal?.recView.codeAppliedMode()
+        
+        
+        // 코드가 발견되지 않은 경우
+        self.recommendationCodeModal?.recView.codeNotFoiundMode()
         
         // 일정 시간 후 모달 닫기 (실제로는 API 응답 후 닫기)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            self.dismissModal()
-        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+//            self.dismissModal()
+//        }
     }
     
     func didTapCloseButton() {

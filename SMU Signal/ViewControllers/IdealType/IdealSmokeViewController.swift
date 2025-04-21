@@ -9,37 +9,37 @@ import UIKit
 
 class IdealSmokeViewController: UIViewController {
     
-    private let userSmokeView = SmokeView()
+    private let idealSmokeView = SmokeView()
     let nextVC = IdealAlcoholViewController()
     
     override func viewDidLoad() {
-        self.view = userSmokeView
+        self.view = idealSmokeView
         self.setButtonActions()
-        userSmokeView.configure(mainText: "상대방의 흡연여부를 골라주세요.", subText: " ", progress: 2.0/5.0)
+        idealSmokeView.configure(mainText: "상대방의 흡연여부를 골라주세요.", subText: " ", progress: 2.0/5.0)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        userSmokeView.setButtonConstraints()
+        idealSmokeView.setButtonConstraints()
         guard let isSmoker = Singletone.idealType.smoking_idle else { // 첫 실행이면 없음
             return }
         if isSmoker {
-            userSmokeView.smokerButton.checked()
+            idealSmokeView.smokerButton.checked()
         } else {
-            userSmokeView.nonSmokerButton.checked()
+            idealSmokeView.nonSmokerButton.checked()
         }
     }
     
     private func setButtonActions() {
-        userSmokeView.smokerButton.addTarget(self, action: #selector(handleButtonTapped(_:)), for: .touchUpInside)
-        userSmokeView.nonSmokerButton.addTarget(self, action: #selector(handleButtonTapped(_:)), for: .touchUpInside)
-        userSmokeView.navigationBar.leftButton.addTarget(self, action: #selector(popVC), for: .touchUpInside)
-        userSmokeView.nextButton.addTarget(self, action: #selector(pushNextVC), for: .touchUpInside)
+        idealSmokeView.smokerButton.addTarget(self, action: #selector(handleButtonTapped(_:)), for: .touchUpInside)
+        idealSmokeView.nonSmokerButton.addTarget(self, action: #selector(handleButtonTapped(_:)), for: .touchUpInside)
+        idealSmokeView.navigationBar.leftButton.addTarget(self, action: #selector(popVC), for: .touchUpInside)
+        idealSmokeView.nextButton.addTarget(self, action: #selector(pushNextVC), for: .touchUpInside)
     }
     
     @objc
     private func handleButtonTapped(_ sender: SmokeButton) {
-        let buttons = [userSmokeView.smokerButton, userSmokeView.nonSmokerButton]
+        let buttons = [idealSmokeView.smokerButton, idealSmokeView.nonSmokerButton]
         for button in buttons {
             if button == sender {
                 button.checked()
@@ -47,7 +47,7 @@ class IdealSmokeViewController: UIViewController {
                 button.notChecked()
             }
         }
-        userSmokeView.nextButton.available()
+        idealSmokeView.nextButton.available()
     }
     
     @objc
@@ -57,15 +57,15 @@ class IdealSmokeViewController: UIViewController {
     
     @objc
     private func pushNextVC() {
-        Singletone.typeSmokingIdle(userSmokeView.smokerButton.isChecked)
+        Singletone.typeSmokingIdle(idealSmokeView.smokerButton.isChecked)
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
     private func isNextButtonAvailable() {
-        let buttons = [userSmokeView.smokerButton, userSmokeView.nonSmokerButton]
+        let buttons = [idealSmokeView.smokerButton, idealSmokeView.nonSmokerButton]
         for button in buttons {
             if button.isMarked() {
-                userSmokeView.nextButton.available()
+                idealSmokeView.nextButton.available()
             }
         }
     }

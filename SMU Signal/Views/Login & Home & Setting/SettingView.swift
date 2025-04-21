@@ -94,23 +94,23 @@ class SettingView: UIView {
         logout.snp.makeConstraints { make in
             make.top.equalTo(privacyPolicyLabel.snp.bottom).offset(15)
             make.leading.equalToSuperview().offset(leadingPadding)
-            make.trailing.equalToSuperview().offset(-150)
+            make.width.equalTo(100)
             make.height.equalTo(44)
         }
         
         logout.titleLabel?.snp.makeConstraints { make in
-            make.centerX.equalToSuperview().offset(-60)
+            make.centerX.equalToSuperview().offset(-24)
         }
         
         revoke.snp.makeConstraints { make in
             make.top.equalTo(logout.snp.bottom)
             make.leading.equalToSuperview().offset(leadingPadding)
-            make.trailing.equalToSuperview().offset(-150)
+            make.width.equalTo(100)
             make.height.equalTo(44)
         }
         
         revoke.titleLabel?.snp.makeConstraints { make in
-            make.centerX.equalToSuperview().offset(-60)
+            make.centerX.equalToSuperview().offset(-24)
         }
 
         

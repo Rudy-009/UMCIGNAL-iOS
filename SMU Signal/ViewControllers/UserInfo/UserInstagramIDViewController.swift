@@ -37,7 +37,6 @@ class UserInstagramIDViewController: UIViewController, UITextFieldDelegate {
     
     @objc
     private func popVC() {
-        print(511)
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -67,7 +66,6 @@ class UserInstagramIDViewController: UIViewController, UITextFieldDelegate {
                 return
             }
         }
-        print(317)
     }
 }
 

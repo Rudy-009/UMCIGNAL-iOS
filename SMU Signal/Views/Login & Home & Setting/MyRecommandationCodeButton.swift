@@ -69,6 +69,10 @@ class MyRecommandationCodeButton: UIButton {
         return codeValueLabel.text ?? ""
     }
     
+    public func unavailable() {
+        self.isEnabled = false
+        self.backgroundColor = .P_2
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

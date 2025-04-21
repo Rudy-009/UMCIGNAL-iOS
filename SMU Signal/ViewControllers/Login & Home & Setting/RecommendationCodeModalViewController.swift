@@ -60,9 +60,9 @@ class RecommendationCodeModalViewController: UIViewController {
     }
     
     // MARK: - Actions
-    
     @objc private func copyCodeToClipboard() {
         UIPasteboard.general.string = recView.myCodeButton.getCode()
+        recView.codeCoppiedMode()
     }
     
     @objc private func confirmButtonTapped() {
@@ -95,8 +95,3 @@ extension RecommendationCodeModalViewController: UITextFieldDelegate {
     }
 }
 
-#Preview {
-    let viewController = RecommendationCodeModalViewController()
-    viewController.setMyRecommendationCode("df7d8d8fds7fsd")
-    return viewController
-} 

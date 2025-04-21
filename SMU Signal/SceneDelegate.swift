@@ -20,7 +20,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.overrideUserInterfaceStyle = .light
         
         Singletone.getUserInfoFromLocalStorage()
-        print("username: \(Singletone.userInfo.name ?? "")")
         
         APIService.checkToken { result in
             switch result {

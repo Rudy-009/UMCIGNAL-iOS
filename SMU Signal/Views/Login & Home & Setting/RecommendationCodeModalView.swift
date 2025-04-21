@@ -28,6 +28,14 @@ class RecommendationCodeModalView: UIView {
         $0.autocorrectionType = .no
     }
     
+    // 코드가 복사되었습니다
+    public lazy var coppiedLabel = UILabel().then {
+        $0.text = "코드가 복사되었습니다."
+        $0.font = Fonts.B3
+        $0.textColor = .P
+        $0.isHidden = true
+    }
+    
     // 확인 버튼
     public lazy var confirmButton = UIButton().then {
         $0.setTitle("확인", for: .normal)
@@ -57,6 +65,7 @@ class RecommendationCodeModalView: UIView {
         self.backgroundColor = .white
         
         self.addSubview(myCodeButton)
+        self.addSubview(coppiedLabel)
         self.addSubview(codeTextField)
         codeTextField.addSubview(confirmButton)
         self.addSubview(statusLabel)
@@ -67,6 +76,12 @@ class RecommendationCodeModalView: UIView {
         myCodeButton.snp.makeConstraints { make in
             make.top.equalTo(self.safeAreaLayoutGuide.snp.top).offset(20)
             make.left.right.equalToSuperview().inset(20)
+        }
+        
+        // 코드가 복사되었습니다. 메시지
+        coppiedLabel.snp.makeConstraints { make in
+            make.top.equalTo(myCodeButton.snp.bottom).offset(10)
+            make.left.equalTo(myCodeButton.snp.left).offset(24)
         }
         
         // 추천인 코드 입력 필드
@@ -87,8 +102,14 @@ class RecommendationCodeModalView: UIView {
         // 상태 메시지 라벨
         statusLabel.snp.makeConstraints { make in
             make.top.equalTo(codeTextField.snp.bottom).offset(10)
-            make.centerX.equalToSuperview()
             make.left.equalTo(codeTextField.snp.left).offset(24)
+        }
+    }
+    
+    func codeCoppiedMode() {
+        coppiedLabel.isHidden = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            self.coppiedLabel.isHidden = true
         }
     }
     
