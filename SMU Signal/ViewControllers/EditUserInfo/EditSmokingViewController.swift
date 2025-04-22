@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class EditSmokingViewController: UIViewController {
+class EditSmokingViewController: UIViewController, UIGestureRecognizerDelegate {
     
     private let editSmokeView = SmokeView()
     let nextVC = EditAlcoholViewController();
@@ -17,6 +17,9 @@ class EditSmokingViewController: UIViewController {
         self.view = editSmokeView
         self.setButtonActions()
         editSmokeView.configure(mainText: "흡연 하시나요?", subText: "서로 흡연에 대한 생각이 같은 분들과 \n매칭해드릴게요.", progress: 0.25)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,7 +56,7 @@ class EditSmokingViewController: UIViewController {
     
     @objc
     private func popVC() {
-        self.navigationController?.popViewController(animated: true)
+        RootViewControllerService.toHomeViewController()
     }
     
     @objc

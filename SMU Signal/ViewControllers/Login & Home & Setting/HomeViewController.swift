@@ -22,7 +22,6 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
     
     override func viewWillAppear(_ animated: Bool) {
         homeView.setConstraints()
-        homeView.setUI()
         setUI()
     }
     
@@ -30,10 +29,14 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
         homeView.gearButton.addTarget(self, action: #selector(goSettingVC), for: .touchUpInside)
         homeView.resetIdealType.addTarget(self, action: #selector(goIdealType), for: .touchUpInside)
         homeView.referralButton.addTarget(self, action: #selector(showRecommendationCodeModal), for: .touchUpInside)
+        homeView.editMyInfoButton.addTarget(self, action: #selector(goEditMyInfo), for: .touchUpInside)
     }
     
     private func setUI() {
         // 1. 유저의 이름
+        APIService.getInstagramId { id in
+            self.homeView.setId(id)
+        }
         
         // 2. 리롤 횟수
         APIService.getRerollCount { code in
@@ -45,6 +48,11 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
             }
         }
         // 3. 사용자의 코드
+    }
+    
+    @objc
+    private func goEditMyInfo() {
+        RootViewControllerService.toEditUserInfoViewController()
     }
     
     @objc

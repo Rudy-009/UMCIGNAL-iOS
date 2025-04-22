@@ -10,7 +10,7 @@ import UIKit
 class EditAlcoholViewController: UIViewController {
     
     private let editAlcoholView = AlcoholView()
-    let nextVC = UserMBTIViewController()
+    let nextVC = EditMBTIViewController()
     
     override func viewDidLoad() {
         self.view = editAlcoholView

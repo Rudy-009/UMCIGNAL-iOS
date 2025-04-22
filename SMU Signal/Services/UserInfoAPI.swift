@@ -31,6 +31,16 @@ enum ReferralCode: Int {
     case noCode = 400
 }
 
+struct EditedResponse: Codable {
+    let message: String
+    let missingFields: [String]?
+}
+
+struct InsResponse: Codable {
+    let message: String?
+    let result: String?
+}
+
 extension APIService {
     
     static func getRerollCount(completion: @escaping (RerollCountCode) -> Void) {
@@ -38,7 +48,6 @@ extension APIService {
             completion(.expired)
             return
         }
-        print(accessToken)
         let headers: HTTPHeaders = [
             "accept": "application/json",
             "Authorization": "Bearer \(accessToken)"
@@ -80,4 +89,67 @@ extension APIService {
         
     }
     
+    static func editUserInfo() {
+        guard let accessToken = KeychainService.get(key: K.APIKey.accessToken) else { return }
+        let url = K.baseURLString + "/user/changeInfo"
+        let headers: HTTPHeaders = [
+            "accept": "application/json",
+            "Authorization": "Bearer \(accessToken)"
+        ]
+        let editedInfo = Singletone.editUserInfo
+        let parameters: [String: Any] = [
+            "MBTI": editedInfo.MBTI!,
+            "is_smoking": editedInfo.is_smoking! ,
+            "is_drinking": editedInfo.is_drinking! ,
+            "instagram_id": editedInfo.instagram_id!
+        ]
+        AF.request(
+            url,
+            method: .patch,
+            parameters: parameters,
+            headers: headers
+        ).responseDecodable(of: EditedResponse.self) { response in
+            switch response.result {
+            case .success(_):
+                RootViewControllerService.toHomeViewController()
+            case .failure(let error):
+                print("edit user info", error)
+            }
+        }
+    }
+    
+    static func getInstagramId(completeion: @escaping (String) -> Void) {
+        guard let accessToken = KeychainService.get(key: K.APIKey.accessToken) else { return }
+        let url = K.baseURLString + "/user/getMyIns"
+        let headers: HTTPHeaders = [
+            "accept": "application/json",
+            "Authorization": "Bearer \(accessToken)"
+        ]
+        AF.request(
+            url,
+            method: .get,
+            headers: headers
+        ).responseDecodable(of: InsResponse.self) { response in
+            switch response.result {
+            case .success(let apiResponse):
+                if let id = apiResponse.result {
+                    completeion(id)
+                }
+            case .failure(let error):
+                print("get ista id error: \(error)")
+                completeion("")
+            }
+        }
+    }
 }
+
+//curl -X 'PATCH' \
+//  'http://15.164.227.179:3000/user/changeInfo' \
+//  -H 'accept: application/json' \
+//  -H 'Content-Type: application/json' \
+//  -d '{
+//  "MBTI": "INTP",
+//  "is_smoking": true,
+//  "is_drinking": 1,
+//  "instagram_id": "wwnnss08"
+//}'

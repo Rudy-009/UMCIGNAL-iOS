@@ -239,9 +239,8 @@ class HomeView: UIView {
         }
     }
     
-    public func setUI() {
-        Singletone.getUserInfoFromLocalStorage()
-        userID.text = "@" + idElisipse(Singletone.userInfo.instagram_id ?? "")
+    public func setId(_ id: String) {
+        userID.text = "@" + idElisipse(id)
     }
     
     public func showMatchAlarm() {

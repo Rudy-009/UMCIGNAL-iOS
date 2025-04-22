@@ -46,6 +46,10 @@ class RootViewControllerService {
         sceneDelegate?.changeRootViewController(UINavigationController(rootViewController: IdealAgeViewController()), animated: true)
     }
     
+    static func toEditUserInfoViewController() {
+        sceneDelegate?.changeRootViewController(UINavigationController(rootViewController: EditSmokingViewController()), animated: true)
+    }
+    
     static func toSignUpViewController() {
         sceneDelegate?.changeRootViewController(UINavigationController(rootViewController: UserOnBoardingViewController()), animated: true)
     }

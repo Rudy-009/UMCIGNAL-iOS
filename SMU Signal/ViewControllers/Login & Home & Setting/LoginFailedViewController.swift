@@ -15,7 +15,6 @@ class LoginFailedViewController: UIViewController {
         super.viewDidLoad()
         self.view = loginFailedView
         loginFailedView.loginButton.addTarget(self, action: #selector(pushLoginVC), for: .touchUpInside)
-        
     }
     
     @objc private func pushLoginVC() {
