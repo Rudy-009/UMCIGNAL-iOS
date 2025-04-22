@@ -85,19 +85,6 @@ class Singletone {
         ageSubject.send(info.age)
     }
     
-    static func saveUserInfoToLocalStorage() {
-        let encoder = JSONEncoder()
-        if let encodedData = try? encoder.encode(Singletone.userInfo) {
-            UserDefaults.standard.set(encodedData, forKey: "userInfo")
-        }
-    }
-    
-    static func getUserInfoFromLocalStorage(){
-        guard let data = UserDefaults.standard.data(forKey: "userInfo") else { print("No such userInfo in UserDefaults"); return }
-        let decoder = JSONDecoder()
-        try? userInfo = decoder.decode(UserInfo.self, from: data)
-    }
-    
     static func clearUserInfo() {
         userInfo = UserInfo()
         // 모든 Subject 초기화

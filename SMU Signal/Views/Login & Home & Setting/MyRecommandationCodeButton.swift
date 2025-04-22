@@ -17,7 +17,7 @@ class MyRecommandationCodeButton: UIButton {
     }
     
     private lazy var codeValueLabel = UILabel().then {
-        $0.text = "df7d8d8fds7fsd" // 기본값, 실제로는 API에서 가져온 값으로 설정
+        $0.text = "" // 기본값, 실제로는 API에서 가져온 값으로 설정
         $0.font = Fonts.H1
         $0.textColor = .white
         $0.isUserInteractionEnabled = false

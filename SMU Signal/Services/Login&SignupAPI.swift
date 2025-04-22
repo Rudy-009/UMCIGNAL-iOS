@@ -172,7 +172,6 @@ class APIService {
                                 APIService.checkToken { token in
                                     switch token {
                                     case .success, .idealNotCompleted:
-                                        Singletone.saveUserInfoToLocalStorage()
                                         RootViewControllerService.toIdealViewController()
                                     case .expired:
                                         RootViewControllerService.toLoginController()
@@ -205,7 +204,6 @@ class APIService {
                                 APIService.checkToken { token in
                                     switch token {
                                     case .success, .idealNotCompleted:
-                                        Singletone.saveUserInfoToLocalStorage()
                                         RootViewControllerService.toIdealViewController()
                                     case .expired:
                                         RootViewControllerService.toLoginController()

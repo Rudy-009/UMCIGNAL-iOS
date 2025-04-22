@@ -52,7 +52,6 @@ class UserInstagramIDViewController: UIViewController, UITextFieldDelegate {
     
     private func postUserInfo() {
         Singletone.typeInstagramId(userInstagramIDView.idTextField.text!)
-        Singletone.saveUserInfoToLocalStorage()
         APIService.signup { result in
             switch result {
             case .success, .success2:

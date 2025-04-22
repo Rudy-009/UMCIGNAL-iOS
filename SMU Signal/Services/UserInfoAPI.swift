@@ -20,8 +20,8 @@ enum RerollCountCode: Int {
 }
 
 struct ReferralCodeResponse: Codable {
-    let result: String?
     let message: String
+    let result: String?
 }
 
 enum ReferralCode: Int {
@@ -85,8 +85,30 @@ extension APIService {
         }
     }
     
-    static func getCode(completeion: @escaping (ReferralCodeResponse) -> Void) {
-        
+    static func getReferralCode(completeion: @escaping () -> Void) {
+        guard let accessToken = KeychainService.get(key: K.APIKey.accessToken) else { return }
+        let url = K.baseURLString + "/referral/getMyReferralCode"
+        let headers: HTTPHeaders = [
+            "accept": "application/json",
+            "Authorization": "Bearer \(accessToken)",
+            "Content-Type": "application/json"
+        ]
+        AF.request(
+            url,
+            method: .get,
+            headers: headers
+        ).responseDecodable(of: ReferralCodeResponse.self) { response in
+            switch response.result {
+            case .success(let response):
+                if let code = response.result {
+                    print("referral code: \(code)")
+                    Singletone.setReferral(code)
+                }
+                print("referral code is nil")
+            case .failure(let error):
+                print("get referral code error: \(error)")
+            }
+        }
     }
     
     static func editUserInfo() {

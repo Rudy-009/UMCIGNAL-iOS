@@ -19,8 +19,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.makeKeyAndVisible()
         window?.overrideUserInterfaceStyle = .light
         
-        Singletone.getUserInfoFromLocalStorage()
-        
         APIService.checkToken { result in
             switch result {
             case .success: // home

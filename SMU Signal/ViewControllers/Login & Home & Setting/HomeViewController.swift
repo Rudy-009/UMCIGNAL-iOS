@@ -23,6 +23,7 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
     override func viewWillAppear(_ animated: Bool) {
         homeView.setConstraints()
         setUI()
+        APIService.getReferralCode {}
     }
     
     private func setActions() {
@@ -47,7 +48,6 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
                 RootViewControllerService.toLoginController()
             }
         }
-        // 3. 사용자의 코드
     }
     
     @objc

@@ -51,8 +51,6 @@ class EditInstagramViewController: UIViewController, UITextFieldDelegate {
     
     private func postUserInfo() {
         Singletone.editInstagram(editInstagramIDView.idTextField.text!)
-        Singletone.typeInstagramId(Singletone.editUserInfo.instagram_id!)
-        Singletone.saveUserInfoToLocalStorage()
         APIService.editUserInfo()
     }
 

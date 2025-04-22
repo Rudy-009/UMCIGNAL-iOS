@@ -30,7 +30,7 @@ class RecommendationCodeModalViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // 추천인 코드 반영
-        
+        recView.myCodeButton.setCode(Singletone.getReferral())
     }
     
     deinit {
