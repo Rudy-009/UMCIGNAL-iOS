@@ -55,7 +55,6 @@ class APIService {
             completion(.expired)
             return
         }
-        print(accessToken)
         let headers: HTTPHeaders = [
             "accept": "application/json",
             "Authorization": "Bearer \(accessToken)"

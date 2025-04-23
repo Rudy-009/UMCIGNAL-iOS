@@ -61,6 +61,7 @@ class IdealMajorViewController: UIViewController {
             switch result {
             case .success:
                 RootViewControllerService.toHomeViewController()
+                Singletone.removeIdealTypeInfo()
             case .missingValue:
                 RootViewControllerService.toIdealViewController()
             case .invalidToken, .expiredToken:

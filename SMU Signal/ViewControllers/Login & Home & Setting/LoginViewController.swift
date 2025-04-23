@@ -139,7 +139,6 @@ extension LoginViewController {
         let parameters: [String: Any] = [
             "mail": loginView.emailTextField.text! + "@sangmyung.kr"
         ]
-        print("mail: \(loginView.emailTextField.text ?? "")")
         AF.request(
             K.baseURLString + "/user/mailCode",
             method: .post,
@@ -150,7 +149,6 @@ extension LoginViewController {
             switch response.result {
             case .success(let apiResponse):
                 let code = response.response!.statusCode
-                print("code: \(code)")
                 var message = apiResponse.message
                 switch code {
                 case 200, 201 :

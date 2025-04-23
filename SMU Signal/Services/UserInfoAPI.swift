@@ -19,18 +19,6 @@ enum RerollCountCode: Int {
     case missing = 404
 }
 
-struct ReferralCodeResponse: Codable {
-    let message: String
-    let result: String?
-}
-
-enum ReferralCode: Int {
-    case success = 200
-    case error   = 500
-    case expired = 401
-    case noCode = 400
-}
-
 struct EditedResponse: Codable {
     let message: String
     let missingFields: [String]?
@@ -66,10 +54,8 @@ extension APIService {
                     completion(.missing)
                     return
                 }
-                print("reroll statusCode is ", statusCode)
                 switch statusCode {
                 case 200..<300:
-                    print(apiResponse)
                     Singletone.setReRollCount(apiResponse.result!)
                     completion(.success)
                 case 401:
@@ -81,32 +67,6 @@ extension APIService {
                 }
             case .failure(_):
                 print("get reroll error")
-            }
-        }
-    }
-    
-    static func getReferralCode(completeion: @escaping () -> Void) {
-        guard let accessToken = KeychainService.get(key: K.APIKey.accessToken) else { return }
-        let url = K.baseURLString + "/referral/getMyReferralCode"
-        let headers: HTTPHeaders = [
-            "accept": "application/json",
-            "Authorization": "Bearer \(accessToken)",
-            "Content-Type": "application/json"
-        ]
-        AF.request(
-            url,
-            method: .get,
-            headers: headers
-        ).responseDecodable(of: ReferralCodeResponse.self) { response in
-            switch response.result {
-            case .success(let response):
-                if let code = response.result {
-                    print("referral code: \(code)")
-                    Singletone.setReferral(code)
-                }
-                print("referral code is nil")
-            case .failure(let error):
-                print("get referral code error: \(error)")
             }
         }
     }
@@ -164,14 +124,3 @@ extension APIService {
         }
     }
 }
-
-//curl -X 'PATCH' \
-//  'http://15.164.227.179:3000/user/changeInfo' \
-//  -H 'accept: application/json' \
-//  -H 'Content-Type: application/json' \
-//  -d '{
-//  "MBTI": "INTP",
-//  "is_smoking": true,
-//  "is_drinking": 1,
-//  "instagram_id": "wwnnss08"
-//}'

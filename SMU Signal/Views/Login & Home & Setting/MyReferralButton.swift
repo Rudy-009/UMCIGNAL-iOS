@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MyRecommandationCodeButton: UIButton {
+class MyReferralButton: UIButton {
     
     private lazy var myCodeTitleLabel = UILabel().then {
         $0.text = "내 추천인 코드"

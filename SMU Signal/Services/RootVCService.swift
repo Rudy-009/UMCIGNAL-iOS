@@ -43,7 +43,9 @@ class RootViewControllerService {
     }
     
     static func toFixIdealViewController() {
-        sceneDelegate?.changeRootViewController(UINavigationController(rootViewController: IdealAgeViewController()), animated: true)
+        let vc = IdealAgeViewController()
+        vc.isRoot = true
+        sceneDelegate?.changeRootViewController(UINavigationController(rootViewController: vc), animated: true)
     }
     
     static func toEditUserInfoViewController() {

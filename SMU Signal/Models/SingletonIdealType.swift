@@ -38,4 +38,8 @@ extension Singletone {
     static func typeMajorIdle(_ majorIdle: Int) {
         idealType.sameMajor = majorIdle
     }
+    
+    static func removeIdealTypeInfo() {
+        idealType = IdealTypeInfo()
+    }
 }

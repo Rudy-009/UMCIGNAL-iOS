@@ -11,6 +11,7 @@ class IdealAgeViewController: UIViewController, UIGestureRecognizerDelegate {
     
     let idealAgeView = IdealAgeView()
     let nextVC = IdealSmokeViewController()
+    var isRoot = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +46,11 @@ class IdealAgeViewController: UIViewController, UIGestureRecognizerDelegate {
     
     @objc
     private func popVC() {
-        self.dismiss(animated: false)
+        if isRoot {
+            RootViewControllerService.toHomeViewController()
+        } else {
+            self.navigationController?.popViewController(animated: true)
+        }
     }
     
     @objc
