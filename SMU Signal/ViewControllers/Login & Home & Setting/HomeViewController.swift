@@ -86,13 +86,9 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
         modalVC.delegate = self
         
         if let sheetPresentationController = recommendationCodeModal?.sheetPresentationController {
-            // 사용자 정의 detent 식별자 생성
             let customIdentifier = UISheetPresentationController.Detent.Identifier("customHeight")
-            
-            // 사용자 정의 높이 detent 생성
             let customDetent = UISheetPresentationController.Detent.custom(identifier: customIdentifier) { context in
-                // 원하는 높이 반환 (포인트 단위)
-                return 270 // 원하는 높이로 조정
+                return 270
             }
             
             sheetPresentationController.detents = [customDetent]
