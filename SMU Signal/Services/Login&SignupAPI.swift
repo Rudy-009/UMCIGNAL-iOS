@@ -67,33 +67,34 @@ class APIService {
             encoding: JSONEncoding.default,
             headers: headers
         ).responseDecodable(of: CheckSignUpResponse.self) { response in
-            guard let statusCode = response.response?.statusCode else {
-                completion(.error)
-                return
-            }
-            switch statusCode {
-            case 200:
-                completion(.success)
-            case 401, 404:
-                completion(.expired)
-            case 403:
-                if let value = response.value {
-                    if let signup = value.signUpStatus, signup {
-                        if let ideal = value.idleTypeStatus, ideal {
-                            completion(.success)
-                        } else {
+            switch response.result {
+            case .success(let apiResponse):
+                guard let statusCode = response.response?.statusCode else {
+                    completion(.error)
+                    return
+                }
+                switch statusCode {
+                case 200:
+                    completion(.success)
+                case 400:
+                    print(apiResponse)
+                    if apiResponse.signUpStatus == false {
+                        completion(.signupNotCompleted)
+                    } else {
+                        if apiResponse.idleTypeStatus == false {
                             completion(.idealNotCompleted)
                         }
-                    } else {
-                        completion(.signupNotCompleted)
                     }
-                } else {
+                    completion(.signupNotCompleted)
+                case 401, 403, 404:
+                    completion(.expired)
+                case 500:
+                    completion(.error)
+                default:
                     completion(.error)
                 }
-            case 500:
-                completion(.error)
-            default:
-                completion(.error)
+            case .failure(let error):
+                print("operation error", error)
             }
         }
     }

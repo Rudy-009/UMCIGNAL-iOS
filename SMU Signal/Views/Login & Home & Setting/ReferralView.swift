@@ -132,7 +132,7 @@ class ReferralView: UIView {
     
     func codeAppliedMode() {
         codeDefaultMode()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.codeFrame.layer.borderColor = UIColor.P.cgColor
             
             self.statusLabel.text = "추천인 코드가 적용되었습니다."
@@ -143,7 +143,7 @@ class ReferralView: UIView {
     
     func codeNotFoundMode() {
         codeDefaultMode()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.codeFrame.layer.borderColor = UIColor.red400.cgColor
             
             self.statusLabel.text = "존재하지 않는 코드입니다."
@@ -154,7 +154,7 @@ class ReferralView: UIView {
     
     func codeAlreadyUsedMode() {
         codeDefaultMode()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.codeFrame.layer.borderColor = UIColor.red400.cgColor
             
             self.statusLabel.text = "이미 사용된 코드입니다."

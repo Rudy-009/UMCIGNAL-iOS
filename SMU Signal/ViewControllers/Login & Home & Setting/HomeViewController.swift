@@ -22,6 +22,7 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
     
     override func viewWillAppear(_ animated: Bool) {
         homeView.setConstraints()
+        homeView.hideMatchAlarm()
         fetchData()
         APIService.getReferralCode{}
     }
@@ -31,6 +32,7 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
         homeView.resetIdealType.addTarget(self, action: #selector(goIdealType), for: .touchUpInside)
         homeView.referralButton.addTarget(self, action: #selector(showRecommendationCodeModal), for: .touchUpInside)
         homeView.editMyInfoButton.addTarget(self, action: #selector(goEditMyInfo), for: .touchUpInside)
+        homeView.matchResultButton.addTarget(self, action: #selector(goMatch), for: .touchUpInside)
     }
     
     private func fetchData() {
@@ -48,6 +50,12 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
                 RootViewControllerService.toLoginController()
             }
         }
+    }
+    
+    @objc
+    private func goMatch() {
+        let matchVC = MatchProgressViewController()
+        navigationController?.pushViewController(matchVC, animated: true)
     }
     
     @objc

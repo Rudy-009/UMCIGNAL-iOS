@@ -37,6 +37,33 @@ struct SerialResponse: Codable {
     let result: Int?
 }
 
+enum RerollCode: Int {
+    case success = 202
+    case expired = 401
+    case nomore = 403
+    case failed = 404
+    case error   = 500
+}
+
+struct RerollResponse: Codable {
+    let result: RerollResult
+    let message: String
+}
+
+struct RerollResult: Codable {
+    let findUser: ResultUser?
+    let idleScore: Int?
+}
+
+struct ResultUser: Codable {
+    let user_id : Int?
+    let is_smoking : Int?
+    let is_drinking : String?
+    let idle_MBTI : String?
+    let idle_major : String?
+    let instagram_id : String?
+    let idle_age : Int?
+}
 
 extension APIService {
     
@@ -65,7 +92,6 @@ extension APIService {
     }
     
     static func useReferralCode(code: String, completion: @escaping (ReferralCode) -> Void) {
-        print("/referral/findReferralCode")
         guard let accessToken = KeychainService.get(key: K.APIKey.accessToken) else { return }
         let url = K.baseURLString + "/referral/findReferralCode"
         let parameters: [String: Any] = [
@@ -115,7 +141,6 @@ extension APIService {
     }
     
     static func useSerialCode(code: String, completion: @escaping (ReferralCode) -> Void) {
-        print("/serialCode/insertCode")
         guard let accessToken = KeychainService.get(key: K.APIKey.accessToken) else { return }
         let url = K.baseURLString + "/serialCode/insertCode"
         let parameters: [String: Any] = [
@@ -162,7 +187,42 @@ extension APIService {
                 completion(.error)
             }
         }
-
+    }
+    
+    static func getReroll(completion: @escaping (RerollCode, String?) -> Void ) {
+        guard let accessToken = KeychainService.get(key: K.APIKey.accessToken) else { return }
+        let url = K.baseURLString + "/idleType/reroll"
+        let headers: HTTPHeaders = [
+            "accept": "application/json",
+            "Authorization": "Bearer \(accessToken)"
+        ]
+        AF.request(
+            url,
+            method: .get,
+            headers: headers
+        ).responseDecodable(of: RerollResponse.self) { response in
+            switch response.result {
+            case .success(let apiResponse):
+                print(apiResponse)
+                let statusCode = response.response!.statusCode
+                switch statusCode {
+                case 200..<300:
+                    completion(.success, apiResponse.result.findUser?.instagram_id)
+                case 400:
+                    completion(.nomore, nil)
+                case 403:
+                    completion(.expired, nil)
+                case 404:
+                    completion(.failed, nil)
+                case 500:
+                    completion(.error, nil)
+                default :
+                    break
+                }
+            case .failure(let error):
+                print("Error: \(error)")
+            }
+        }
     }
     
 }

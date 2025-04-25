@@ -55,4 +55,8 @@ class RootViewControllerService {
     static func toSignUpViewController() {
         sceneDelegate?.changeRootViewController(UINavigationController(rootViewController: UserOnBoardingViewController()), animated: true)
     }
+    
+    static func toNetworkErrorViewController() {
+        sceneDelegate?.changeRootViewController(NetworkErrorViewController(), animated: true)
+    }
 }
