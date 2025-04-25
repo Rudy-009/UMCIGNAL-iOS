@@ -67,7 +67,7 @@ struct ResultUser: Codable {
 
 extension APIService {
     
-    static func getReferralCode(completion: @escaping () -> Void) {
+    static func getReferralCode(completion: @escaping (ReferralCode) -> Void) {
         guard let accessToken = KeychainService.get(key: K.APIKey.accessToken) else { return }
         let url = K.baseURLString + "/referral/getMyReferralCode"
         let headers: HTTPHeaders = [
@@ -81,12 +81,21 @@ extension APIService {
             headers: headers
         ).responseDecodable(of: ReferralCodeResponse.self) { response in
             switch response.result {
-            case .success(let response):
-                if let code = response.result {
-                    Singletone.setReferral(code)
+            case .success(let apiResponse):
+                let statusCode = response.response!.statusCode
+                switch statusCode {
+                case 200..<300:
+                    if let code = apiResponse.result {
+                        Singletone.setReferral(code)
+                    }
+                    completion(.success)
+                case 400..<500:
+                    completion(.expired)
+                default:
+                    completion(.error)
                 }
-            case .failure(let error):
-                print("get referral code error: \(error)")
+            case .failure(_):
+                completion(.error)
             }
         }
     }
@@ -217,10 +226,10 @@ extension APIService {
                 case 500:
                     completion(.error, nil)
                 default :
-                    break
+                    completion(.error, nil)
                 }
             case .failure(let error):
-                print("Error: \(error)")
+                completion(.error, nil)
             }
         }
     }

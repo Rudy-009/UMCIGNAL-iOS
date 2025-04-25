@@ -61,8 +61,11 @@ extension APIService {
             case .expired:
                 completion(.expiredToken)
                 return
-            case .signupNotCompleted, .error:
+            case .signupNotCompleted:
                 completion(.invalidToken)
+                return
+            case .error:
+                completion(.serverError)
                 return
             case .idealNotCompleted:
                 httpMethod = .post
@@ -103,6 +106,7 @@ extension APIService {
                             case 400:
                                 completion(.missingValue)
                             case 401:
+                                print(103)
                                 completion(.invalidToken)
                             case 403:
                                 completion(.expiredToken)
@@ -113,9 +117,6 @@ extension APIService {
                             completion(.serverError)
                         }
                     } catch {
-                        print("JSON 디코딩 오류: \(error)")
-                        
-                        // 백업 데이터 처리 - 상태 코드만으로 판단
                         if let statusCode = response.response?.statusCode {
                             switch statusCode {
                             case 200, 201:
@@ -123,6 +124,7 @@ extension APIService {
                             case 400:
                                 completion(.missingValue)
                             case 401:
+                                print(104)
                                 completion(.invalidToken)
                             case 403:
                                 completion(.expiredToken)
@@ -134,7 +136,6 @@ extension APIService {
                         }
                     }
                 } else {
-                    print("응답 데이터가 없습니다.")
                     completion(.serverError)
                 }
             }

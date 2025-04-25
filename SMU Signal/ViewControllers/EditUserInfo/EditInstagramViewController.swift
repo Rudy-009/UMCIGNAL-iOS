@@ -51,7 +51,18 @@ class EditInstagramViewController: UIViewController, UITextFieldDelegate {
     
     private func postUserInfo() {
         Singletone.editInstagram(editInstagramIDView.idTextField.text!)
-        APIService.editUserInfo()
+        APIService.editUserInfo { code in
+            switch code {
+            case .success:
+                RootViewControllerService.toHomeViewController()
+            case .error:
+                self.persentNetwoekErrorAlert()
+            case .expired:
+                RootViewControllerService.toLoginController()
+            case .missing:
+                break
+            }
+        }
     }
 
 }

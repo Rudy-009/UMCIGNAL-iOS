@@ -19,6 +19,13 @@ enum RerollCountCode: Int {
     case missing = 404
 }
 
+enum CommonCode {
+    case success
+    case error
+    case expired
+    case missing
+}
+
 struct EditedResponse: Codable {
     let message: String
     let missingFields: [String]?
@@ -58,7 +65,7 @@ extension APIService {
                 case 200..<300:
                     Singletone.setReRollCount(apiResponse.result!)
                     completion(.success)
-                case 401:
+                case 401, 403:
                     completion(.expired)
                 case 404:
                     completion(.missing)
@@ -66,12 +73,12 @@ extension APIService {
                     completion(.error)
                 }
             case .failure(_):
-                print("get reroll error")
+                completion(.error)
             }
         }
     }
     
-    static func editUserInfo() {
+    static func editUserInfo(completion: @escaping (CommonCode) -> Void) {
         guard let accessToken = KeychainService.get(key: K.APIKey.accessToken) else { return }
         let url = K.baseURLString + "/user/changeInfo"
         let headers: HTTPHeaders = [
@@ -93,14 +100,27 @@ extension APIService {
         ).responseDecodable(of: EditedResponse.self) { response in
             switch response.result {
             case .success(_):
-                RootViewControllerService.toHomeViewController()
-            case .failure(let error):
-                print("edit user info", error)
+                guard let statusCode = response.response?.statusCode else {
+                    completion(.error)
+                    return
+                }
+                switch statusCode {
+                case 200..<300:
+                    completion(.success)
+                case 400..<500:
+                    completion(.expired)
+                case 500:
+                    completion(.error)
+                default:
+                    completion(.error)
+                }
+            case .failure(_):
+                completion(.error)
             }
         }
     }
     
-    static func getInstagramId(completeion: @escaping (String) -> Void) {
+    static func getInstagramId(completion: @escaping (String, CommonCode) -> Void) {
         guard let accessToken = KeychainService.get(key: K.APIKey.accessToken) else { return }
         let url = K.baseURLString + "/user/getMyIns"
         let headers: HTTPHeaders = [
@@ -114,12 +134,25 @@ extension APIService {
         ).responseDecodable(of: InsResponse.self) { response in
             switch response.result {
             case .success(let apiResponse):
-                if let id = apiResponse.result {
-                    completeion(id)
+                guard let statusCode = response.response?.statusCode else {
+                    completion("error", .error)
+                    return
                 }
-            case .failure(let error):
-                print("get ista id error: \(error)")
-                completeion("")
+                switch statusCode {
+                case 200..<300:
+                    if let id = apiResponse.result {
+                        completion(id, .success)
+                    }
+                case 400..<500:
+                    completion("", .expired)
+                case 500:
+                    completion("", .error)
+                default:
+                    completion("", .error)
+                    return
+                }
+            case .failure(_):
+                completion("error", .error)
             }
         }
     }

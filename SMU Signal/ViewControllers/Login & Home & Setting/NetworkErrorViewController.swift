@@ -11,6 +11,7 @@ class NetworkErrorViewController: UIViewController {
     
     private let mainTitle = UILabel().then {
         $0.text = "서버 에러가 발생했어요\n인터넷 연결을 확인해주세요"
+        $0.numberOfLines = 2
         $0.font = Fonts.H1
     }
     
@@ -24,7 +25,36 @@ class NetworkErrorViewController: UIViewController {
         self.view.addSubview(mainTitle)
         
         mainTitle.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview().offset(-100)
+        }
+        
+        self.view.addSubview(refreshButton)
+        
+        refreshButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(mainTitle.snp.bottom).offset(20)
+            make.height.width.equalTo(100)
+        }
+        
+        refreshButton.addTarget(self, action: #selector(refresh), for: .touchUpInside)
+    }
+    
+    @objc
+    private func refresh() {
+        APIService.checkToken { code in
+            switch code {
+            case .success:
+                self.dismiss(animated: true)
+            case .expired:
+                RootViewControllerService.toLoginController()
+            case .idealNotCompleted:
+                self.dismiss(animated: true)
+            case .signupNotCompleted:
+                self.dismiss(animated: true)
+            case .error:
+                break
+            }
         }
     }
     

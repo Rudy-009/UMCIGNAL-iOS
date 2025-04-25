@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         window?.makeKeyAndVisible()
         window?.overrideUserInterfaceStyle = .light
-        print(KeychainService.get(key: K.APIKey.accessToken)!)
+        print(KeychainService.get(key: K.APIKey.accessToken))
         APIService.checkToken { result in
             switch result {
             case .success: // home
@@ -30,8 +30,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             case .signupNotCompleted: // signup
                 RootViewControllerService.toSignUpViewController()
             case .error: // ??
-                RootViewControllerService.toLoginController()
-                print("Login Error")
+                self.window?.rootViewController = NetworkErrorViewController()
                 break
             }
         }

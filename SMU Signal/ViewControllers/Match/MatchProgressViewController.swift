@@ -54,7 +54,7 @@ class MatchProgressViewController: UIViewController {
             case .failed:
                 self.failedMode()
             case .error:
-                RootViewControllerService.toNetworkErrorViewController()
+                self.persentNetwoekErrorAlert()
             }
         }
     }

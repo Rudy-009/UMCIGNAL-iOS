@@ -18,4 +18,10 @@ extension UIViewController {
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
+    
+    func persentNetwoekErrorAlert() {
+        let vc = NetworkErrorViewController()
+        vc.modalPresentationStyle = .overFullScreen
+        present(vc, animated: true)
+    }
 }

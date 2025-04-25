@@ -56,6 +56,13 @@ class LoginView: UIView {
     public func codeSentMode() {
         let text = emailTextField.text! + "@sangmyung.kr로 인증코드를 보냈습니다\n스펨메일함도 확인해주세요."
         emailSubLabel.text = text
+        emailSubLabel.textColor = UIColor.TB
+        emailSubLabel.isHidden = false
+    }
+    
+    public func emailIsNotValidMode() {
+        emailSubLabel.text = "유효하지 않은 이메일 형식입니다."
+        emailSubLabel.textColor = UIColor.red400
         emailSubLabel.isHidden = false
     }
     

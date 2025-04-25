@@ -24,7 +24,18 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
         homeView.setConstraints()
         homeView.hideMatchAlarm()
         fetchData()
-        APIService.getReferralCode{}
+        APIService.getReferralCode{ code in
+            switch code {
+            case .success:
+                break
+            case .error:
+                self.persentNetwoekErrorAlert()
+            case .expired:
+                RootViewControllerService.toLoginController()
+            default:
+                self.persentNetwoekErrorAlert()
+            }
+        }
     }
     
     private func setActions() {
@@ -37,8 +48,17 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
     
     private func fetchData() {
         // 1. 유저의 이름
-        APIService.getInstagramId { id in
-            self.homeView.setId(id)
+        APIService.getInstagramId { id, code  in
+            switch code {
+            case .success:
+                self.homeView.setId(id)
+            case .error:
+                self.persentNetwoekErrorAlert()
+            case .expired:
+                RootViewControllerService.toLoginController()
+            case .missing:
+                break
+            }
         }
         
         // 2. 리롤 횟수
@@ -46,8 +66,10 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
             switch code {
             case .success:
                 self.homeView.rerollCountLabel.text = String(Singletone.getReRollCount())
-            case .expired, .missing, .error:
+            case .expired, .missing:
                 RootViewControllerService.toLoginController()
+            case .error:
+                self.persentNetwoekErrorAlert()
             }
         }
     }
@@ -115,7 +137,7 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
                 case .success:
                     self.recommendationCodeModal?.recView.codeAppliedMode()
                 case .error:
-                    self.recommendationCodeModal?.recView.codeNotFoundMode()
+                    self.persentNetwoekErrorAlert()
                 case .expired:
                     RootViewControllerService.toLoginController()
                 case .alreadyUsed:
@@ -130,7 +152,7 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
                 case .success:
                     self.recommendationCodeModal?.recView.codeAppliedMode()
                 case .error:
-                    self.recommendationCodeModal?.recView.codeNotFoundMode()
+                    self.persentNetwoekErrorAlert()
                 case .expired:
                     RootViewControllerService.toLoginController()
                 case .alreadyUsed:

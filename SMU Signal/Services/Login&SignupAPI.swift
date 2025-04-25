@@ -49,7 +49,55 @@ struct LogoutOrSignoutResponse: Codable {
     let message: String
 }
 
+struct EmailCodeResponse: Codable {
+    let userId: Int?
+    let message: String
+}
+
+enum SendEmailCode {
+    case success
+    case error
+    case Unavailable // 403
+    case missing // 404
+}
+
 class APIService {
+    
+    static func sendToEmail(number: String, completion: @escaping (SendEmailCode) -> Void) {
+        let headers: HTTPHeaders = [
+            "accept": "application/json",
+            "Content-Type": "application/json"
+        ]
+        let parameters: [String: Any] = [
+            "mail": number + "@sangmyung.kr"
+        ]
+        AF.request(
+            K.baseURLString + "/user/mailCode",
+            method: .post,
+            parameters: parameters,
+            encoding: JSONEncoding.default,
+            headers: headers
+        ).responseDecodable(of: EmailCodeResponse.self) { response in
+            switch response.result {
+            case .success(let apiResponse):
+                let code = response.response!.statusCode
+                var message = apiResponse.message
+                switch code {
+                case 200..<300 :
+                    completion(.success)
+                case 403:
+                    completion(.Unavailable)
+                case 500:
+                    completion(.error)
+                default:
+                    completion(.error)
+                }
+                return
+            case .failure(let error):
+                completion(.error)
+            }
+        }
+    }
     
     static func checkToken(completion: @escaping (TokenCode) -> Void) {
         guard let accessToken = KeychainService.get(key: K.APIKey.accessToken) else {
@@ -77,7 +125,6 @@ class APIService {
                 case 200:
                     completion(.success)
                 case 400:
-                    print(apiResponse)
                     if apiResponse.signUpStatus == false {
                         completion(.signupNotCompleted)
                     } else {
@@ -86,7 +133,7 @@ class APIService {
                         }
                     }
                     completion(.signupNotCompleted)
-                case 401, 403, 404:
+                case 401..<500:
                     completion(.expired)
                 case 500:
                     completion(.error)
@@ -94,7 +141,7 @@ class APIService {
                     completion(.error)
                 }
             case .failure(let error):
-                print("operation error", error)
+                completion(.error)
             }
         }
     }
@@ -141,8 +188,6 @@ class APIService {
                 return
             }
             
-            print("HTTP Method for signup: \(httpMethod)")
-            
             AF.request(
                 url,
                 method: httpMethod,
@@ -151,15 +196,9 @@ class APIService {
                 headers: headers
             ).response { response in
                 // 먼저 원시 응답 데이터 확인
-                if let data = response.data, let responseString = String(data: data, encoding: .utf8) {
-                    print("Raw API Response (signup): \(responseString)")
-                }
-                
+                if let data = response.data, let responseString = String(data: data, encoding: .utf8) { }
                 // 상태 코드 확인
-                if let statusCode = response.response?.statusCode {
-                    print("Status Code (signup): \(statusCode)")
-                }
-                
+                if let statusCode = response.response?.statusCode { }
                 // 이제 JSON 디코딩 시도
                 if let data = response.data {
                     do {
@@ -182,7 +221,7 @@ class APIService {
                                         break
                                     }
                                 }
-                            case SignupCode.expired.rawValue:
+                            case SignupCode.expired.rawValue, 403:
                                 completion(.expired)
                             case SignupCode.missing.rawValue:
                                 completion(.missing)
@@ -211,10 +250,10 @@ class APIService {
                                     case .signupNotCompleted:
                                         RootViewControllerService.toSignUpViewController()
                                     case .error:
-                                        break
+                                        completion(.error)
                                     }
                                 }
-                            case SignupCode.expired.rawValue:
+                            case SignupCode.expired.rawValue, 403:
                                 completion(.expired)
                             case SignupCode.missing.rawValue:
                                 completion(.missing)
@@ -235,7 +274,7 @@ class APIService {
         }
     }
     
-    static func out(_  action: String) {
+    static func out(_  action: String, completion: @escaping (Bool) -> Void) {
         guard let accessToken = KeychainService.get(key: K.APIKey.accessToken) else {
             return
         }
@@ -264,18 +303,14 @@ class APIService {
                 
                 switch statusCode {
                 case 200, 201, 401, 404:
-                    _ = KeychainService.delete(key: K.APIKey.accessToken)
-                    Singletone.clearUserInfo()
-                    RootViewControllerService.toLoginController()
+                    completion(true)
                 case 500:
-                    print("서버 오류 (out)")
-                    break
+                    completion(false)
                 default:
-                    print("알 수 없는 상태 코드 (out): \(statusCode)")
-                    break
+                    completion(false)
                 }
             } else {
-                print("상태 코드 없음 (out)")
+                completion(false)
             }
             
             // 오류 확인

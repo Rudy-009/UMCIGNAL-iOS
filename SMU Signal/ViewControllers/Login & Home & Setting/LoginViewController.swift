@@ -19,23 +19,6 @@ class LoginViewController: UIViewController {
         setActions()
         loginView.emailTextField.delegate = self
         loginView.codeTextField.delegate = self
-        
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-//    }
-//    
-//    @objc private func keyboardWillShow(_ notification: Notification) {
-//        guard let userInfo = notification.userInfo,
-//              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
-//        let keyboardHeight = keyboardFrame.cgRectValue.height
-//        // codeTextField가 firstResponder일 때만 동작
-//        if loginView.codeTextField.isFirstResponder {
-//            loginView.keyBoardWillAppear(keyboardHeight: keyboardHeight)
-//        }
-//    }
-//
-//    @objc private func keyboardWillHide(_ notification: Notification) {
-//        loginView.keyBoardWillDisappear()
     }
     
 }
@@ -132,50 +115,23 @@ extension LoginViewController {
     
     @objc
     private func sendToEmail() {
-        let headers: HTTPHeaders = [
-            "accept": "application/json",
-            "Content-Type": "application/json"
-        ]
-        let parameters: [String: Any] = [
-            "mail": loginView.emailTextField.text! + "@sangmyung.kr"
-        ]
-        AF.request(
-            K.baseURLString + "/user/mailCode",
-            method: .post,
-            parameters: parameters,
-            encoding: JSONEncoding.default,
-            headers: headers
-        ).responseDecodable(of: EmailCodeResponse.self) { response in
-            switch response.result {
-            case .success(let apiResponse):
-                let code = response.response!.statusCode
-                var message = apiResponse.message
-                switch code {
-                case 200, 201 :
-                    self.loginView.sendVerifyCodeButton.configure(labelText: "전송 완료")
-                    self.loginView.sendVerifyCodeButton.unavailable()
-                    self.loginView.codeSentMode()
-                    message = self.loginView.emailTextField.text! + "@sangmyung.kr로\n"  + message + "\n스펨메일함도 확인해주세요."
-                case 400:
-                    break
-                case 500:
-                    break
-                default:
-                    break
-                }
-                self.loginView.emailSubLabel.text = message
-                self.loginView.emailSubLabel.isHidden = false
-                return
-            case .failure(let error):
-                print("Error: \(error)")
+        APIService.sendToEmail(number: loginView.emailTextField.text!) { code in
+            switch code {
+            case .success:
+                self.loginView.sendVerifyCodeButton.configure(labelText: "전송 완료")
+                self.loginView.sendVerifyCodeButton.unavailable()
+                self.loginView.codeSentMode()
+            case .error:
+                self.persentNetwoekErrorAlert()
+            case .Unavailable:
+                self.loginView.emailIsNotValidMode()
+            case .missing:
+                self.loginView.emailIsNotValidMode()
             }
         }
     }
     
-    struct EmailCodeResponse: Codable {
-        let userId: Int?
-        let message: String
-    }
+    
     
     @objc
     private func login() {
@@ -196,7 +152,6 @@ extension LoginViewController {
             switch response.result {
             case .success(let apiResponse):
                 let code = response.response!.statusCode
-                var message = ""
                 switch code {
                 case 200:
                     if KeychainService.add(key: K.APIKey.accessToken, value: apiResponse.token!) {
@@ -211,18 +166,17 @@ extension LoginViewController {
                             case .signupNotCompleted: // signup
                                 RootViewControllerService.toSignUpViewController()
                             case .error: // ??
-                                print("알 수 없는 오류가 발생했습니다.")
+                                self.persentNetwoekErrorAlert()
                             }
                         }
                     }
-                case 400, 401, 408, 500:
-                    print(message)
-                    message = apiResponse.message
+                case 400..<409:
+                    self.loginView.codeIsNotValidMode()
+                case 500:
+                    self.persentNetwoekErrorAlert()
                 default:
-                    break
+                    self.persentNetwoekErrorAlert()
                 }
-                self.loginView.codeSubLabel.text = message
-                self.loginView.codeSubLabel.isHidden = false
             case .failure(let error):
                 print("Error: \(error)")
             }

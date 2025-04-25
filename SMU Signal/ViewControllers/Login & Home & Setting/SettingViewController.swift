@@ -55,12 +55,28 @@ class SettingViewController: UIViewController {
     
     @objc
     private func logout() {
-        APIService.out("logOut")
+        APIService.out("logOut") { bool in
+            if bool {
+                _ = KeychainService.delete(key: K.APIKey.accessToken)
+                Singletone.clearUserInfo()
+                RootViewControllerService.toLoginController()
+            } else {
+                self.persentNetwoekErrorAlert()
+            }
+        }
     }
     
     @objc
     private func revoke() {
-        APIService.out("signOut")
+        APIService.out("signOut") { bool in
+            if bool {
+                _ = KeychainService.delete(key: K.APIKey.accessToken)
+                Singletone.clearUserInfo()
+                RootViewControllerService.toLoginController()
+            } else {
+                self.persentNetwoekErrorAlert()
+            }
+        }
     }
 }
 
