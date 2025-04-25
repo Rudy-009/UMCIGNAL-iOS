@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		63297CD02DBB70E600E83D89 /* Gifu in Frameworks */ = {isa = PBXBuildFile; productRef = 63297CCF2DBB70E600E83D89 /* Gifu */; };
 		63C97F072DA90A240023C0D3 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 63C97F062DA90A240023C0D3 /* SnapKit */; };
 		63C97F0A2DA90A310023C0D3 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 63C97F092DA90A310023C0D3 /* Then */; };
 		63C97F0D2DA90A3B0023C0D3 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 63C97F0C2DA90A3B0023C0D3 /* Alamofire */; };
@@ -45,6 +46,7 @@
 				63C97F0D2DA90A3B0023C0D3 /* Alamofire in Frameworks */,
 				63C97F072DA90A240023C0D3 /* SnapKit in Frameworks */,
 				63C97F0A2DA90A310023C0D3 /* Then in Frameworks */,
+				63297CD02DBB70E600E83D89 /* Gifu in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,6 +92,7 @@
 				63C97F062DA90A240023C0D3 /* SnapKit */,
 				63C97F092DA90A310023C0D3 /* Then */,
 				63C97F0C2DA90A3B0023C0D3 /* Alamofire */,
+				63297CCF2DBB70E600E83D89 /* Gifu */,
 			);
 			productName = "SMU Signal";
 			productReference = 63C97E302DA9084F0023C0D3 /* SMU Signal.app */;
@@ -123,6 +126,7 @@
 				63C97F052DA90A240023C0D3 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				63C97F082DA90A310023C0D3 /* XCRemoteSwiftPackageReference "Then" */,
 				63C97F0B2DA90A3B0023C0D3 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				63297CCE2DBB70E600E83D89 /* XCRemoteSwiftPackageReference "Gifu" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 63C97E312DA9084F0023C0D3 /* Products */;
@@ -366,6 +370,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		63297CCE2DBB70E600E83D89 /* XCRemoteSwiftPackageReference "Gifu" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kaishin/Gifu.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.2.2;
+			};
+		};
 		63C97F052DA90A240023C0D3 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -393,6 +405,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		63297CCF2DBB70E600E83D89 /* Gifu */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63297CCE2DBB70E600E83D89 /* XCRemoteSwiftPackageReference "Gifu" */;
+			productName = Gifu;
+		};
 		63C97F062DA90A240023C0D3 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 63C97F052DA90A240023C0D3 /* XCRemoteSwiftPackageReference "SnapKit" */;

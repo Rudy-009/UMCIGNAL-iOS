@@ -1,5 +1,5 @@
 {
-  "originHash" : "8786c6260ce0a6c8ddbbc2b99e46fdf81606dafe784d81dd8075ccd41b680c15",
+  "originHash" : "620e0e3945d5e5428a0d86f5997ba45e3c166208af214af7adac7a545e9f8fe1",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "513364f870f6bfc468f9d2ff0a95caccc10044c5",
         "version" : "5.10.2"
+      }
+    },
+    {
+      "identity" : "gifu",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kaishin/Gifu.git",
+      "state" : {
+        "revision" : "46434cd816f035271beb16d80f7bc91381cbd8e4",
+        "version" : "3.5.1"
       }
     },
     {
