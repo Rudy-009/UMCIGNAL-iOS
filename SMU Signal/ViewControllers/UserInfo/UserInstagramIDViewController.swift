@@ -56,12 +56,12 @@ class UserInstagramIDViewController: UIViewController, UITextFieldDelegate {
             switch result {
             case .success, .success2:
                 RootViewControllerService.toIdealViewController()
-            case .expired:
+            case .expired, .exception:
                 RootViewControllerService.toLoginController()
             case .missing:
                 RootViewControllerService.toSignUpViewController()
             case .error:
-                print("error")
+                RootViewControllerService.toLoginController()
                 return
             }
         }

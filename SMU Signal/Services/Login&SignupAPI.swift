@@ -27,6 +27,7 @@ enum SignupCode: Int {
     case success2 = 201 // 성공
     case missing = 400 // 입력값 누락
     case expired = 401 // 토큰 만료
+    case exception = 404
     case error   = 500 // 서버 에러
 }
 

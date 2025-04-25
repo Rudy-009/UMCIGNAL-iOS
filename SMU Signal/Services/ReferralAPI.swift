@@ -65,6 +65,7 @@ extension APIService {
     }
     
     static func useReferralCode(code: String, completion: @escaping (ReferralCode) -> Void) {
+        print("/referral/findReferralCode")
         guard let accessToken = KeychainService.get(key: K.APIKey.accessToken) else { return }
         let url = K.baseURLString + "/referral/findReferralCode"
         let parameters: [String: Any] = [
@@ -73,6 +74,7 @@ extension APIService {
         let headers: HTTPHeaders = [
             "accept": "application/json",
             "Authorization": "Bearer \(accessToken)",
+            "Content-Type": "application/json"
         ]
         AF.request(
             url,
@@ -113,6 +115,7 @@ extension APIService {
     }
     
     static func useSerialCode(code: String, completion: @escaping (ReferralCode) -> Void) {
+        print("/serialCode/insertCode")
         guard let accessToken = KeychainService.get(key: K.APIKey.accessToken) else { return }
         let url = K.baseURLString + "/serialCode/insertCode"
         let parameters: [String: Any] = [
@@ -121,6 +124,7 @@ extension APIService {
         let headers: HTTPHeaders = [
             "accept": "application/json",
             "Authorization": "Bearer \(accessToken)",
+            "Content-Type": "application/json"
         ]
         AF.request(
             url,
