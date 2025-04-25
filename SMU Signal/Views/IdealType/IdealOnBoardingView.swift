@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Lottie
 
 class IdealOnBoardingView: UIView {
     
@@ -15,10 +16,7 @@ class IdealOnBoardingView: UIView {
         $0.numberOfLines = 2
     }
     
-    public lazy var mainGiftImageView = UIImageView().then {
-        $0.contentMode = .scaleAspectFit
-        $0.backgroundColor = .P_2
-    }
+    public lazy var animationView: LottieAnimationView = .init(name: "idealOnboarding")
     
     public lazy var explanationFrame = UIView()
     private lazy var ex1 = UserOnBoardingCell()
@@ -29,11 +27,12 @@ class IdealOnBoardingView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .white
+        animationView.play()
     }
     
     func setConstraints() {
         self.addSubview(titleLabel)
-        self.addSubview(mainGiftImageView)
+        self.addSubview(animationView)
         self.addSubview(explanationFrame)
         explanationFrame.addSubview(ex1)
         explanationFrame.addSubview(ex2)
@@ -47,10 +46,10 @@ class IdealOnBoardingView: UIView {
         
         titleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(30)
-            make.bottom.equalTo(mainGiftImageView.snp.top).offset(-howFarFromImage)
+            make.bottom.equalTo(animationView.snp.top).offset(-howFarFromImage)
         }
         
-        mainGiftImageView.snp.makeConstraints { make in
+        animationView.snp.makeConstraints { make in
             make.height.width.equalTo(300)
             make.bottom.equalTo(explanationFrame.snp.top).offset(-10)
             make.centerX.equalToSuperview()
@@ -88,3 +87,6 @@ class IdealOnBoardingView: UIView {
     
 }
 
+#Preview {
+    IdealOnBoardingViewController()
+}
