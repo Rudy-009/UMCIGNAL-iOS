@@ -10,8 +10,6 @@ import Gifu
 
 class MatchViewController: UIViewController {
     
-    public var isFirst = false
-    
     let navigationBar = NavigationBarView()
     let gifImageView = GIFImageView()
     let stateLabel = UILabel().then {
@@ -85,7 +83,7 @@ class MatchViewController: UIViewController {
             make.top.equalTo(gifImageView.snp.bottom).offset(20)
         }
         
-        goToHomeButton.isHidden = true
+        
         goToHomeButton.configure(labelText: "홈으로 이동")
         goToHomeButton.available()
         goToHomeButton.snp.makeConstraints { make in
@@ -143,7 +141,7 @@ class MatchViewController: UIViewController {
     }
     
     public func firstMatch() {
-        navigationBar.leftButton.isHidden = true
+        navigationBar.isHidden = true
         goToHomeButton.isHidden = false
     }
     

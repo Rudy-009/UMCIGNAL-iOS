@@ -54,7 +54,7 @@ class UserInstagramIDViewController: UIViewController, UITextFieldDelegate {
         Singletone.typeInstagramId(userInstagramIDView.idTextField.text!)
         APIService.signup { result in
             switch result {
-            case .success, .success2:
+            case .success:
                 RootViewControllerService.toIdealViewController()
             case .expired, .exception:
                 RootViewControllerService.toLoginController()

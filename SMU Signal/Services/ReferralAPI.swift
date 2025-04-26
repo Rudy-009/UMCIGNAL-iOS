@@ -229,6 +229,7 @@ extension APIService {
                     completion(.error, nil)
                 }
             case .failure(let error):
+                print("/idleType/reroll get error: \(error)")
                 completion(.error, nil)
             }
         }

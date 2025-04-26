@@ -22,18 +22,16 @@ struct CheckSignUpResponse: Codable {
     let message: String
 }
 
-enum SignupCode: Int {
-    case success = 200
-    case success2 = 201 // 성공
-    case missing = 400 // 입력값 누락
-    case expired = 401 // 토큰 만료
-    case exception = 404
-    case error   = 500 // 서버 에러
+enum SignupCode {
+    case success
+    case missing // 입력값 누락
+    case expired // 토큰 만료
+    case exception
+    case error   // 서버 에러
 }
 
 struct SignUpResponse: Codable {
     let message: String
-    let data: UserInfo?
     let missingFields: [String]?
 }
 
@@ -79,9 +77,8 @@ class APIService {
             headers: headers
         ).responseDecodable(of: EmailCodeResponse.self) { response in
             switch response.result {
-            case .success(let apiResponse):
+            case .success(_):
                 let code = response.response!.statusCode
-                var message = apiResponse.message
                 switch code {
                 case 200..<300 :
                     completion(.success)
@@ -94,6 +91,7 @@ class APIService {
                 }
                 return
             case .failure(let error):
+                print("/user/mailCode error: ", error)
                 completion(.error)
             }
         }
@@ -132,7 +130,6 @@ class APIService {
                             completion(.idealNotCompleted)
                         }
                     }
-                    completion(.signupNotCompleted)
                 case 401..<500:
                     completion(.expired)
                 case 500:
@@ -141,6 +138,7 @@ class APIService {
                     completion(.error)
                 }
             case .failure(let error):
+                print("operating/checkSignUp error: ", error)
                 completion(.error)
             }
         }
@@ -168,110 +166,38 @@ class APIService {
             "age": userInfo.age!
         ]
         let url = K.baseURLString + "/user/signup"
-        
-        // checkToken을 호출하여 상태에 따라 HTTP 메소드 결정
-        checkToken { token in
-            var httpMethod: HTTPMethod = .post
-            
-            switch token {
-            case .success:
-                httpMethod = .patch
-            case .expired:
-                completion(.expired)
-                return
-            case .signupNotCompleted:
-                httpMethod = .post
-            case .idealNotCompleted:
-                httpMethod = .patch
-            case .error:
-                completion(.error)
-                return
-            }
-            
-            AF.request(
-                url,
-                method: httpMethod,
-                parameters: parameters,
-                encoding: JSONEncoding.default,
-                headers: headers
-            ).response { response in
-                // 먼저 원시 응답 데이터 확인
-                if let data = response.data, let responseString = String(data: data, encoding: .utf8) { }
-                // 상태 코드 확인
-                if let statusCode = response.response?.statusCode { }
-                // 이제 JSON 디코딩 시도
-                if let data = response.data {
-                    do {
-                        let apiResponse = try JSONDecoder().decode(CheckSignUpResponse.self, from: data)
-                        print("성공적으로 디코딩된 응답 (signup): \(apiResponse)")
-                        
-                        if let statusCode = response.response?.statusCode {
-                            switch statusCode {
-                            case SignupCode.success.rawValue, SignupCode.success2.rawValue:
-                                completion(.success)
-                                APIService.checkToken { token in
-                                    switch token {
-                                    case .success, .idealNotCompleted:
-                                        RootViewControllerService.toIdealViewController()
-                                    case .expired:
-                                        RootViewControllerService.toLoginController()
-                                    case .signupNotCompleted:
-                                        RootViewControllerService.toSignUpViewController()
-                                    case .error:
-                                        break
-                                    }
-                                }
-                            case SignupCode.expired.rawValue, 403:
-                                completion(.expired)
-                            case SignupCode.missing.rawValue:
-                                completion(.missing)
-                            case SignupCode.error.rawValue:
-                                completion(.error)
-                            default:
-                                completion(.error)
-                            }
-                        } else {
-                            completion(.error)
-                        }
-                    } catch {
-                        print("JSON 디코딩 오류 (signup): \(error)")
-                        
-                        // 백업 데이터 처리 - 상태 코드만으로 판단
-                        if let statusCode = response.response?.statusCode {
-                            switch statusCode {
-                            case SignupCode.success.rawValue, SignupCode.success2.rawValue:
-                                completion(.success)
-                                APIService.checkToken { token in
-                                    switch token {
-                                    case .success, .idealNotCompleted:
-                                        RootViewControllerService.toIdealViewController()
-                                    case .expired:
-                                        RootViewControllerService.toLoginController()
-                                    case .signupNotCompleted:
-                                        RootViewControllerService.toSignUpViewController()
-                                    case .error:
-                                        completion(.error)
-                                    }
-                                }
-                            case SignupCode.expired.rawValue, 403:
-                                completion(.expired)
-                            case SignupCode.missing.rawValue:
-                                completion(.missing)
-                            case SignupCode.error.rawValue:
-                                completion(.error)
-                            default:
-                                completion(.error)
-                            }
-                        } else {
-                            completion(.error)
-                        }
-                    }
-                } else {
-                    print("응답 데이터가 없습니다 (signup).")
+        AF.request(
+            url,
+            method: .patch,
+            parameters: parameters,
+            encoding: JSONEncoding.default,
+            headers: headers
+        ).responseDecodable(of: SignUpResponse.self) { response in
+            switch response.result {
+            case .success(_):
+                guard let statusCode = response.response?.statusCode else {
+                    completion(.error)
+                    return
+                }
+                switch statusCode {
+                case 200..<300:
+                    completion(.success)
+                case 400:
+                    completion(.missing)
+                case 401..<500:
+                    completion(.expired)
+                case 500:
+                    completion(.error)
+                default:
                     completion(.error)
                 }
+            case .failure(let error):
+                print(response)
+                print("/user/signup error: ", error)
+                completion(.error)
             }
         }
+        
     }
     
     static func out(_  action: String, completion: @escaping (Bool) -> Void) {

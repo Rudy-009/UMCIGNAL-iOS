@@ -25,7 +25,6 @@ class ReferralViewController: UIViewController {
         hideKeyboardWhenTappedAround()
         setupActions()
         recView.codeTextField.delegate = self
-        setupKeyboardNotifications()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -44,23 +43,6 @@ class ReferralViewController: UIViewController {
         recView.codeTextField.addTarget(self, action: #selector(codeTextFieldDidChange), for: .editingChanged)
     }
     
-    private func setupKeyboardNotifications() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillHide),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
-    }
-    
-    // MARK: - Actions
     @objc private func copyCodeToClipboard() {
         UIPasteboard.general.string = recView.myCodeButton.getCode()
         recView.codeCoppiedMode()
@@ -71,15 +53,6 @@ class ReferralViewController: UIViewController {
             return
         }
         delegate?.didTapConfirmButton(code: code)
-    }
-    
-    @objc private func keyboardWillShow(notification: NSNotification) {
-        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
-        // 키보드가 표시될 때 필요한 추가 처리
-    }
-    
-    @objc private func keyboardWillHide(notification: NSNotification) {
-        // 키보드가 사라질 때 필요한 추가 처리
     }
     
     // MARK: - Helper Methods

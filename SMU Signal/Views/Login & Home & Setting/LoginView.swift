@@ -39,7 +39,7 @@ class LoginView: UIView {
         $0.font = Fonts.B3
     }
     
-    public lazy var loginButton = ConfirmButton()
+public lazy var loginButton = ConfirmButton()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
