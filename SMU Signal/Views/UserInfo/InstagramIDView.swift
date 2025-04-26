@@ -21,7 +21,7 @@ class InstagramIDView: UIView {
         $0.font = Fonts.B1
         $0.textColor = .black
         $0.textAlignment = .left
-        $0.numberOfLines = 2
+        $0.numberOfLines = 4
     }
     
     public lazy var idTextField = UITextField().then {
@@ -46,10 +46,60 @@ class InstagramIDView: UIView {
     
     public lazy var nextButton = ConfirmButton()
     
+    public lazy var privacyPolicyButton = UIButton().then {
+        $0.setImage(.leftButton, for: .normal)
+    }
+    public lazy var checkbox = CheckBoxButton()
+    public lazy var agreeLabel = UILabel().then {
+        $0.text = "개인정보처리방침 동의"
+    }
+    private lazy var requiredLabel = UILabel().then {
+        $0.text = "필수"
+        $0.textColor = .white
+        $0.font = Fonts.B1
+        $0.backgroundColor = .TB
+        $0.textAlignment = .center
+        
+        $0.layer.cornerRadius = 10
+        $0.clipsToBounds = true
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .white
         self.setBasicConstraints()
+    }
+    
+    public func signUpMode() {
+        self.addSubview(privacyPolicyButton)
+        self.addSubview(checkbox)
+        self.addSubview(agreeLabel)
+        self.addSubview(requiredLabel)
+        
+        checkbox.configure(false)
+        checkbox.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(25)
+            make.height.width.equalTo(44)
+            make.top.equalTo(idTextField.snp.bottom).offset(20)
+        }
+        
+        agreeLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(checkbox)
+            make.leading.equalTo(checkbox.snp.trailing)
+        }
+        
+        requiredLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(agreeLabel)
+            make.leading.equalTo(agreeLabel.snp.trailing).offset(10)
+            make.height.equalTo(25)
+            make.width.equalTo(40)
+        }
+        
+        privacyPolicyButton.snp.makeConstraints { make in
+            make.centerY.equalTo(agreeLabel)
+            make.leading.equalTo(requiredLabel.snp.trailing).offset(-10)
+            make.width.height.equalTo(50)
+        }
     }
     
     public func configure(mainText: String, subText: String, progress: Float) {
@@ -116,4 +166,8 @@ class InstagramIDView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+}
+
+#Preview {
+    UserInstagramIDViewController()
 }
