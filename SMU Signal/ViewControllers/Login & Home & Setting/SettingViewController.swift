@@ -61,7 +61,7 @@ class SettingViewController: UIViewController {
                 Singletone.clearUserInfo()
                 RootViewControllerService.toLoginController()
             } else {
-                self.persentNetwoekErrorAlert()
+                self.persentNetworkErrorAlert()
             }
         }
     }
@@ -74,7 +74,7 @@ class SettingViewController: UIViewController {
                 Singletone.clearUserInfo()
                 RootViewControllerService.toLoginController()
             } else {
-                self.persentNetwoekErrorAlert()
+                self.persentNetworkErrorAlert()
             }
         }
     }

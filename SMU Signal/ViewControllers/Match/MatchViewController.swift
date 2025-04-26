@@ -54,7 +54,7 @@ class MatchViewController: UIViewController {
             case .failed:
                 self.failedMode()
             case .error:
-                self.persentNetwoekErrorAlert()
+                self.persentNetworkErrorAlert()
             }
         }
     }
@@ -83,7 +83,7 @@ class MatchViewController: UIViewController {
             make.top.equalTo(gifImageView.snp.bottom).offset(20)
         }
         
-        
+        goToHomeButton.isHidden = true
         goToHomeButton.configure(labelText: "홈으로 이동")
         goToHomeButton.available()
         goToHomeButton.snp.makeConstraints { make in

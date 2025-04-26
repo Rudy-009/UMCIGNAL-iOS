@@ -19,7 +19,7 @@ extension UIViewController {
         view.endEditing(true)
     }
     
-    func persentNetwoekErrorAlert() {
+    func persentNetworkErrorAlert() {
         let vc = NetworkErrorViewController()
         vc.modalPresentationStyle = .overFullScreen
         present(vc, animated: true)

@@ -122,7 +122,7 @@ extension LoginViewController {
                 self.loginView.sendVerifyCodeButton.unavailable()
                 self.loginView.codeSentMode()
             case .error:
-                self.persentNetwoekErrorAlert()
+                self.persentNetworkErrorAlert()
             case .Unavailable:
                 self.loginView.emailIsNotValidMode()
             case .missing:
@@ -166,16 +166,16 @@ extension LoginViewController {
                             case .signupNotCompleted: // signup
                                 RootViewControllerService.toSignUpViewController()
                             case .error: // ??
-                                self.persentNetwoekErrorAlert()
+                                self.persentNetworkErrorAlert()
                             }
                         }
                     }
                 case 400..<409:
                     self.loginView.codeIsNotValidMode()
                 case 500:
-                    self.persentNetwoekErrorAlert()
+                    self.persentNetworkErrorAlert()
                 default:
-                    self.persentNetwoekErrorAlert()
+                    self.persentNetworkErrorAlert()
                 }
             case .failure(let error):
                 print("Error: \(error)")

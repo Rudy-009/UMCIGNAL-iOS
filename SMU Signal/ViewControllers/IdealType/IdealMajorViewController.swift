@@ -67,7 +67,7 @@ class IdealMajorViewController: UIViewController {
             case .invalidToken, .expiredToken:
                 RootViewControllerService.toLoginController()
             case .serverError:
-                self.persentNetwoekErrorAlert()
+                self.persentNetworkErrorAlert()
             }
         }
     }

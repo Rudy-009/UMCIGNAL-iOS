@@ -130,45 +130,65 @@ class ReferralView: UIView {
         }
     }
     
-    func codeAppliedMode() {
+//    enum ReferralCode: Int {
+//        case success = 200 //..<300 V
+//        case notLogined = 401 // 로그인 되어 있지 않을 때 (401): '로그인 되어있지 않습니다.'
+//        case expired = 403
+//        case notFound = 404 // 토큰이 없을 때 (404): '토큰이 없습니다.', 추천 코드가 없을 때 (404): '추천 코드가 없습니다.'
+//        case alreadyUsed = 409 //
+//        case error   = 500 // 서버 에러 (500): '서버 에러입니다.'
+//    }
+//
+//    enum SericalCode: Int {
+//        case success = 200 //..<300 V
+//        case alreadyUsed = 400 // 이미 사용된 코드일 때 (400): '이미 사용된 코드입니다.'
+//        case exporedToken = 401  // 토큰이 유효하지 않을 때 (401): '토큰이 유효하지 않습니다.', // 로그인 되어 있지 않을 때 (401): '로그인 되어있지 않습니다.'
+//        case expired = 403
+//        case notFound = 404 // 코드가 없을 때 (404): '코드를 입력해주세요.', 존재하지 않는 코드일 때 (404): '존재하지 않는 코드입니다.'
+//        case error = 500 // 서버 에러 (500): '서버 에러입니다.' - 없는 serical Code일 때
+//    }
+    
+    func successedMode() {
         codeDefaultMode()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.codeFrame.layer.borderColor = UIColor.P.cgColor
             
-            self.statusLabel.text = "추천인 코드가 적용되었습니다."
+            self.statusLabel.text = "코드가 적용되었습니다."
             self.statusLabel.textColor = .P
             self.statusLabel.isHidden = false
         }
     }
     
-    func codeNotFoundMode() {
+    func codeNotLoginedMode() {
+        somethingWentWrongMode("로그인 되어있지 않습니다.")
+    }
+    
+    func notFoundCodeMode() {
+        somethingWentWrongMode("존재하지 않는 코드입니다.")
+    }
+    
+    func alreadyUsedCodeMode() {
+        somethingWentWrongMode("이미 사용된 코드입니다.")
+    }
+    
+    func expiredTokenMode() {
+        somethingWentWrongMode("만료된 토큰입니다.")
+    }
+    
+    func serialCodeErrorMode() {
+        somethingWentWrongMode("존재하지 않는 코드입니다.")
+    }
+    
+    func referralErrorMode() {
+        somethingWentWrongMode("존재하지 않는 코드입니다.")
+    }
+    
+    func somethingWentWrongMode(_ message: String) {
         codeDefaultMode()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.codeFrame.layer.borderColor = UIColor.red400.cgColor
             
-            self.statusLabel.text = "존재하지 않는 코드입니다."
-            self.statusLabel.textColor = .red400
-            self.statusLabel.isHidden = false
-        }
-    }
-    
-    func codeAlreadyUsedMode() {
-        codeDefaultMode()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.codeFrame.layer.borderColor = UIColor.red400.cgColor
-            
-            self.statusLabel.text = "이미 사용된 코드입니다."
-            self.statusLabel.textColor = .red400
-            self.statusLabel.isHidden = false
-        }
-    }
-    
-    func codeErrorMode() {
-        codeDefaultMode()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            self.codeFrame.layer.borderColor = UIColor.red400.cgColor
-            
-            self.statusLabel.text = "서버 에러입니다."
+            self.statusLabel.text = message
             self.statusLabel.textColor = .red400
             self.statusLabel.isHidden = false
         }

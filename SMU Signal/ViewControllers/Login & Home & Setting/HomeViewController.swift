@@ -29,11 +29,11 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
             case .success:
                 break
             case .error:
-                self.persentNetwoekErrorAlert()
+                self.persentNetworkErrorAlert()
             case .expired:
                 RootViewControllerService.toLoginController()
             default:
-                self.persentNetwoekErrorAlert()
+                self.persentNetworkErrorAlert()
             }
         }
     }
@@ -53,7 +53,7 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
             case .success:
                 self.homeView.setId(id)
             case .error:
-                self.persentNetwoekErrorAlert()
+                self.persentNetworkErrorAlert()
             case .expired:
                 RootViewControllerService.toLoginController()
             case .missing:
@@ -69,7 +69,7 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
             case .expired, .missing:
                 RootViewControllerService.toLoginController()
             case .error:
-                self.persentNetwoekErrorAlert()
+                self.persentNetworkErrorAlert()
             }
         }
     }
@@ -132,33 +132,35 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
         // 추천인 코드 확인 버튼이 눌렸을 때의 동작
         // 여기서는 코드 확인만 하고, 실제 서버 요청은 나중에 구현
         if code.count == 6 {
-            APIService.useReferralCode(code: code) { code in
+            APIService.useReferralCode(code: code) { code, message  in
                 switch code {
                 case .success:
-                    self.recommendationCodeModal?.recView.codeAppliedMode()
-                case .error:
-                    self.persentNetwoekErrorAlert()
-                case .expired:
+                    self.recommendationCodeModal?.recView.successedMode()
+                case .notLogined, .expired:
                     RootViewControllerService.toLoginController()
+                case .notFound:
+                    self.recommendationCodeModal?.recView.notFoundCodeMode()
                 case .alreadyUsed:
-                    self.recommendationCodeModal?.recView.codeAlreadyUsedMode()
-                case .notFound, .noCode:
-                    self.recommendationCodeModal?.recView.codeNotFoundMode()
+                    self.recommendationCodeModal?.recView.alreadyUsedCodeMode()
+                case .error:
+                    self.recommendationCodeModal?.recView.referralErrorMode()
                 }
             }
         } else if code.count == 8 {
-            APIService.useSerialCode(code: code) { code in
+            APIService.useSerialCode(code: code) { code, message  in
                 switch code {
                 case .success:
-                    self.recommendationCodeModal?.recView.codeAppliedMode()
-                case .error:
-                    self.persentNetwoekErrorAlert()
+                    self.recommendationCodeModal?.recView.successedMode()
+                case .alreadyUsed:
+                    self.recommendationCodeModal?.recView.alreadyUsedCodeMode()
+                case .exporedToken:
+                    self.recommendationCodeModal?.recView.expiredTokenMode()
                 case .expired:
                     RootViewControllerService.toLoginController()
-                case .alreadyUsed:
-                    self.recommendationCodeModal?.recView.codeAlreadyUsedMode()
-                case .notFound, .noCode:
-                    self.recommendationCodeModal?.recView.codeNotFoundMode()
+                case .notFound:
+                    self.recommendationCodeModal?.recView.notFoundCodeMode()
+                case .error:
+                    self.recommendationCodeModal?.recView.serialCodeErrorMode()
                 }
             }
         }

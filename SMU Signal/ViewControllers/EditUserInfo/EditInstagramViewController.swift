@@ -56,7 +56,7 @@ class EditInstagramViewController: UIViewController, UITextFieldDelegate {
             case .success:
                 RootViewControllerService.toHomeViewController()
             case .error:
-                self.persentNetwoekErrorAlert()
+                self.persentNetworkErrorAlert()
             case .expired:
                 RootViewControllerService.toLoginController()
             case .missing:

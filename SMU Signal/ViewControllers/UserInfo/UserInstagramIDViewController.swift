@@ -61,7 +61,7 @@ class UserInstagramIDViewController: UIViewController, UITextFieldDelegate {
             case .missing:
                 RootViewControllerService.toSignUpViewController()
             case .error:
-                self.persentNetwoekErrorAlert()
+                self.persentNetworkErrorAlert()
                 return
             }
         }
