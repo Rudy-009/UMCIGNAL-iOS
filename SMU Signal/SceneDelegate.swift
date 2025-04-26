@@ -18,25 +18,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         window?.makeKeyAndVisible()
         window?.overrideUserInterfaceStyle = .light
-        
-        window?.rootViewController = UserInstagramIDViewController()
-        
 //        print(KeychainService.get(key: K.APIKey.accessToken) ?? "")
-//        APIService.checkToken { result in
-//            switch result {
-//            case .success: // home
-//                RootViewControllerService.toHomeViewController()
-//            case .expired: // login
-//                RootViewControllerService.toLoginController()
-//            case .idealNotCompleted: // ideal
-//                RootViewControllerService.toIdealViewController()
-//            case .signupNotCompleted: // signup
-//                RootViewControllerService.toSignUpViewController()
-//            case .error: // ??
-//                self.window?.rootViewController = NetworkErrorViewController()
-//                break
-//            }
-//        }
+        APIService.checkToken { result in
+            switch result {
+            case .success: // home
+                RootViewControllerService.toHomeViewController()
+            case .expired: // login
+                RootViewControllerService.toLoginController()
+            case .idealNotCompleted: // ideal
+                RootViewControllerService.toIdealViewController()
+            case .signupNotCompleted: // signup
+                RootViewControllerService.toSignUpViewController()
+            case .error: // ??
+                self.window?.rootViewController = NetworkErrorViewController()
+                break
+            }
+        }
     }
     
     func changeRootViewController(_ viewController: UIViewController, animated: Bool) {
