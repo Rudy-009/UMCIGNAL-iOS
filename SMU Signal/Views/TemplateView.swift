@@ -79,8 +79,3 @@ class TemplateView: UIView {
     }
     
 }
-
-import SwiftUI
-#Preview {
-    TemplateViewController()
-}

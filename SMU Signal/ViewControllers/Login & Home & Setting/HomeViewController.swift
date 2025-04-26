@@ -76,7 +76,7 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
     
     @objc
     private func goMatch() {
-        let matchVC = MatchProgressViewController()
+        let matchVC = MatchViewController()
         navigationController?.pushViewController(matchVC, animated: true)
     }
     
@@ -169,8 +169,4 @@ class HomeViewController: UIViewController, UIGestureRecognizerDelegate, Recomme
     func didTapCloseButton() {
         dismissModal()
     }
-}
-
-#Preview {
-    UINavigationController(rootViewController: HomeViewController())
 }

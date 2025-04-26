@@ -39,4 +39,11 @@ class RootViewControllerService {
         sceneDelegate?.changeRootViewController(UINavigationController(rootViewController: UserOnBoardingViewController()), animated: true)
     }
     
+    static func toMatchViewController() {
+        let vc = MatchViewController()
+        vc.firstMatch()
+        vc.isFirst = true
+        sceneDelegate?.changeRootViewController(UINavigationController(rootViewController: MatchViewController()), animated: true)
+    }
+    
 }

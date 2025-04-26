@@ -60,7 +60,7 @@ class IdealMajorViewController: UIViewController {
         APIService.addIdeal { result in
             switch result {
             case .success:
-                RootViewControllerService.toHomeViewController()
+                RootViewControllerService.toMatchViewController()
                 Singletone.removeIdealTypeInfo()
             case .missingValue:
                 RootViewControllerService.toIdealViewController()

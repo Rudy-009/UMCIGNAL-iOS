@@ -8,7 +8,9 @@
 import UIKit
 import Gifu
 
-class MatchProgressViewController: UIViewController {
+class MatchViewController: UIViewController {
+    
+    public var isFirst = false
     
     let navigationBar = NavigationBarView()
     let gifImageView = GIFImageView()
@@ -119,7 +121,7 @@ class MatchProgressViewController: UIViewController {
         if gifImageView.frameCount == 1 {
             gifImageView.stopAnimating()
         }
-        stateLabel.text = "리롤 기회를 모두 사용하셧습니다"
+        stateLabel.text = "리롤 기회를 모두 사용하셨습니다"
     }
     
     @objc
